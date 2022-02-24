@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "checkJs": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    // "lib": ["esnext", "dom"],
+    // "types": ["vite/client", "lodash"],
+    // "plugins": [{
+    //   "name": "@vuedx/typescript-plugin-vue" // 增强Vue单文件的TS体验的插件
+    // }],
+    "baseUrl": "./",
+    // "paths": {
+    //   "@/*": ["src/*"] // 路径alias
+    // }
+  },
+  "include": ["packages"],
+  "exclude": ["node_modules", "commitlint.config.js"]
+}
