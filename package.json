@@ -4,6 +4,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "cz": "git add . && git cz"
+  },
   "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
