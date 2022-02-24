@@ -12,6 +12,7 @@
     "@typescript-eslint/parser": "^5.12.1",
     "@vue/eslint-config-airbnb": "^6.0.0",
     "commitlint": "^16.2.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.9.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-plugin-vue": "^8.5.0",
@@ -20,6 +21,11 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }
