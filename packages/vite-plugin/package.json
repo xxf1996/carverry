@@ -1,0 +1,12 @@
+{
+  "name": "@carverry/vite-plugin",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "glob": "^7.2.0",
+    "vue-docgen-api": "^4.44.16"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0"
+  }
+}
