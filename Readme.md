@@ -11,3 +11,5 @@
 - `inquirer`：可交互式命令行；
 - `ora`：命令行`loading`状态；
 - `chalk`：彩色，格式化命令行输出；
+
+- [All in one：项目级 monorepo 策略最佳实践 - SegmentFault 思否](https://segmentfault.com/a/1190000039157365###)
