@@ -13,6 +13,11 @@
       // different options with a single tsconfig.json.
     }
   },
-  "compilerOptions": {},
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "types": [
+      "inquirer"
+    ]
+  },
   "exclude": ["node_modules"]
 }

@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "cli": "ts-node ./cli.ts"
+    "cli": "ts-node ./cli/index.ts"
   },
   "dependencies": {
     "commander": "^9.0.0",
+    "inquirer": "^8.2.0",
     "ts-node": "^10.5.0"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^1.0.2"
+    "@tsconfig/node16": "^1.0.2",
+    "@types/inquirer": "^8.2.0"
   }
 }

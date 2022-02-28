@@ -1,12 +1,12 @@
 export interface ProjectConfig {
-  /** 项目根目录 */
-  root: string;
   /** 项目名称 */
   name: string;
   /** 源码目录（相对于根目录的相对路径） */
   sourceDir: string;
   /** 页面源码文件输出目录（相对于根目录的相对路径） */
   pageOutDir: string;
+  /** 可视化搭建应用端口 */
+  port: number;
 }
 
 interface AliasPath {
@@ -14,5 +14,7 @@ interface AliasPath {
 }
 
 export interface ProjectContext extends ProjectConfig {
+  /** 项目根目录 */
+  root: string;
   alias: AliasPath;
 }
