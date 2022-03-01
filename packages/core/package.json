@@ -4,10 +4,15 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts"
+    "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts",
+    "server": "node --no-warnings --loader ts-node/esm ./server/index.ts"
   },
   "dependencies": {
     "commander": "^9.0.0",
+    "farrow": "^1.11.4",
+    "farrow-http": "^1.11.4",
+    "farrow-pipeline": "^1.11.4",
+    "farrow-schema": "^1.11.1",
     "inquirer": "^8.2.0",
     "lowdb": "^3.0.0",
     "ts-node": "^10.5.0"

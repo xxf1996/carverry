@@ -1,5 +1,5 @@
 {
-  "name": "@carverry/vite-plugin",
+  "name": "@carverry/plugins",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
