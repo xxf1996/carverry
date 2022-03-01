@@ -14,10 +14,11 @@
     }
   },
   "compilerOptions": {
-    "resolveJsonModule": true,
     "types": [
       "inquirer"
-    ]
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Node",
   },
   "exclude": ["node_modules"]
 }

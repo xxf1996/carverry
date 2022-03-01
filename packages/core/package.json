@@ -2,12 +2,14 @@
   "name": "@carverry/core",
   "version": "1.0.0",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
-    "cli": "ts-node ./cli/index.ts"
+    "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts"
   },
   "dependencies": {
     "commander": "^9.0.0",
     "inquirer": "^8.2.0",
+    "lowdb": "^3.0.0",
     "ts-node": "^10.5.0"
   },
   "devDependencies": {

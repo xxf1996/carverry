@@ -1,10 +1,11 @@
 import { Command } from 'commander';
-import packageInfo from '../package.json';
-import { ProjectConfig } from '../typings/context';
-import { updatePprojectContext } from './context';
-import { initConfig } from './init';
+import { createRequire } from 'module';
+import { updatePprojectContext } from './context.js';
+import { initConfig } from './init.js';
 
 const program = new Command();
+const require = createRequire(import.meta.url);
+const packageInfo = require('../package.json');
 
 program
   .version(packageInfo.version, '-v, --version', '运行版本')
