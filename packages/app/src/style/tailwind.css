@@ -1,0 +1,31 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-10 text-sm font-normal text-neutral-600 leading-5 antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold text-neutral-800;
+  }
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  h5 {
+    @apply text-base;
+  }
+  h6 {
+    @apply text-sm;
+  }
+}

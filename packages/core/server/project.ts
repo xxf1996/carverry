@@ -13,6 +13,9 @@ export async function saveContext(context: ProjectContext) {
   await db.write();
 }
 
+/**
+ * 获取当前项目上下文信息
+ */
 export async function getContext(): Promise<ProjectContext> {
   await db.read();
   if (db.data?.context) {

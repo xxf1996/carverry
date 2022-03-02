@@ -659,6 +659,28 @@
   dependencies:
     vue-demi "*"
 
+"@windicss/config@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.npmmirror.com/@windicss/config/-/config-1.8.1.tgz#698178d9ad609c1e45ae562a8e2a6a458bedf023"
+  integrity sha512-WwrUMa8dT1AXbUjzQUVVCEpCNQg6rvr6wTyLXX8tv5jf9zYyTmj10sl0f7i5tbsMeG66hd2TpDp2JCcQf9knTA==
+  dependencies:
+    debug "^4.3.3"
+    jiti "^1.13.0"
+    windicss "^3.5.0"
+
+"@windicss/plugin-utils@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.npmmirror.com/@windicss/plugin-utils/-/plugin-utils-1.8.1.tgz#ee14d668cc1bbd386cc96ab69a83c088428b37b6"
+  integrity sha512-bYJDw5cPBhUR8qlyL1g634xtGPF4ABOmtRfDrkL8nf9YAJkNowHao9lAMAJqHLd56Zp6BEoqib3smuwKSJKBnQ==
+  dependencies:
+    "@antfu/utils" "^0.5.0"
+    "@windicss/config" "1.8.1"
+    debug "^4.3.3"
+    fast-glob "^3.2.11"
+    magic-string "^0.25.7"
+    micromatch "^4.0.4"
+    windicss "^3.5.0"
+
 JSONStream@^1.0.4:
   version "1.3.5"
   resolved "https://registry.npmjs.org/JSONStream/-/JSONStream-1.3.5.tgz"
@@ -2621,6 +2643,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+jiti@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.npmmirror.com/jiti/-/jiti-1.13.0.tgz#3cdfc4e651ca0cca4c62ed5e47747b5841d41a8e"
+  integrity sha512-/n9mNxZj/HDSrincJ6RP+L+yXbpnB8FybySBa+IjIaoH9FIxBbrbRT5XUbe8R7zuVM2AQqNMNDDqz0bzx3znOQ==
+
 js-stringify@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/js-stringify/-/js-stringify-1.0.2.tgz"
@@ -2710,6 +2737,11 @@ kind-of@^6.0.3:
   version "6.0.3"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
+
+kolorist@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.npmmirror.com/kolorist/-/kolorist-1.5.1.tgz#c3d66dc4fabde4f6b7faa6efda84c00491f9e52b"
+  integrity sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==
 
 leven@3:
   version "3.1.0"
@@ -3653,12 +3685,7 @@ slash@^3.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-sortablejs@1.10.2:
-  version "1.10.2"
-  resolved "https://registry.npmjs.org/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
-  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
-
-sortablejs@^1.14.0:
+sortablejs@1.14.0, sortablejs@^1.14.0:
   version "1.14.0"
   resolved "https://registry.npmjs.org/sortablejs/-/sortablejs-1.14.0.tgz#6d2e17ccbdb25f464734df621d4f35d4ab35b3d8"
   integrity sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==
@@ -4100,6 +4127,16 @@ vary@^1.1.2:
   resolved "https://registry.npmmirror.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
+vite-plugin-windicss@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.npmmirror.com/vite-plugin-windicss/-/vite-plugin-windicss-1.8.1.tgz#3dd3400dd3509bce67cb4f5109f310a268433c45"
+  integrity sha512-c+900Dkc94kRuZPb6mz79B5XOS2PHNhadf7P9UjIRoimEE5HB7hj1f+A6qGHO4VejwU/MIvA6D5+Sz2lDKAaEQ==
+  dependencies:
+    "@windicss/plugin-utils" "1.8.1"
+    debug "^4.3.3"
+    kolorist "^1.5.1"
+    windicss "^3.5.0"
+
 vite@^2.8.0:
   version "2.8.4"
   resolved "https://registry.npmjs.org/vite/-/vite-2.8.4.tgz"
@@ -4314,12 +4351,12 @@ vue@^3.2.25:
     "@vue/server-renderer" "3.2.31"
     "@vue/shared" "3.2.31"
 
-vuedraggable@^2.24.3:
-  version "2.24.3"
-  resolved "https://registry.npmjs.org/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
-  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
+vuedraggable@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmmirror.com/vuedraggable/-/vuedraggable-4.1.0.tgz#edece68adb8a4d9e06accff9dfc9040e66852270"
+  integrity sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==
   dependencies:
-    sortablejs "1.10.2"
+    sortablejs "1.14.0"
 
 wcwidth@^1.0.1:
   version "1.0.1"
@@ -4370,6 +4407,11 @@ which@^2.0.1:
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
   dependencies:
     isexe "^2.0.0"
+
+windicss@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.npmmirror.com/windicss/-/windicss-3.5.0.tgz#cb6896b136bc21d32d50a742352eece4ce0400d1"
+  integrity sha512-+UNYm2Zy4TM2uLiz6bqY2a69LavMqGbILFIwuGhPEJ/uqsPT3kCGSaWlhMw/weIaFOkm1K1cEzZ015Y8pp8N1A==
 
 with@^7.0.0:
   version "7.0.2"

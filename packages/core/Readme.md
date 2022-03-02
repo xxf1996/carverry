@@ -17,3 +17,10 @@
 
 
 
+## json schema
+
+可以制定一个`schema`，来限定和校验`json`配置文件；
+
+- [JSON Schema | The home of JSON Schema](https://json-schema.org/)
+- https://json.schemastore.org/tsconfig
+

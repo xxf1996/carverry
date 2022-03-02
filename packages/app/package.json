@@ -15,7 +15,7 @@
     "sortablejs": "^1.14.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.2.0",
@@ -23,6 +23,8 @@
     "unplugin-auto-import": "^0.6.1",
     "unplugin-vue-components": "^0.17.21",
     "vite": "^2.8.0",
-    "vue-tsc": "^0.29.8"
+    "vite-plugin-windicss": "^1.8.1",
+    "vue-tsc": "^0.29.8",
+    "windicss": "^3.5.0"
   }
 }

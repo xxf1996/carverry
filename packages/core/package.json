@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts",
-    "server": "node --no-warnings --loader ts-node/esm ./server/index.ts"
+    "server": "node --no-warnings --loader ts-node/esm ./server/index.ts",
+    "demo": "node --no-warnings --loader ts-node/esm ./test.ts"
   },
   "dependencies": {
     "commander": "^9.0.0",
@@ -15,10 +16,13 @@
     "farrow-schema": "^1.11.1",
     "inquirer": "^8.2.0",
     "lowdb": "^3.0.0",
-    "ts-node": "^10.5.0"
+    "ts-node": "^10.5.0",
+    "glob": "^7.2.0",
+    "vue-docgen-api": "^4.44.16"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
-    "@types/inquirer": "^8.2.0"
+    "@types/inquirer": "^8.2.0",
+    "@types/glob": "^7.2.0"
   }
 }

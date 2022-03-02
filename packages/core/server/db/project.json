@@ -2,9 +2,9 @@
   "context": {
     "name": "yisight-fe",
     "sourceDir": "src",
-    "port": 4556,
+    "port": 4444,
     "pageOutDir": "src/blocks",
-    "root": "/Users/snowdream/Desktop/github/carverry/packages/core",
+    "root": "/Users/snowdream/Desktop/yimian/yisight-fe",
     "alias": {}
   }
 }

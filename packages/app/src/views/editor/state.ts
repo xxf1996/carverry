@@ -1,6 +1,4 @@
 import { ref } from 'vue';
-// import FILE_INFO from 'virtual:fileinfo';
-// import COMPONENT_INFO from 'virtual:component-info?t=1111123';
 import { useLocalStorage } from '@vueuse/core';
 import {
   ComponentInfo,
@@ -66,16 +64,25 @@ export function getOptionByKey(tree: ComponentOption, key: string): ComponentOpt
 }
 
 export async function updateFileInfo() {
-  const fileInfoLoader = () => import(`./${Date.now()}/virtual:fileinfo`);
-  const { default: info } = await fileInfoLoader() as { default: FileInfo };
-  console.log(info);
-  fileInfo.value = info;
+  // TODO: 请求真实文件信息
+  // const fileInfoLoader = () => import(`./${Date.now()}/virtual:fileinfo`);
+  // const { default: info } = await fileInfoLoader() as { default: FileInfo };
+  // console.log(info);
+  fileInfo.value = {
+    fileMap: {},
+    fileTree: {
+      children: {},
+    },
+  };
 }
 
 export async function updateComponnetInfo() {
-  const { default: info } = await import(`./${Date.now()}/virtual:component-info`) as { default: ComponentInfo };
-  console.log(info);
-  componentInfo.value = info;
+  const data = await fetch('/editor-api/components/local', {
+    method: 'get',
+  }).then((res) => {
+    return res.json() as Promise<ComponentInfo>;
+  });
+  componentInfo.value = data;
 }
 
 export function updateOptionKey(option: ComponentOption, prefix = '') {

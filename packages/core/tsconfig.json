@@ -15,10 +15,12 @@
   },
   "compilerOptions": {
     "types": [
-      "inquirer"
+      "inquirer",
+      "glob"
     ],
     "module": "ESNext",
     "moduleResolution": "Node",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"]
 }

@@ -3,14 +3,14 @@
     <el-container class="h-screen">
       <el-aside width="360px">
         <div class="flex items-center gap-2">
-          <el-select v-model="pageContainer">
+          <!-- <el-select v-model="pageContainer">
             <el-option
               v-for="(page, key) in pages"
               :key="key"
               :label="page.name"
               :value="key"
             />
-          </el-select>
+          </el-select> -->
           <el-button size="small">
             重置
           </el-button>
@@ -44,7 +44,7 @@
       </el-aside>
       <el-main class="p-0">
         <!-- TODO: 优化异步组件重载逻辑 -->
-        <template-render
+        <!-- <template-render
           v-if="templateLoaded"
           ref="renderRef"
           :meta="activedPageMeta"
@@ -52,7 +52,8 @@
           render-key=""
           @update-target="initSlotContainer"
           @update-template="updateTemplate"
-        />
+        /> -->
+        <page-viewer />
       </el-main>
     </el-container>
   </div>
@@ -64,7 +65,6 @@ import {
 } from 'vue';
 import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import { ElMessageBox } from 'element-plus';
-import CommonPageMeta from '@/template/CommonPage.vue.meta';
 import CommonPage from '@/template/CommonPage.vue';
 import TemplateRender from './TemplateRender.vue';
 import TemplateMeta from './TemplateMeta.vue';
@@ -74,16 +74,8 @@ import {
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import { Nullable } from '@/typings/common';
+import PageViewer from './PageViewer.vue';
 
-const pages = {
-  CommonPage: {
-    name: '一般看板页面',
-    component: CommonPage,
-    meta: CommonPageMeta,
-  },
-};
-const pageContainer = ref<keyof typeof pages>('CommonPage');
-const activedPageMeta = computed(() => pages[pageContainer.value].meta);
 const renderRef = ref<typeof TemplateRender>();
 const templateLoaded = ref(true);
 const generating = ref(false);
