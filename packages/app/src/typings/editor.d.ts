@@ -6,7 +6,19 @@ export interface ComponentMeta {
   doc: ComponentDoc;
 }
 
-export type ComponentInfo = Record<string, Required<ComponentMeta>>;
+export interface ComponentLeafNode {
+  /** 组件路径，也是唯一标识符 */
+  path: string;
+}
+
+export interface ComponentTree {
+  children: Record<string, ComponentTree | ComponentLeafNode>;
+}
+
+export type ComponentInfo = {
+  componentTree: ComponentTree;
+  componentMap: Record<string, Required<ComponentMeta>>;
+};
 
 /** 组件需要的变量依赖 */
 export interface ComponentDependence {
@@ -37,7 +49,7 @@ export interface ComponentOption {
 export interface FileExportMember {
   name: string;
   desc: string;
-  type: 'funtion' | 'var';
+  type: 'function' | 'var';
 }
 
 export interface FileLeafNode {

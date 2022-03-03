@@ -1,3 +1,5 @@
-import { getLoaclComponents } from './plugins/component-meta.js';
+import { getFileInfo } from './plugins/file-meta.js';
 
-getLoaclComponents();
+const info = await getFileInfo();
+
+console.log(info);

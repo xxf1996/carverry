@@ -1,0 +1,201 @@
+@use 'sass:map';
+// styles/element/index.scss
+/* just override what you need */
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: (
+    "primary": (
+      "base": $--color-brand-500,
+    ),
+    'success': (
+      'base': $--color-green-500,
+    ),
+    'warning': (
+      'base': $--color-orange-500,
+    ),
+    'danger': (
+      'base': $--color-red-500,
+    ),
+    'error': (
+      'base': $--color-red-500,
+    ),
+    'info': (
+      'base': $--color-neutral-300,
+    ),
+  ),
+
+  $text-color: (
+    "primary": $--color-neutral-800,
+    "regular": $--color-neutral-600,
+    "secondary": $--color-neutral-70,
+    "placeholder": $--color-neutral-50,
+  ),
+
+  $font-size: (
+    'extra-large': 20px,
+    'large': 18px,
+    'medium': 16px,
+    'base': 14px,
+    'small': 14px,
+    'extra-small': 13px,
+  ),
+
+  $border-color: (
+    'base': $--color-neutral-30,
+    'light': $--color-neutral-20,
+    'lighter': $--color-neutral-10,
+    'extra-light': $--color-neutral-10,
+  ),
+
+  $header: (
+    'padding': 0 16px,
+    'height': 60px,
+  ),
+
+  $footer: (
+    'padding': 0 16px,
+    'height': 60px,
+  ),
+
+  $main: (
+    'padding': 16px,
+  ),
+
+  // Break-point
+  $sm: 640px,
+  $md: 768px,
+  $lg: 1024px,
+  $xl: 1280px,
+  $xxl: 1536px,
+
+  // Background
+  $background-color-base: $--color-neutral-10,
+
+  // Border
+  $border-radius: (
+    'base': $--borderRadius-sm,
+    'small': $--borderRadius-sm,
+    'round': 16px,
+    'circle': 100%,
+  ),
+
+  // Input
+  $input-height: (
+    'default': 40px,
+    'medium': 48px,
+    'small': 32px,
+    'mini': 28px,
+  ),
+  
+  $input-font-size: (
+    'base': 14px,
+    'small': 14px,
+    'medium': 16px,
+  ),
+  $input-line-height: (
+    'default': 28px,
+    'medium': 32px,
+    'small': 24px,
+    'mini': 20px,
+  ),
+
+  $input: (
+    'border-radius': $--borderRadius-sm,
+  ),
+
+  
+
+  // Button
+  $button-font-size: (
+  'small': 14px,
+  'mini': 12px,
+  ),
+  $button-padding-vertical: (
+  'default': 0,
+  'medium': 0,
+  'small': 0,
+  'mini': 0,
+  ),
+  $button-padding-horizontal: (
+    'default': 16px,
+    'medium': 16px,
+    'small': 12px,
+    'mini': 8px,
+  ),
+  $button-border-radius: (
+    'default': $--borderRadius-sm,
+    'medium': $--borderRadius-sm,
+    'small': $--borderRadius-sm,
+    'mini': $--borderRadius-sm,
+  ),
+
+  // Select
+  $select-option: (
+    'height': 40px,
+  ),
+  $select-group: (
+    'height': 32px,
+    'font-size': 14px,
+  ),
+
+  // Dropdown
+  $dropdown: (
+    'menu-box-shadow': $--shadow-xs,
+    'menuItem-hover-fill': $--color-brand-100,
+    'menuItem-hover-color': $--color-brand-500,
+  ),
+
+  // Radio & Checkbox 
+  $radio-height: (
+    'large': 48px,
+    'default': 32px,
+    'small': 28px,
+    'mini': 24px,
+  ),
+
+  $checkbox: (
+    'disabled-input-fill': $--color-neutral-10,
+    'disabled-checked-input-fill': $--color-neutral-10,
+    'checked-font-color': $--color-neutral-600,
+  ),
+
+  // Cascader
+  $cascader: (
+    'menu-selected-font-color': $--color-neutral-600,
+    'node-background-hover': $--color-neutral-10,
+    'tag-background': $--color-neutral-20,
+  ),
+
+  // Tag 
+  $tag: (
+    'border-radius': $--borderRadius-sm,
+  ),
+
+  // Card 
+  $card: (
+    'border-radius': $--borderRadius-default,
+    'padding': 16px,
+    'background-color': var(--el-color-white),
+  ),
+
+  // Drawer
+  $drawer: (
+    'padding-primary': var(--el-dialog-padding-primary, 24px),
+  ),
+
+  // Table
+  $table: (
+    'row-hover-background-color': $--color-brand-100,
+  ),
+
+  // Descriptions
+  $descriptions: (
+    'header-margin-bottom': 16px,
+    'item-bordered-label-background': $--color-neutral-00,
+  ),
+
+);
+
+/* icon font path, required */
+$--font-path: 'node_modules/element-plus/theme-chalk/fonts';
+
+// @import "element-plus/theme-chalk/src/index.scss"; // 这里不需要再引入了，按需引入插件会自动处理

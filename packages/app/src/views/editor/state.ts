@@ -12,7 +12,12 @@ export const fileInfo = ref<FileInfo>({
   fileMap: {},
   fileTree: { children: {} },
 });
-export const componentInfo = ref<ComponentInfo>({});
+export const componentInfo = ref<ComponentInfo>({
+  componentMap: {},
+  componentTree: {
+    children: {},
+  },
+});
 export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref('');
 // TODO: 从配置文件加载
@@ -64,16 +69,13 @@ export function getOptionByKey(tree: ComponentOption, key: string): ComponentOpt
 }
 
 export async function updateFileInfo() {
-  // TODO: 请求真实文件信息
-  // const fileInfoLoader = () => import(`./${Date.now()}/virtual:fileinfo`);
-  // const { default: info } = await fileInfoLoader() as { default: FileInfo };
-  // console.log(info);
-  fileInfo.value = {
-    fileMap: {},
-    fileTree: {
-      children: {},
-    },
-  };
+  // 获取当前项目逻辑文件信息
+  const data = await fetch('/editor-api/files', {
+    method: 'get',
+  }).then((res) => {
+    return res.json() as Promise<FileInfo>;
+  });
+  fileInfo.value = data;
 }
 
 export async function updateComponnetInfo() {

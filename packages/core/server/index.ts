@@ -1,5 +1,6 @@
 import farrowHttp from 'farrow-http';
 import { getLoaclComponents } from '../plugins/component-meta.js';
+import { getFileInfo } from '../plugins/file-meta.js';
 import { getContext } from './project.js';
 
 const { Http, Router, Response } = farrowHttp;
@@ -14,6 +15,13 @@ http
   .get('/context')
   .use(async () => {
     const data = await getContext();
+    return Response.json(data);
+  });
+
+http
+  .get('/files')
+  .use(async () => {
+    const data = await getFileInfo();
     return Response.json(data);
   });
 

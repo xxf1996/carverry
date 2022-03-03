@@ -1,0 +1,312 @@
+/*
+  This variables file control both tailwind configurations and Element-UI theming.
+*/
+
+/* SASS Variables */
+// neutrals
+$--color-neutral-00:  #F5F7FA;
+$--color-neutral-10:  #F3F4F6;
+$--color-neutral-20:  #E5E7EB;
+$--color-neutral-30:  #D1D5DC;
+$--color-neutral-40:  #BEC4CE;
+$--color-neutral-50:  #AFB7C3;
+$--color-neutral-60:  #9EA7B6;
+$--color-neutral-70:  #8C97A9;
+$--color-neutral-300: #7D899D;
+$--color-neutral-400: #6D7B91;
+$--color-neutral-500: #55647C;
+$--color-neutral-600: #3D4D68;
+$--color-neutral-700: #253753;
+$--color-neutral-800: #0E2140;
+$--color-neutral-900: #051123;
+
+// Brand
+$--color-brand-100: #EBF4FF;
+$--color-brand-200: #C2DDFF;
+$--color-brand-300: #90C2FF;
+$--color-brand-400: #62A9FF;
+$--color-brand-500: #338FFF;
+$--color-brand-600: #1C72E3;
+$--color-brand-700: #0455C6;
+$--color-brand-800: #084191;
+$--color-brand-900: #0E2A58;
+
+// Skyblue
+$--color-skyblue-100: #DCF2FE;
+$--color-skyblue-200: #B7E5FE;
+$--color-skyblue-300: #7CCFFE;
+$--color-skyblue-400: #43B9FD;
+$--color-skyblue-500: #09A4FC;
+$--color-skyblue-600: #058FDD;
+$--color-skyblue-700: #017ABE;
+$--color-skyblue-800: #03598A;
+$--color-skyblue-900: #083653;
+
+// Teal
+$--color-teal-100: #EAF9FB;
+$--color-teal-200: #BBECF3;
+$--color-teal-300: #8BDFEB;
+$--color-teal-400: #5CD1E3;
+$--color-teal-500: #26C2D9;
+$--color-teal-600: #24A4B7;
+$--color-teal-700: #218897;
+$--color-teal-800: #18646F;
+$--color-teal-900: #103F46;
+
+// Green
+$--color-green-100: #ECF9F2;
+$--color-green-200: #C0EBD5;
+$--color-green-300: #8EDAB4;
+$--color-green-400: #5CC992;
+$--color-green-500: #2DB270;
+$--color-green-600: #26A163;
+$--color-green-700: #1D8752;
+$--color-green-800: #126C3F;
+$--color-green-900: #064B28;
+
+// Ascential
+$--color-ascential-100: #F2F7E5;
+$--color-ascential-200: #DBE9B6;
+$--color-ascential-300: #C2DB84;
+$--color-ascential-400: #A8CB50;
+$--color-ascential-500: #91BE23;
+$--color-ascential-600: #729C3B;
+$--color-ascential-700: #486F59;
+$--color-ascential-800: #255A4D;
+$--color-ascential-900: #054641;
+
+// Orange
+$--color-orange-100: #FFF3DB;
+$--color-orange-200: #FFE0A3;
+$--color-orange-300: #FAC864;
+$--color-orange-400: #F5B431;
+$--color-orange-500: #EB9F13;
+$--color-orange-600: #D18A0F;
+$--color-orange-700: #AB6A0A;
+$--color-orange-800: #804E0D;
+$--color-orange-900: #5C3D1F;
+
+// Red
+$--color-red-100: #FCE3E3;
+$--color-red-200: #FCBFBF;
+$--color-red-300: #FB9797;
+$--color-red-400: #F76E6D;
+$--color-red-500: #EB5150;
+$--color-red-600: #CC3E3D;
+$--color-red-700: #AD3434;
+$--color-red-800: #842525;
+$--color-red-900: #592222;
+
+// Pink
+$--color-pink-100: #FCE8F5;
+$--color-pink-200: #F7CCE7;
+$--color-pink-300: #F0ABD6;
+$--color-pink-400: #EA8DC6;
+$--color-pink-500: #E16FB5;
+$--color-pink-600: #C2599A;
+$--color-pink-700: #A1457D;
+$--color-pink-800: #7A335E;
+$--color-pink-900: #4A1C38;
+
+// Purple
+$--color-purple-100: #EDE9FB;
+$--color-purple-200: #DBD5F7;
+$--color-purple-300: #C7BDF3;
+$--color-purple-400: #B5A7EF;
+$--color-purple-500: #A190EA;
+$--color-purple-600: #8772DE;
+$--color-purple-700: #6D54D1;
+$--color-purple-800: #4F3C9C;
+$--color-purple-900: #33246B;
+
+/* Box Shadow */
+$--shadow-xs:      0 0 0 1px rgba(0, 0, 0, 0.04);
+$--shadow-sm:      0 2px 10px 0 rgba(0, 0, 0, 0.04);
+$--shadow-default: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 3px rgba(0, 0, 0, 0.04);
+$--shadow-md:      0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$--shadow-lg:      0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$--shadow-xl:      0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$--shadow-2xl:     0 25px 50px -12px rgba(0, 0, 0, 0.25);
+$--shadow-inner:   inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+$--shadow-outline: 0 0 0 3px rgba($--color-brand-500, 0.5);
+$--shadow-none:    none;
+
+/*
+  Border Radius
+  The default radius for element-UI is 2px.
+  We also provide a value of 6 sizes for different situations.
+*/
+$--borderRadius-none:    0;
+$--borderRadius-sm:      0.125rem; // 2px
+$--borderRadius-default: 0.25rem;  // 4px
+$--borderRadius-md:      0.375rem; // 6px
+$--borderRadius-lg:      0.5rem;   // 8px
+$--borderRadius-full:    9999px;
+
+/* Font-size
+-------------------------- */
+$--fontSize-xs: 0.75rem;
+$--fontSize-sm: 0.875rem;
+$--fontSize-base: 1rem;
+$--fontSize-lg: 1.125rem;
+$--fontSize-xl: 1.25rem;
+$--fontSize-2xl: 1.5rem;
+$--fontSize-3xl: 1.875rem;
+$--fontSize-4xl: 2.25rem;
+$--fontSize-5xl: 3rem;
+$--fontSize-6xl: 4rem;
+
+/* ================================================================ */
+
+/* CSS Variables */
+:root {
+  // neutrals
+  --color-neutral-00: #{$--color-neutral-00};
+  --color-neutral-10: #{$--color-neutral-10};
+  --color-neutral-20: #{$--color-neutral-20};
+  --color-neutral-30: #{$--color-neutral-30};
+  --color-neutral-40: #{$--color-neutral-40};
+  --color-neutral-50: #{$--color-neutral-50};
+  --color-neutral-60: #{$--color-neutral-60};
+  --color-neutral-70: #{$--color-neutral-70};
+  --color-neutral-300: #{$--color-neutral-300};
+  --color-neutral-400: #{$--color-neutral-400};
+  --color-neutral-500: #{$--color-neutral-500};
+  --color-neutral-600: #{$--color-neutral-600};
+  --color-neutral-700: #{$--color-neutral-700};
+  --color-neutral-800: #{$--color-neutral-800};
+  --color-neutral-900: #{$--color-neutral-900};
+
+  // Brand
+  --color-brand-100: #{$--color-brand-100};
+  --color-brand-200: #{$--color-brand-200};
+  --color-brand-300: #{$--color-brand-300};
+  --color-brand-400: #{$--color-brand-400};
+  --color-brand-500: #{$--color-brand-500};
+  --color-brand-600: #{$--color-brand-600};
+  --color-brand-700: #{$--color-brand-700};
+  --color-brand-800: #{$--color-brand-800};
+  --color-brand-900: #{$--color-brand-900};
+
+  // Skyblue
+  --color-skyblue-100: #{$--color-skyblue-100};
+  --color-skyblue-200: #{$--color-skyblue-200};
+  --color-skyblue-300: #{$--color-skyblue-300};
+  --color-skyblue-400: #{$--color-skyblue-400};
+  --color-skyblue-500: #{$--color-skyblue-500};
+  --color-skyblue-600: #{$--color-skyblue-600};
+  --color-skyblue-700: #{$--color-skyblue-700};
+  --color-skyblue-800: #{$--color-skyblue-800};
+  --color-skyblue-900: #{$--color-skyblue-900};
+
+  // Teal
+  --color-teal-100: #{$--color-teal-100};
+  --color-teal-200: #{$--color-teal-200};
+  --color-teal-300: #{$--color-teal-300};
+  --color-teal-400: #{$--color-teal-400};
+  --color-teal-500: #{$--color-teal-500};
+  --color-teal-600: #{$--color-teal-600};
+  --color-teal-700: #{$--color-teal-700};
+  --color-teal-800: #{$--color-teal-800};
+  --color-teal-900: #{$--color-teal-900};
+
+  // Green
+  --color-green-100: #{$--color-green-100};
+  --color-green-200: #{$--color-green-200};
+  --color-green-300: #{$--color-green-300};
+  --color-green-400: #{$--color-green-400};
+  --color-green-500: #{$--color-green-500};
+  --color-green-600: #{$--color-green-600};
+  --color-green-700: #{$--color-green-700};
+  --color-green-800: #{$--color-green-800};
+  --color-green-900: #{$--color-green-900};
+
+  // Ascential
+  --color-ascential-100: #{$--color-ascential-100};
+  --color-ascential-200: #{$--color-ascential-200};
+  --color-ascential-300: #{$--color-ascential-300};
+  --color-ascential-400: #{$--color-ascential-400};
+  --color-ascential-500: #{$--color-ascential-500};
+  --color-ascential-600: #{$--color-ascential-600};
+  --color-ascential-700: #{$--color-ascential-700};
+  --color-ascential-800: #{$--color-ascential-800};
+  --color-ascential-900: #{$--color-ascential-900};
+
+  // Orange
+  --color-orange-100: #{$--color-orange-100};
+  --color-orange-200: #{$--color-orange-200};
+  --color-orange-300: #{$--color-orange-300};
+  --color-orange-400: #{$--color-orange-400};
+  --color-orange-500: #{$--color-orange-500};
+  --color-orange-600: #{$--color-orange-600};
+  --color-orange-700: #{$--color-orange-700};
+  --color-orange-800: #{$--color-orange-800};
+  --color-orange-900: #{$--color-orange-900};
+
+  // Red
+  --color-red-100: #{$--color-red-100};
+  --color-red-200: #{$--color-red-200};
+  --color-red-300: #{$--color-red-300};
+  --color-red-400: #{$--color-red-400};
+  --color-red-500: #{$--color-red-500};
+  --color-red-600: #{$--color-red-600};
+  --color-red-700: #{$--color-red-700};
+  --color-red-800: #{$--color-red-800};
+  --color-red-900: #{$--color-red-900};
+
+  // Pink
+  --color-pink-100: #{$--color-pink-100};
+  --color-pink-200: #{$--color-pink-200};
+  --color-pink-300: #{$--color-pink-300};
+  --color-pink-400: #{$--color-pink-400};
+  --color-pink-500: #{$--color-pink-500};
+  --color-pink-600: #{$--color-pink-600};
+  --color-pink-700: #{$--color-pink-700};
+  --color-pink-800: #{$--color-pink-800};
+  --color-pink-900: #{$--color-pink-900};
+
+  // Purple
+  --color-purple-100: #{$--color-purple-100};
+  --color-purple-200: #{$--color-purple-200};
+  --color-purple-300: #{$--color-purple-300};
+  --color-purple-400: #{$--color-purple-400};
+  --color-purple-500: #{$--color-purple-500};
+  --color-purple-600: #{$--color-purple-600};
+  --color-purple-700: #{$--color-purple-700};
+  --color-purple-800: #{$--color-purple-800};
+  --color-purple-900: #{$--color-purple-900};
+
+  // Shadows
+  --shadow-xs: #{$--shadow-xs};
+  --shadow-sm: #{$--shadow-sm};
+  --shadow-default: #{$--shadow-default};
+  --shadow-md: #{$--shadow-md};
+  --shadow-lg: #{$--shadow-lg};
+  --shadow-xl: #{$--shadow-xl};
+  --shadow-2xl: #{$--shadow-2xl};
+  --shadow-inner: #{$--shadow-inner};
+  --shadow-outline: #{$--shadow-outline};
+  --shadow-none: #{$--shadow-none};
+
+  // Border Radius
+
+  /* Border Radius */
+  --borderRadius-none: #{$--borderRadius-none};
+  --borderRadius-sm: #{$--borderRadius-sm};
+  --borderRadius-default: #{$--borderRadius-default};
+  --borderRadius-md: #{$--borderRadius-md};
+  --borderRadius-lg: #{$--borderRadius-lg};
+  --borderRadius-full: #{$--borderRadius-full};
+
+  // Font Size
+  --fontSize-xs: #{$--fontSize-xs};
+  --fontSize-sm: #{$--fontSize-sm};
+  --fontSize-base: #{$--fontSize-base};
+  --fontSize-lg: #{$--fontSize-lg};
+  --fontSize-xl: #{$--fontSize-xl};
+  --fontSize-2xl: #{$--fontSize-2xl};
+  --fontSize-3xl: #{$--fontSize-3xl};
+  --fontSize-4xl: #{$--fontSize-4xl};
+  --fontSize-5xl: #{$--fontSize-5xl};
+  --fontSize-6xl: #{$--fontSize-6xl};
+}

@@ -33,7 +33,7 @@ import Draggable from 'vuedraggable';
 import { componentInfo, curDragComponent } from './state';
 import { ComponentMeta } from '@/typings/editor';
 
-const componentList = ref(Object.values(componentInfo.value));
+const componentList = ref<Required<ComponentMeta>[]>(Object.values(componentInfo.value.componentMap));
 
 function dragStart(data) {
   // const ev = data.originalEvent as DragEvent;
@@ -48,6 +48,6 @@ function dragEnd() {
   }, 100);
 }
 watch(componentInfo, () => {
-  componentList.value = Object.values(componentInfo.value);
+  componentList.value = Object.values(componentInfo.value.componentMap);
 });
 </script>
