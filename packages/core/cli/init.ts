@@ -1,7 +1,9 @@
 import { ProjectConfig } from '../typings/context';
 import inquirer from 'inquirer';
-import { promises } from 'fs';
+import { promises, existsSync } from 'fs';
 import { resolve } from 'path';
+import { warning } from '../utils/tip.js';
+import { getContext } from '../server/project.js';
 
 function getProjectName(): string {
   const rootDir = process.cwd();
@@ -63,14 +65,36 @@ async function saveConfig(config: ProjectConfig) {
 }
 
 /**
+ * 初始化输出目录及缓存目录等文件
+ */
+export async function initProjectFiles() {
+  const context = await getContext();
+  const output = resolve(context.root, context.pageOutDir);
+  if (!existsSync(output)) {
+    await promises.mkdir(output);
+    await promises.writeFile(resolve(output, '.gitignore'), '.cache', {
+      encoding: 'utf-8',
+    });
+  }
+  const cache = resolve(output, '.cache');
+  if (!existsSync(cache)) {
+    await promises.mkdir(cache);
+  }
+}
+
+/**
  * 初始化项目配置
  * @param useDefault 是否使用默认配置
  */
 export async function initConfig(useDefault = false) {
-  // TODO: 是否已存在配置文件，存在则提示无需初始化
+  if (existsSync(resolve(process.cwd(), 'carverry.config.json'))) {
+    warning('配置文件已存在，无需初始化！');
+    return;
+  }
   let config = getDefaultConfig();
   if (!useDefault) {
     config = await getUserConfig();
   }
   await saveConfig(config);
+  // TODO: 初始化成功后提示；要不要给项目script字段注入脚本？
 }

@@ -1,7 +1,8 @@
+import { ComponentOption } from '@carverry/app/src/typings/editor';
 import farrowHttp from 'farrow-http';
 import { getLoaclComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
-import { getContext } from './project.js';
+import { getContext, updatePreview } from './project.js';
 
 const { Http, Router, Response } = farrowHttp;
 const http = Http();
@@ -23,6 +24,22 @@ http
   .use(async () => {
     const data = await getFileInfo();
     return Response.json(data);
+  });
+
+http
+  .post('/preview', {
+    body: {
+      config: String,
+    },
+  })
+  .use(async (req) => {
+    try {
+      const config: ComponentOption = JSON.parse(req.body.config);
+      await updatePreview(config);
+      return Response.text('ok');
+    } catch (err) {
+      return Response.text('error');
+    }
   });
 
 components

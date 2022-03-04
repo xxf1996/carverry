@@ -20,6 +20,6 @@
     //   "@/*": ["src/*"] // 路径alias
     // }
   },
-  "include": ["packages"],
+  "include": ["packages", "index.ts"],
   "exclude": ["node_modules", "commitlint.config.js"]
 }

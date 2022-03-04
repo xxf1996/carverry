@@ -2,6 +2,7 @@ import { promises, existsSync } from 'fs';
 import { resolve } from 'path';
 import { saveContext } from '../server/project.js';
 import { AliasPath, ProjectConfig, ProjectContext } from '../typings/context';
+import { warning } from '../utils/tip.js';
 import { getDefaultConfig } from './init.js';
 
 function getProjectAlias(): AliasPath {
@@ -13,8 +14,8 @@ export async function updatePprojectContext(cliConfig: Partial<ProjectConfig> = 
   const rootDir = process.cwd();
   const configPath = resolve(rootDir, 'carverry.config.json');
   if (!existsSync(configPath)) {
-    // TODO: 警告x
-    return;
+    warning('没有发现配置文件，请先执行carverry init命令');
+    return Promise.reject(new Error('没有发现配置文件，请先执行carverry init命令'));
   }
   const configSource = await promises.readFile(configPath, {
     encoding: 'utf-8',

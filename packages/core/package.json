@@ -9,6 +9,7 @@
     "demo": "node --no-warnings --loader ts-node/esm ./test.ts"
   },
   "dependencies": {
+    "chalk": "^5.0.0",
     "commander": "^9.0.0",
     "farrow": "^1.11.4",
     "farrow-http": "^1.11.4",
