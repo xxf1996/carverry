@@ -10,7 +10,7 @@
 import { Command } from 'commander';
 import { createRequire } from 'module';
 import { updatePprojectContext } from './context.js';
-import { initConfig, initProjectFiles } from './init.js';
+import { initConfig, initProjectFiles, startApp } from './init.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
@@ -26,6 +26,7 @@ program
   .action(async (options) => {
     await updatePprojectContext(options);
     await initProjectFiles();
+    await startApp();
   });
 program
   .command('init')

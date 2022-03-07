@@ -4,6 +4,12 @@ import { promises, existsSync } from 'fs';
 import { resolve } from 'path';
 import { warning } from '../utils/tip.js';
 import { getContext } from '../server/project.js';
+import { getDirname } from '../utils/file.js';
+import { execShellOrigin } from '../utils/shell.js';
+import { setTimeout } from 'timers/promises';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = getDirname(import.meta.url);
 
 function getProjectName(): string {
   const rootDir = process.cwd();
@@ -64,6 +70,14 @@ async function saveConfig(config: ProjectConfig) {
   });
 }
 
+export async function startApp() {
+  const appDir = resolve(__dirname, '../../app');
+  const curDir = resolve(__dirname, '..');
+  execShellOrigin(`cd ${curDir} && yarn server`); // 先启动服务器
+  await setTimeout(3000); // 服务器和应用分属两个不同的线程
+  await execShellOrigin(`cd ${appDir} && yarn dev`); // 再启动可视化应用
+}
+
 /**
  * 初始化输出目录及缓存目录等文件
  */
@@ -79,6 +93,7 @@ export async function initProjectFiles() {
   const cache = resolve(output, '.cache');
   if (!existsSync(cache)) {
     await promises.mkdir(cache);
+    await promises.copyFile(resolve(__dirname, '../template/empty.vue'), resolve(cache, 'index.vue')); // 空白入口文件
   }
 }
 

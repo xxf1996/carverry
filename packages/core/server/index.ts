@@ -1,12 +1,16 @@
 import { ComponentOption } from '@carverry/app/src/typings/editor';
 import farrowHttp from 'farrow-http';
+import farrowCors from 'farrow-cors';
 import { getLoaclComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
 import { getContext, updatePreview } from './project.js';
 
 const { Http, Router, Response } = farrowHttp;
+const { cors } = farrowCors;
 const http = Http();
 const components = Router();
+
+http.use(cors()); // 跨域支持
 
 http
   .route('/components')
