@@ -4,7 +4,7 @@
     "sourceDir": "src",
     "port": 3300,
     "pageOutDir": "src/blocks",
-    "root": "/Users/snowdream/Desktop/yimian/yisight-fe",
+    "root": "/Users/snowdream/Desktop/github/carverry-demo",
     "alias": {}
   }
 }

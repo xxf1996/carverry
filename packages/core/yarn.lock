@@ -348,9 +348,9 @@ chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
     supports-color "^7.1.0"
 
 chalk@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmmirror.com/chalk/-/chalk-5.0.0.tgz#bd96c6bb8e02b96e08c0c3ee2a9d90e050c7b832"
-  integrity sha512-/duVOqst+luxCQRKEo4bNxinsOQtMP80ZYm7mMqzuh5PociNL0PvmHFvREJ9ueYL2TxlHjBcmLCdmocx9Vg+IQ==
+  version "5.0.1"
+  resolved "https://registry.npmmirror.com/chalk/-/chalk-5.0.1.tgz#ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
+  integrity sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w==
 
 character-parser@^2.2.0:
   version "2.2.0"
@@ -752,14 +752,14 @@ external-editor@^3.0.3:
     iconv-lite "^0.4.24"
     tmp "^0.0.33"
 
-farrow-api@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.npmmirror.com/farrow-api/-/farrow-api-1.12.0.tgz#447ad8bf033a8bc1d6a95e2db512103ece3ef894"
-  integrity sha512-42qam8K0hV6Fes/4VZka0IgtL/RGL6wh594KVAI+lJ17DDxgYAcaeL7y+RQJwGutGLpwJO+l+TCdmSn+tbQ+Lw==
+farrow-api@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.npmmirror.com/farrow-api/-/farrow-api-1.12.1.tgz#69daa0f13ac5df1d4acef0d333c769c3e9b58c5a"
+  integrity sha512-+uxQMLhOKbJB2L/1+k3gHAsqcrplVUhlEO9sg+EjQ9zVs7tCxtE/+OUC0rxIAl45GfUFno6bAOJB65eIE0q23Q==
   dependencies:
     cosmiconfig "^7.0.0"
     farrow-pipeline "^1.12.0"
-    farrow-schema "^1.12.0"
+    farrow-schema "^1.12.1"
     prettier "^2.4.1"
     tslib "^2.1.0"
 
@@ -805,17 +805,17 @@ farrow-pipeline@^1.11.4, farrow-pipeline@^1.12.0:
   dependencies:
     tslib "^2.1.0"
 
-farrow-schema@^1.11.1, farrow-schema@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.npmmirror.com/farrow-schema/-/farrow-schema-1.12.0.tgz#4e0acd2f6a6c26be40464a440961f954c77e79ae"
-  integrity sha512-PjevsiiCfYPfbZFP6yGIoY+l0rT5JdldYydjKAIN12Uoi+8ox20+WXtu66jYZi9BjrYa+zlAuRG8V1zEczDGsw==
+farrow-schema@^1.11.1, farrow-schema@^1.12.0, farrow-schema@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.npmmirror.com/farrow-schema/-/farrow-schema-1.12.1.tgz#8df6c7e9e0e61b4ee08311160eaf017efb3edcc3"
+  integrity sha512-K15et9jhiPakxPxbWRQLT8m1DkIk6BB4KeUkp3YTwqV30cjTIUjdll6q2/lyjS/T/ZX8BLHuZDtacBJdzgJn6A==
   dependencies:
     tslib "^2.1.0"
 
 farrow@^1.11.4:
-  version "1.12.0"
-  resolved "https://registry.npmmirror.com/farrow/-/farrow-1.12.0.tgz#20a1d1958c2ba783e46cb982d3a95100d64052fb"
-  integrity sha512-2I2FAyDPArPFtWL/qn3RKwzjSFp2SxLCr7nZ7gRzv7/l6t8EDcADK8vCgnkKX4cfvAQJWur/jS4MbgEXTmk7+g==
+  version "1.12.1"
+  resolved "https://registry.npmmirror.com/farrow/-/farrow-1.12.1.tgz#d16b14745af9f0f0467cede06c295ec70fbd72f5"
+  integrity sha512-Avr0AUTiqVvEDc9NXyGjU2wBuVi1k2c/H+GsdbZl05qp/rl27AJZm8Rc5qNtqZdO0onIQbVVXsFqJ+FQEcRkCw==
   dependencies:
     chalk "^4.1.2"
     chokidar "^3.4.1"
@@ -824,8 +824,8 @@ farrow@^1.11.4:
     esbuild "^0.14.5"
     esbuild-node-externals "^1.4.1"
     execa "^5.0.0"
-    farrow-api "^1.12.0"
-    farrow-schema "^1.12.0"
+    farrow-api "^1.12.1"
+    farrow-schema "^1.12.1"
     fs-extra "^9.1.0"
     leven "3"
     node-fetch "^2.6.1"
@@ -1026,9 +1026,9 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3, inherits@^2.0.4:
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
 inquirer@^8.2.0:
-  version "8.2.0"
-  resolved "https://registry.npmmirror.com/inquirer/-/inquirer-8.2.0.tgz#f44f008dd344bbfc4b30031f45d984e034a3ac3a"
-  integrity sha512-0crLweprevJ02tTuA6ThpoAERAGyVILC4sS74uib58Xf/zSr1/ZWtmm7D5CI+bSQEaA04f0K7idaHpQbSWgiVQ==
+  version "8.2.1"
+  resolved "https://registry.npmmirror.com/inquirer/-/inquirer-8.2.1.tgz#e00022e3e8930a92662f760f020686530a84671d"
+  integrity sha512-pxhBaw9cyTFMjwKtkjePWDhvwzvrNGAw7En4hottzlPvz80GZaMZthdDU35aA6/f5FRZf3uhE057q8w1DE3V2g==
   dependencies:
     ansi-escapes "^4.2.1"
     chalk "^4.1.1"
@@ -1040,7 +1040,7 @@ inquirer@^8.2.0:
     mute-stream "0.0.8"
     ora "^5.4.1"
     run-async "^2.4.0"
-    rxjs "^7.2.0"
+    rxjs "^7.5.5"
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
     through "^2.3.6"
@@ -1450,9 +1450,9 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
 postcss@^8.1.10:
-  version "8.4.7"
-  resolved "https://registry.npmmirror.com/postcss/-/postcss-8.4.7.tgz#f99862069ec4541de386bf57f5660a6c7a0875a8"
-  integrity sha512-L9Ye3r6hkkCeOETQX6iOaWZgjp3LL6Lpqm6EtgbKrgqGGteRMNb9vzBfRL96YOSu8o7x3MfIH9Mo5cPJFGrW6A==
+  version "8.4.8"
+  resolved "https://registry.npmmirror.com/postcss/-/postcss-8.4.8.tgz#dad963a76e82c081a0657d3a2f3602ce10c2e032"
+  integrity sha512-2tXEqGxrjvAO6U+CJzDL2Fk2kPHTv1jQsYkSoMeOis2SsYaXRO2COxTdQp99cYvif9JTXaAk9lYGc3VhJt7JPQ==
   dependencies:
     nanoid "^3.3.1"
     picocolors "^1.0.0"
@@ -1681,10 +1681,10 @@ run-async@^2.4.0:
   resolved "https://registry.npmmirror.com/run-async/-/run-async-2.4.1.tgz#8440eccf99ea3e70bd409d49aab88e10c189a455"
   integrity sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==
 
-rxjs@^7.2.0:
-  version "7.5.4"
-  resolved "https://registry.npmmirror.com/rxjs/-/rxjs-7.5.4.tgz#3d6bd407e6b7ce9a123e76b1e770dc5761aa368d"
-  integrity sha512-h5M3Hk78r6wAheJF0a5YahB1yRQKCsZ4MsGdZ5O9ETbVtjPcScGfrMmoOq7EBsCRzd4BDkvDJ7ogP8Sz5tTFiQ==
+rxjs@^7.2.0, rxjs@^7.5.5:
+  version "7.5.5"
+  resolved "https://registry.npmmirror.com/rxjs/-/rxjs-7.5.5.tgz#2ebad89af0f560f460ad5cc4213219e1f7dd4e9f"
+  integrity sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==
   dependencies:
     tslib "^2.1.0"
 
@@ -1882,9 +1882,9 @@ ts-map@^1.0.3:
   integrity sha512-vDWbsl26LIcPGmDpoVzjEP6+hvHZkBkLW7JpvwbCv/5IYPJlsbzCVXY3wsCeAxAUeTclNOUZxnLdGh3VBD/J6w==
 
 ts-node@^10.5.0:
-  version "10.6.0"
-  resolved "https://registry.npmmirror.com/ts-node/-/ts-node-10.6.0.tgz#c3f4195d5173ce3affdc8f2fd2e9a7ac8de5376a"
-  integrity sha512-CJen6+dfOXolxudBQXnVjRVvYTmTWbyz7cn+xq2XTsvnaXbHqr4gXSCNbS2Jj8yTZMuGwUoBESLaOkLascVVvg==
+  version "10.7.0"
+  resolved "https://registry.npmmirror.com/ts-node/-/ts-node-10.7.0.tgz#35d503d0fab3e2baa672a0e94f4b40653c2463f5"
+  integrity sha512-TbIGS4xgJoX2i3do417KSaep1uRAW/Lu+WAL2doDHC0D6ummjirVOXU5/7aiZotbQ5p1Zp9tP7U6cYhA0O7M8A==
   dependencies:
     "@cspotcode/source-map-support" "0.7.0"
     "@tsconfig/node10" "^1.0.7"

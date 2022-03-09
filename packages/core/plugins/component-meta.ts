@@ -2,7 +2,7 @@ import { parse } from 'vue-docgen-api';
 import { resolve } from 'path';
 import { getContext } from '../server/project.js';
 import { getFileName, getRelativePath, globAsync } from '../utils/file.js';
-import { ComponentInfo, ComponentLeafNode, ComponentTree } from '@carverry/app/src/typings/editor';
+import { ComponentInfo, ComponentLeafNode, ComponentTree } from '../../app/src/typings/editor';
 
 function getComponentTree(files: string[], rootDir: string): ComponentTree {
   const root: ComponentTree = {

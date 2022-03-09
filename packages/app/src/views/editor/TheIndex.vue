@@ -44,15 +44,6 @@
       </el-aside>
       <el-main class="p-0">
         <!-- TODO: 优化异步组件重载逻辑 -->
-        <!-- <template-render
-          v-if="templateLoaded"
-          ref="renderRef"
-          :meta="activedPageMeta"
-          :option="pageOption"
-          render-key=""
-          @update-target="initSlotContainer"
-          @update-template="updateTemplate"
-        /> -->
         <page-viewer />
       </el-main>
     </el-container>
@@ -61,111 +52,18 @@
 
 <script lang="ts" setup>
 import {
-  computed, nextTick, ref, watch,
+  nextTick, ref, watch,
 } from 'vue';
-import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import { ElMessageBox } from 'element-plus';
-import CommonPage from '@/template/CommonPage.vue';
-import TemplateRender from './TemplateRender.vue';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curDragComponent,
   curEditKey, curOption, getOptionByKey, pageOption, updateComponnetInfo, updateFileInfo, updateOptionKey,
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
-import { Nullable } from '@/typings/common';
 import PageViewer from './PageViewer.vue';
 
-const renderRef = ref<typeof TemplateRender>();
 const templateLoaded = ref(true);
 const generating = ref(false);
-
-function containerDragover(e: DragEvent) {
-  e.preventDefault();
-  if (!e.currentTarget || !curDragComponent.value) {
-    return;
-  }
-  e.stopPropagation(); // 停止冒泡
-  (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
-}
-
-function containerDrop(e: DragEvent) {
-  e.preventDefault();
-  e.stopPropagation(); // 停止冒泡
-  e.currentTarget?.dispatchEvent(new Event('slot-append', {
-    cancelable: true,
-    bubbles: true,
-  }));
-  console.log('containerDrop');
-}
-
-function containerDragenter(e: DragEvent) {
-  if (!e.currentTarget || !curDragComponent.value) {
-    return;
-  }
-  e.stopPropagation(); // 停止冒泡
-  (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
-}
-
-function containerDragleave(e: DragEvent) {
-  if (!e.currentTarget || !curDragComponent.value) {
-    return;
-  }
-  e.stopPropagation(); // 停止冒泡
-  (e.currentTarget as HTMLElement).classList.remove('bg-brand-300', 'bg-opacity-30');
-}
-
-/**
- * 为目标DOM（容器）添加排序功能
- * @param target 目标DOM
- * @param slot slot名称
- */
-function initSort(target: HTMLElement, slot: string) {
-  // eslint-disable-next-line no-new
-  const el = new Sortable(target, {
-    animation: 100,
-    ghostClass: 'border',
-    onEnd: (ev) => {
-      target.dispatchEvent(new CustomEvent('slot-change', {
-        detail: {
-          oldIdx: ev.oldIndex,
-          newIdx: ev.newIndex,
-          slot,
-        },
-        cancelable: true,
-        bubbles: true,
-      }));
-      console.log(ev);
-    },
-  });
-}
-
-/** 初始化slot容器事件和样式 */
-function initSlotContainer() {
-  if (!renderRef.value) {
-    return;
-  }
-  // [document.createTreeWalker() - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createTreeWalker)
-  // [javascript - Is there a DOM API for querying comment nodes? - Stack Overflow](https://stackoverflow.com/questions/16151813/is-there-a-dom-api-for-querying-comment-nodes)
-  const walker = document.createTreeWalker(renderRef.value.$el, NodeFilter.SHOW_COMMENT, null);
-  let cur: Comment = walker.currentNode as Comment;
-  while (cur) {
-    if (cur.textContent?.includes('@slot')) {
-      const slotContainer = (cur as Comment).parentElement as HTMLDivElement;
-      const slotName = (cur.nextElementSibling as Nullable<HTMLElement>)?.dataset.slot || 'default';
-      slotContainer.dataset.slot = slotName;
-      // 给slot容器加上样式
-      slotContainer.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
-      // 容器拖拽交互和样式
-      slotContainer.addEventListener('dragover', containerDragover);
-      slotContainer.addEventListener('drop', containerDrop);
-      slotContainer.addEventListener('dragenter', containerDragenter);
-      slotContainer.addEventListener('dragleave', containerDragleave);
-      initSort(slotContainer, slotName);
-    }
-    cur = walker.nextNode() as Comment;
-  }
-}
 
 function updateTemplate() {
   templateLoaded.value = false;

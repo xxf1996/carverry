@@ -1,7 +1,7 @@
 import typescript from 'typescript';
 import type { JSDoc, FunctionDeclaration, VariableStatement, ExportAssignment } from 'typescript';
 import { readFile } from 'fs/promises';
-import { FileExportMember, FileInfo, FileTree } from '@carverry/app/src/typings/editor';
+import { FileExportMember, FileInfo, FileTree } from '../../app/src/typings/editor';
 import { getContext } from '../server/project.js';
 import { globAsync, getRelativePath } from '../utils/file.js';
 import { resolve } from 'path';

@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "noImplicitAny": false,
     // "lib": ["esnext", "dom"],
-    // "types": ["vite/client", "lodash"],
+    "types": ["sortablejs"],
     // "plugins": [{
     //   "name": "@vuedx/typescript-plugin-vue" // 增强Vue单文件的TS体验的插件
     // }],

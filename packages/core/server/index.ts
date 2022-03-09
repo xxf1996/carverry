@@ -1,4 +1,4 @@
-import { ComponentOption } from '@carverry/app/src/typings/editor';
+import { ComponentOption } from '../../app/src/typings/editor';
 import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents } from '../plugins/component-meta.js';

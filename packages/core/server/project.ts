@@ -1,4 +1,4 @@
-import { ComponentOption } from '@carverry/app/src/typings/editor';
+import { ComponentOption } from '../../app/src/typings/editor';
 import { ProjectContext } from '../typings/context';
 import { db } from './common.js';
 
