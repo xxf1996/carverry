@@ -4,6 +4,8 @@ import farrowCors from 'farrow-cors';
 import { getLoaclComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
 import { getContext, updatePreview } from './project.js';
+import './socket.js';
+import { resolve } from 'path';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
@@ -31,17 +33,30 @@ http
   });
 
 http
-  .post('/preview', {
+  .match({
+    url: '/preview',
+    method: 'post',
     body: {
-      config: String,
+      option: String,
+      block: String,
     },
   })
   .use(async (req) => {
     try {
-      const config: ComponentOption = JSON.parse(req.body.config);
-      await updatePreview(config);
+      if (req.body.option) {
+        const option: ComponentOption = JSON.parse(req.body.option);
+        await updatePreview({
+          block: req.body.block,
+          option,
+        });
+      } else {
+        await updatePreview({
+          block: req.body.block,
+        });
+      }
       return Response.text('ok');
     } catch (err) {
+      console.log(err);
       return Response.text('error');
     }
   });

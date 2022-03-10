@@ -96,9 +96,9 @@ export function templateTargetPlugin() {
           // 先解压字符串
           // const { decompress } = await import('lzw-compressor');
           // const option: Required<ComponentOption> = JSON.parse(decompress(options[1]));
-          const pageOption = await promises.readFile(path.resolve(__dirname, '../.cache/pageOption.json'), { encoding: 'utf-8' });
+          const blockOption = await promises.readFile(path.resolve(__dirname, '../.cache/blockOption.json'), { encoding: 'utf-8' });
           const key = options[1] || '';
-          const option = getOptionByKey(JSON.parse(pageOption), key);
+          const option = getOptionByKey(JSON.parse(blockOption), key);
           console.log(key, option);
           const source = getFile(option);
           const filename = `template-target-${option.key || 'root'}`; // 使用固定文件名有助于vite缓存依赖关系

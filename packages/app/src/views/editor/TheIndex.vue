@@ -2,17 +2,15 @@
   <div>
     <el-container class="h-screen">
       <el-aside width="360px">
-        <div class="flex items-center gap-2">
-          <!-- <el-select v-model="pageContainer">
-            <el-option
-              v-for="(page, key) in pages"
-              :key="key"
-              :label="page.name"
-              :value="key"
-            />
-          </el-select> -->
+        <div class="flex items-center gap-2 px-1 py-2">
+          <el-button
+            size="small"
+            type="primary"
+          >
+            加载Block
+          </el-button>
           <el-button size="small">
-            重置
+            新建Block
           </el-button>
           <el-button
             type="primary"
@@ -22,6 +20,9 @@
             @click="generatePage('test')"
           >
             生成页面
+          </el-button>
+          <el-button size="small">
+            重置
           </el-button>
         </div>
         <h5>操作</h5>
@@ -57,7 +58,7 @@ import {
 import { ElMessageBox } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, pageOption, updateComponnetInfo, updateFileInfo, updateOptionKey,
+  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview,
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import PageViewer from './PageViewer.vue';
@@ -89,9 +90,9 @@ async function removeComponent() {
     const selfPaths = paths.slice(-2);
     const slotName = selfPaths[0];
     const slotIdx = Number(selfPaths[1]);
-    const parent = getOptionByKey(pageOption.value, parentPath);
+    const parent = getOptionByKey(blockOption.value, parentPath);
     parent.slots[slotName].splice(slotIdx, 1); // 移除配置
-    updateOptionKey(pageOption.value);
+    updateOptionKey(blockOption.value);
   });
 }
 
@@ -99,7 +100,7 @@ async function generatePage(name: string) {
   generating.value = true;
   // 相同配置会被缓存，需要实时最新
   await import(`./${Date.now()}/page-generator?option=${JSON.stringify({
-    data: pageOption.value,
+    data: blockOption.value,
     name,
   })}`).finally(() => {
     generating.value = false;
@@ -107,9 +108,10 @@ async function generatePage(name: string) {
 }
 
 watch(curEditKey, (val) => {
-  curOption.value = getOptionByKey(pageOption.value, val);
+  curOption.value = getOptionByKey(blockOption.value, val);
 }, { immediate: true });
 updateFileInfo();
 updateComponnetInfo();
+updatePreview();
 // initPageOption();
 </script>

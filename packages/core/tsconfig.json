@@ -16,7 +16,8 @@
   "compilerOptions": {
     "types": [
       "inquirer",
-      "glob"
+      "glob",
+      "ws"
     ],
     "module": "ESNext",
     "moduleResolution": "Node",

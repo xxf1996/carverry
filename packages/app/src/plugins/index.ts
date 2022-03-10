@@ -1,7 +1,11 @@
 import { Nullable } from '@/typings/common';
 import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
-import { ProjectContext } from '../../../core/typings/context';
+import { ProjectContext } from '@carverry/core/typings/context';
+import { SocketEvent, SocketInit } from '@carverry/core/typings/server';
+import { ComponentMeta } from '@/typings/editor';
+
+let curMeta: Nullable<Required<ComponentMeta>> = null;
 
 /**
  * 为目标DOM（容器）添加排序功能
@@ -28,20 +32,7 @@ function initSort(target: HTMLElement, slot: string) {
   });
 }
 
-function emitEvent(name: string) {
-  return (e: DragEvent) => {
-    console.log(e);
-    e.stopPropagation();
-    e.preventDefault();
-    e.currentTarget?.dispatchEvent(new CustomEvent(name, {
-      cancelable: true,
-      bubbles: true,
-    }));
-  };
-}
-
 function containerDragover(e: DragEvent) {
-  console.log(e);
   e.preventDefault();
   if (!e.currentTarget) {
     return;
@@ -51,18 +42,17 @@ function containerDragover(e: DragEvent) {
 }
 
 function containerDrop(e: DragEvent) {
-  console.log(e);
   e.preventDefault();
   e.stopPropagation(); // 停止冒泡
-  e.currentTarget?.dispatchEvent(new Event('slot-append', {
+  e.currentTarget?.dispatchEvent(new CustomEvent('slot-append', {
     cancelable: true,
     bubbles: true,
+    detail: curMeta, // 传递当前要添加的组件的元数据
   }));
   console.log('containerDrop');
 }
 
 function containerDragenter(e: DragEvent) {
-  console.log(e);
   if (!e.currentTarget) {
     return;
   }
@@ -71,7 +61,6 @@ function containerDragenter(e: DragEvent) {
 }
 
 function containerDragleave(e: DragEvent) {
-  console.log(e);
   if (!e.currentTarget) {
     return;
   }
@@ -79,24 +68,68 @@ function containerDragleave(e: DragEvent) {
   (e.currentTarget as HTMLElement).classList.remove('bg-brand-300', 'bg-opacity-30');
 }
 
+function emitDragEvent(target: Element, event: 'dragover' | 'dragleave' | 'dragenter' | 'drop') {
+  target.dispatchEvent(new DragEvent(event, {
+    bubbles: true,
+    cancelable: true,
+    shiftKey: false,
+    altKey: false,
+  }));
+}
+
+function initSocket() {
+  const ws = new WebSocket('ws://localhost:3366');
+  let wsLoaded = false;
+  let target: Nullable<Element> = null;
+  ws.onopen = () => {
+    wsLoaded = true;
+    const data: SocketInit = {
+      type: 'init',
+      id: 'target',
+    };
+    ws.send(JSON.stringify(data));
+  };
+  ws.onmessage = (e) => {
+    const message: SocketEvent = JSON.parse(e.data);
+    // console.log(message);
+    // 自行触发drag相关事件（从父级窗口进行参数传递）
+    switch (message.type) {
+      case 'dragover':
+        const curTarget = document.elementFromPoint(message.x, message.y); // hit testing，得到当前鼠标位置命中的元素
+        if (curTarget && target && target !== curTarget) {
+          emitDragEvent(target, 'dragleave');
+          emitDragEvent(curTarget, 'dragenter');
+        } else if (curTarget && target && target === curTarget) {
+          emitDragEvent(target, 'dragover');
+        } else if (!curTarget && target) {
+          emitDragEvent(target, 'dragleave');
+        } else if (!target && curTarget) {
+          emitDragEvent(curTarget, 'dragenter');
+        }
+        target = curTarget;
+        break;
+      case 'drop':
+        curMeta = message.meta;
+        const curTarget2 = document.elementFromPoint(message.x, message.y); 
+        if (curTarget2 && target && curTarget2 === target) {
+          emitDragEvent(target, 'dragleave');
+          emitDragEvent(target, 'drop');
+        } else if (!curTarget2 && target) {
+          emitDragEvent(target, 'dragleave'); // 表示从整个预览区离开了
+        }
+        target = null;
+        break;
+      default:
+        break;
+    }
+  };
+}
+
 function initSlotEvent(target: HTMLElement, name: string) {
-  // TODO: 也许可以通过伪造事件来传递drag/drop事件，只不过需要自行判断事件类型。有没有高效的hit test方法？
-  window.addEventListener('mousemove', () => {
-    target.dispatchEvent(new DragEvent('dragover', {
-      bubbles: true,
-      cancelable: true,
-      shiftKey: false,
-      altKey: false,
-    }));
-  });
   target.dataset.slot = name;
   // 给slot容器加上样式
   target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
   // 容器拖拽交互和样式
-  // target.addEventListener('dragover', emitEvent('carverry-dragover'));
-  // target.addEventListener('drop', emitEvent('carverry-drop'));
-  // target.addEventListener('dragenter', emitEvent('carverry-dragenter'));
-  // target.addEventListener('dragleave', emitEvent('carverry-dragleave'));
   target.addEventListener('dragover', containerDragover);
   target.addEventListener('drop', containerDrop);
   target.addEventListener('dragenter', containerDragenter);
@@ -106,6 +139,7 @@ function initSlotEvent(target: HTMLElement, name: string) {
 
 /** 初始化slot容器事件和样式 */
 export function initSlotContainer(container: HTMLElement, empty = false) {
+  initSocket();
   if (empty) {
     initSlotEvent(container, 'carverry-empty');
     return;
@@ -134,6 +168,7 @@ export async function addCarverryRoute(router: Router) {
   router.addRoute({
     path: '/carverry-preview',
     name: 'CarverryPreview',
+    /* @vite-ignore */
     component: () => import(cacheDir),
   });
   setTimeout(() => {

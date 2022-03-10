@@ -51,7 +51,7 @@ import {
 import type { ComponentDoc } from 'vue-docgen-api';
 import {
   curDragComponent,
-  curEditKey, curMeta, curOption, getOptionByKey, pageOption, updateOptionKey,
+  curEditKey, curMeta, curOption, getOptionByKey, blockOption, updateOptionKey,
 } from './state';
 import { ComponentMeta, ComponentOption } from '@/typings/editor';
 
@@ -66,7 +66,7 @@ const emit = defineEmits<{ (event: 'update-target'): void;
 const slots = computed(() => props.option.slots);
 const targetRef = ref<typeof TemplateTarget | null>(null);
 const selected = computed(() => props.renderKey === curEditKey.value);
-const templateOption = computed(() => getOptionByKey(pageOption.value, props.renderKey));
+const templateOption = computed(() => getOptionByKey(blockOption.value, props.renderKey));
 
 const meta = ref<ComponentMeta>();
 const loadedTime = ref(Date.now());
@@ -81,7 +81,7 @@ const TemplateTarget = defineAsyncComponent({
       },
       cache: 'no-cache',
       method: 'POST',
-      body: JSON.stringify(pageOption.value),
+      body: JSON.stringify(blockOption.value),
     }).then(() => Promise.all([targetLoader(), metaLoader()])).then(([targetRes, metaRes]) => {
       resolve(targetRes);
       meta.value = metaRes.default;
@@ -135,7 +135,7 @@ function initOption() {
   if (!meta.value) {
     return;
   }
-  const option = getOptionByKey(pageOption.value, props.renderKey);
+  const option = getOptionByKey(blockOption.value, props.renderKey);
   meta.value.doc.props?.forEach((prop) => {
     if (!option.props[prop.name]) {
       option.props[prop.name] = {
@@ -190,9 +190,9 @@ function slotAppend(e: Event) {
   if (!triggeredSlot) {
     return;
   }
-  const option = getOptionByKey(pageOption.value, props.renderKey);
+  const option = getOptionByKey(blockOption.value, props.renderKey);
   option.slots[triggeredSlot].push(getInitOption(curDragComponent.value.path, curDragComponent.value.doc));
-  updateOptionKey(pageOption.value);
+  updateOptionKey(blockOption.value);
   nextTick(() => {
     curDragComponent.value = undefined; // drop处理完后清空，用于识别其他情况的拖拽
   });
@@ -203,7 +203,7 @@ function slotAppend(e: Event) {
  * @param e
  */
 function slotChange(e: CustomEvent<{ oldIdx: number; newIdx: number; slot: string; }>) {
-  const option = getOptionByKey(pageOption.value, props.renderKey);
+  const option = getOptionByKey(blockOption.value, props.renderKey);
   if (!e.target) {
     return;
   }
@@ -213,7 +213,7 @@ function slotChange(e: CustomEvent<{ oldIdx: number; newIdx: number; slot: strin
   const slotChildren = Array.from((e.target as HTMLElement).querySelectorAll(`:scope > [data-slot="${slot}"]`));
   const curIdx = slotChildren.map((child) => Number((child as HTMLElement).dataset.idx));
   option.slots[slot] = curIdx.map((val) => origin[val]);
-  updateOptionKey(pageOption.value);
+  updateOptionKey(blockOption.value);
 }
 
 defineExpose({

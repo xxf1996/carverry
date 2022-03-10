@@ -1,6 +1,8 @@
-import { ComponentOption } from '../../app/src/typings/editor';
 import { ProjectContext } from '../typings/context';
+import { PreviewParams } from '../typings/server';
 import { db } from './common.js';
+import { resolve } from 'path';
+import { emptyBlock, emptyPage } from '../plugins/output.js';
 
 export async function saveContext(context: ProjectContext) {
   await db.read();
@@ -25,7 +27,14 @@ export async function getContext(): Promise<ProjectContext> {
   return Promise.reject(new Error('没有上下文信息'));
 }
 
-export async function updatePreview(config: ComponentOption) {
-  // TODO: 同步更新预览输出
-  console.log(config);
+export async function updatePreview(params: PreviewParams) {
+  const context = await getContext();
+  const cacheDir = resolve(context.root, context.pageOutDir, '.cache');
+  if (params.block && params.option) {
+    // TODO: 同步更新预览输出
+  } else if (params.block) {
+    emptyBlock(cacheDir);
+  } else if (!params.block) {
+    emptyPage(cacheDir);
+  }
 }

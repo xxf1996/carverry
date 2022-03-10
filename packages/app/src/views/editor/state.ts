@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import {
   ComponentInfo,
@@ -20,8 +20,11 @@ export const componentInfo = ref<ComponentInfo>({
 });
 export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref('');
+/** 当前进行操作的block名称 */
+export const curBlock = ref('');
 // TODO: 从配置文件加载
-export const pageOption = useLocalStorage<ComponentOption>('carverry_pageOption', {
+/** 操作的block配置 */
+export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOption', {
   path: 'src/template/CommonPage.vue',
   key: '',
   props: {},
@@ -31,11 +34,13 @@ export const pageOption = useLocalStorage<ComponentOption>('carverry_pageOption'
     content: [],
   },
 });
+/** 是否正在拖拽组件 */
+export const dragging = computed(() => !!curDragComponent.value);
 
 // TODO: 组件类设置支持，共享项目上下文（taliwind）
 
 export function initPageOption() {
-  pageOption.value = {
+  blockOption.value = {
     path: 'src/template/CommonPage.vue',
     key: '',
     props: {},
@@ -85,6 +90,16 @@ export async function updateComponnetInfo() {
     return res.json() as Promise<ComponentInfo>;
   });
   componentInfo.value = data;
+}
+
+export async function updatePreview() {
+  await fetch('/editor-api/preview', {
+    method: 'post',
+    body: JSON.stringify({
+      block: curBlock.value,
+      option: JSON.stringify(blockOption.value),
+    }),
+  });
 }
 
 export function updateOptionKey(option: ComponentOption, prefix = '') {
