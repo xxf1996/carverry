@@ -28,6 +28,12 @@ function handleEvent(message: string, ws: WebSocket) {
       }
       target.send(message);
       break;
+    case 'config-change':
+      if (data.id === 'app' || !app) {
+        return;
+      }
+      app.send(message);
+      break;
     default:
       break;
   }

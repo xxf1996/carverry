@@ -18,14 +18,58 @@
 </template>
 
 <script lang="ts" setup>
-import { curDragComponent, dragging } from './state';
-import { SocketInit, SocketEvent, SocketDragover, SocketDrop } from '@carverry/core/typings/server';
+import { blockOption, curDragComponent, dragging } from './state';
+import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange } from '@carverry/core/typings/server';
+import { ComponentOption  } from '@/typings/editor';
+import type { ComponentDoc } from 'vue-docgen-api';
 import { ref, watch } from 'vue';
 
 const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
 const container = ref<HTMLDivElement>();
 let wsLoaded = false;
+
+/**
+ * 获取一个组件的初始配置
+ * @param path 组件路径
+ * @param doc 组件文档信息
+ */
+function getInitOption(path: string, key: string, doc: ComponentDoc): ComponentOption {
+  const option: ComponentOption = {
+    path,
+    key,
+    props: {},
+    slots: {},
+    events: {},
+  };
+  doc.props?.forEach((prop) => {
+    option.props[prop.name] = {
+      path: '',
+      member: '',
+      model: false,
+    };
+  });
+  doc.events?.forEach((event) => {
+    option.events[event.name] = {
+      path: '',
+      member: '',
+    };
+  });
+  doc.slots?.forEach((slot) => {
+    option.slots[slot.name] = [];
+  });
+
+  return option;
+}
+
+function changeConfig(message: SocketConfigChange) {
+  if (message.key && message.slot) {
+    // 正常插入
+  } else if (!message.key) { // 初始容器插入
+    const option = getInitOption(message.meta.path, '', message.meta.doc);
+    blockOption.value = option;
+  }
+}
 
 function sendMessage(message: SocketEvent) {
   if (!wsLoaded) {
@@ -35,6 +79,20 @@ function sendMessage(message: SocketEvent) {
   ws.send(JSON.stringify(message));
 }
 
+function handleMessage(message: SocketEvent) {
+  console.log(message);
+  switch (message.type) {
+    case 'config-change':
+      changeConfig(message);
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * 获取鼠标相对于预览区原点的坐标
+ */
 function getPosition(e: DragEvent) {
   if (!container.value) {
     return {
@@ -61,6 +119,10 @@ ws.onerror = (e) => {
 };
 ws.onclose = () => {
   wsLoaded = false;
+};
+ws.onmessage = (e) => {
+  const message: SocketEvent = JSON.parse(e.data);
+  handleMessage(message);
 };
 
 function containerDragover(e: DragEvent) {

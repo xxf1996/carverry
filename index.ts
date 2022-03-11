@@ -1,1 +1,1 @@
-export { addCarverryRoute, initSlotContainer } from './packages/app/src/plugins';
+export { addCarverryRoute, initSlotContainer, changeConfig } from './packages/app/src/plugins';

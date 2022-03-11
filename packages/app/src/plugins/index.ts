@@ -2,10 +2,12 @@ import { Nullable } from '@/typings/common';
 import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
 import { ProjectContext } from '@carverry/core/typings/context';
-import { SocketEvent, SocketInit } from '@carverry/core/typings/server';
+import { SocketConfigChange, SocketEvent, SocketInit } from '@carverry/core/typings/server';
 import { ComponentMeta } from '@/typings/editor';
 
 let curMeta: Nullable<Required<ComponentMeta>> = null;
+let wsLoaded = false;
+let ws: Nullable<WebSocket> = null;
 
 /**
  * 为目标DOM（容器）添加排序功能
@@ -78,8 +80,7 @@ function emitDragEvent(target: Element, event: 'dragover' | 'dragleave' | 'drage
 }
 
 function initSocket() {
-  const ws = new WebSocket('ws://localhost:3366');
-  let wsLoaded = false;
+  ws = new WebSocket('ws://localhost:3366');
   let target: Nullable<Element> = null;
   ws.onopen = () => {
     wsLoaded = true;
@@ -87,7 +88,7 @@ function initSocket() {
       type: 'init',
       id: 'target',
     };
-    ws.send(JSON.stringify(data));
+    ws?.send(JSON.stringify(data));
   };
   ws.onmessage = (e) => {
     const message: SocketEvent = JSON.parse(e.data);
@@ -176,4 +177,18 @@ export async function addCarverryRoute(router: Router) {
       name: 'CarverryPreview',
     });
   }, 1000);
+}
+
+export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: string) {
+  if (!wsLoaded || !ws) {
+    return;
+  }
+  const data: SocketConfigChange = {
+    type: 'config-change',
+    id: 'target',
+    key,
+    slot,
+    meta,
+  };
+  ws.send(JSON.stringify(data)); // 向可视化应用上报配置变化
 }

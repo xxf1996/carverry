@@ -10,12 +10,13 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { initSlotContainer } from 'carverry';
+import { initSlotContainer, changeConfig } from 'carverry';
+import { ComponentMeta } from '@carverry/app/src/typings/editor';
 
 const containerRef = ref<HTMLElement>();
 
-function slotAppend(e: CustomEvent) {
-  console.log(e);
+function slotAppend(e: CustomEvent<ComponentMeta>) {
+  changeConfig('', e.detail);
 }
 
 onMounted(() => {

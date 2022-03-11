@@ -3,9 +3,8 @@ import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
-import { getContext, updatePreview } from './project.js';
+import { addBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
 import './socket.js';
-import { resolve } from 'path';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
@@ -59,6 +58,36 @@ http
       console.log(err);
       return Response.text('error');
     }
+  });
+
+http
+  .match({
+    url: '/block',
+    method: 'post',
+    body: {
+      name: String,
+    },
+  })
+  .use(async (req) => {
+    await addBlock(req.body.name);
+    return Response.text('ok');
+  });
+
+http
+  .get('/block')
+  .use(async () => {
+    const blocks = await getBlocks();
+    return Response.json(blocks);
+  });
+
+http
+  .match({
+    url: '/config/<name:string>',
+    method: 'get',
+  })
+  .use(async (req) => {
+    const config = await getBlockConfig(req.params.name);
+    return Response.json(config);
   });
 
 components

@@ -2,14 +2,19 @@
   <div>
     <el-container class="h-screen">
       <el-aside width="360px">
+        <p>当前编辑Block为：{{ curBlock || '暂无' }}</p>
         <div class="flex items-center gap-2 px-1 py-2">
           <el-button
             size="small"
             type="primary"
+            @click="showLoad = true;"
           >
             加载Block
           </el-button>
-          <el-button size="small">
+          <el-button
+            size="small"
+            @click="showAdd = true;"
+          >
             新建Block
           </el-button>
           <el-button
@@ -19,7 +24,7 @@
             :loading="generating"
             @click="generatePage('test')"
           >
-            生成页面
+            生成源码
           </el-button>
           <el-button size="small">
             重置
@@ -48,6 +53,32 @@
         <page-viewer />
       </el-main>
     </el-container>
+    <drawer-container
+      v-model="showLoad"
+      title="加载Block"
+      @ok="selectBlock"
+      @cancel="showLoad = false;"
+    >
+      <el-select v-model="loadedBlock">
+        <el-option
+          v-for="block in blocks"
+          :key="block"
+          :value="block"
+          :label="block"
+        />
+      </el-select>
+    </drawer-container>
+    <drawer-container
+      v-model="showAdd"
+      title="新建Block"
+      @ok="addBlock"
+      @cancel="showAdd = false;"
+    >
+      <el-input
+        v-model="blockName"
+        placeholder="请输入Block名称"
+      />
+    </drawer-container>
   </div>
 </template>
 
@@ -58,19 +89,23 @@ import {
 import { ElMessageBox } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview,
+  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig,
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import PageViewer from './PageViewer.vue';
+import DrawerContainer from '@/components/DrawerContainer.vue';
+import { debouncedWatch } from '@vueuse/core';
 
-const templateLoaded = ref(true);
 const generating = ref(false);
+const showLoad = ref(false);
+const showAdd = ref(false);
+const loadedBlock = ref('');
+const blocks = ref<string[]>([]);
+const blockName = ref('');
 
-function updateTemplate() {
-  templateLoaded.value = false;
-  nextTick(() => {
-    templateLoaded.value = true;
-  });
+async function updateBlocks() {
+  const data = await getBlocks();
+  blocks.value = data;
 }
 
 /** 从配置中移除当前选中组件 */
@@ -107,11 +142,46 @@ async function generatePage(name: string) {
   });
 }
 
-watch(curEditKey, (val) => {
-  curOption.value = getOptionByKey(blockOption.value, val);
-}, { immediate: true });
+async function addBlock() {
+  if (!blockName.value) {
+    return;
+  }
+  await fetch('/editor-api/block', {
+    method: 'post',
+    body: JSON.stringify({
+      name: blockName.value,
+    }),
+  });
+  updateBlocks();
+  curBlock.value = blockName.value;
+  initBlockOption();
+  showAdd.value = false;
+}
+
+async function selectBlock() {
+  if (!loadedBlock.value) {
+    return;
+  }
+  curBlock.value = loadedBlock.value;
+  const curConfig = await getBlockConfig(loadedBlock.value);
+  if (curConfig.path) {
+    blockOption.value = curConfig;
+  } else {
+    initBlockOption();
+  }
+  showLoad.value = false;
+}
+
 updateFileInfo();
 updateComponnetInfo();
 updatePreview();
-// initPageOption();
+updateBlocks();
+
+watch(curEditKey, (val) => {
+  curOption.value = getOptionByKey(blockOption.value, val);
+}, { immediate: true });
+
+debouncedWatch(() => [curBlock.value, blockOption.value], () => {
+  updatePreview();
+}, { debounce: 200 });
 </script>

@@ -32,7 +32,12 @@ export function getRelativePath(root: string, filePath: string): string {
   return other.startsWith('/') ? other.slice(1) : other;
 }
 
-export function getFileName(filePath: string): string {
+export function getFileName(filePath: string, fullName = true): string {
   const paths = filePath.split('/');
-  return paths[paths.length - 1];
+  const full = paths[paths.length - 1];
+  if (fullName) {
+    return full;
+  }
+  const info = full.split('.');
+  return info[0];
 }

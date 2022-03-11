@@ -22,40 +22,26 @@ export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref('');
 /** 当前进行操作的block名称 */
 export const curBlock = ref('');
-// TODO: 从配置文件加载
 /** 操作的block配置 */
 export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOption', {
-  path: 'src/template/CommonPage.vue',
+  path: '', // 空的path代表是一个空的block，初始状态
   key: '',
   props: {},
   events: {},
-  slots: {
-    btns: [],
-    content: [],
-  },
+  slots: {},
 });
 /** 是否正在拖拽组件 */
 export const dragging = computed(() => !!curDragComponent.value);
 
 // TODO: 组件类设置支持，共享项目上下文（taliwind）
 
-export function initPageOption() {
+export function initBlockOption() {
   blockOption.value = {
-    path: 'src/template/CommonPage.vue',
+    path: '', // 空的path代表是一个空的block，初始状态
     key: '',
     props: {},
     events: {},
-    slots: {
-      btns: [
-        {
-          path: 'src/components/AnalysisRange.vue',
-          props: {},
-          events: {},
-          slots: {},
-        },
-      ],
-      content: [],
-    },
+    slots: {},
   };
 }
 
@@ -90,6 +76,20 @@ export async function updateComponnetInfo() {
     return res.json() as Promise<ComponentInfo>;
   });
   componentInfo.value = data;
+}
+
+export async function getBlocks() {
+  const blocks: string[] = await fetch('/editor-api/block', {
+    method: 'get',
+  }).then((res) => res.json());
+  return blocks;
+}
+
+export async function getBlockConfig(name: string) {
+  const config: ComponentOption = await fetch(`/editor-api/config/${name}`, {
+    method: 'get',
+  }).then((res) => res.json());
+  return config;
 }
 
 export async function updatePreview() {

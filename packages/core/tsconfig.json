@@ -17,8 +17,10 @@
     "types": [
       "inquirer",
       "glob",
-      "ws"
+      "ws",
+      "lodash"
     ],
+    "lib": ["DOM"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "esModuleInterop": true
