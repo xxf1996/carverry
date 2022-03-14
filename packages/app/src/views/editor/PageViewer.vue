@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curDragComponent, dragging } from './state';
-import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange } from '@carverry/core/typings/server';
+import { blockOption, curDragComponent, dragging, getOptionByKey, updateOptionKey } from './state';
+import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
 import { ref, watch } from 'vue';
@@ -63,12 +63,31 @@ function getInitOption(path: string, key: string, doc: ComponentDoc): ComponentO
 }
 
 function changeConfig(message: SocketConfigChange) {
-  if (message.key && message.slot) {
-    // 正常插入
-  } else if (!message.key) { // 初始容器插入
+  if (message.key !== undefined && message.slot) { // 正常插入
+    const parent = getOptionByKey(blockOption.value, message.key); // 获取父级配置结点
+    const childKey = `${message.slot}-0`;
+    const option = getInitOption(message.meta.path, message.key ? `${message.key}-${childKey}` : childKey, message.meta.doc);
+    parent.slots[message.slot].push(option); // 往指定容器插入新组件配置
+  } else if (message.key === undefined) { // 初始容器插入
     const option = getInitOption(message.meta.path, '', message.meta.doc);
     blockOption.value = option;
   }
+  updateOptionKey(blockOption.value); // 更新配置树的key
+}
+
+function slotChange(message: SocketSlotChange) {
+  const parent = getOptionByKey(blockOption.value, message.parent); // 获取父级配置结点
+  const slot = parent.slots[message.slot];
+  const curIdx = new Array(slot.length).fill(0).map((val, idx) => idx);
+  if (message.newIdx > message.oldIdx) {
+    curIdx.splice(message.newIdx + 1, 0, message.oldIdx);
+    curIdx.splice(message.oldIdx, 1);
+  } else if (message.newIdx < message.oldIdx) {
+    curIdx.splice(message.newIdx, 0, message.oldIdx);
+    curIdx.splice(message.oldIdx + 1, 1);
+  }
+  parent.slots[message.slot] = curIdx.map((idx) => slot[idx]); // 按照当前排序进行交换
+  updateOptionKey(blockOption.value); // 更新配置树的key
 }
 
 function sendMessage(message: SocketEvent) {
@@ -84,6 +103,9 @@ function handleMessage(message: SocketEvent) {
   switch (message.type) {
     case 'config-change':
       changeConfig(message);
+      break;
+    case 'slot-change':
+      slotChange(message);
       break;
     default:
       break;

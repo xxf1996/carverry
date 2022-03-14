@@ -29,6 +29,7 @@ function handleEvent(message: string, ws: WebSocket) {
       target.send(message);
       break;
     case 'config-change':
+    case 'slot-change':
       if (data.id === 'app' || !app) {
         return;
       }

@@ -1,9 +1,15 @@
 import { ComponentDoc } from 'vue-docgen-api';
+import { Nullable } from './common';
 
 export interface ComponentMeta {
   name?: string;
   path?: string;
   doc: ComponentDoc;
+}
+
+export interface SlotAppendEvent {
+  meta: Nullable<Required<ComponentMeta>>;
+  slot: string;
 }
 
 export interface ComponentLeafNode {
@@ -33,7 +39,7 @@ export interface ComponentOption {
   /** 组件自身路径 */
   path: string;
   /** 配置树结构中的标识 */
-  key?: string;
+  key: string;
   // TODO: 通用指令支持（v-if/v-show/v-loading）
   /** props映射配置 */
   props: Record<string, ComponentDependence & {

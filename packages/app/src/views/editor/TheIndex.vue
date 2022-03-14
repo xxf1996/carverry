@@ -183,5 +183,5 @@ watch(curEditKey, (val) => {
 
 debouncedWatch(() => [curBlock.value, blockOption.value], () => {
   updatePreview();
-}, { debounce: 200 });
+}, { debounce: 200, deep: true });
 </script>

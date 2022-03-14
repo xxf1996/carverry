@@ -48,7 +48,7 @@ export async function updatePreview(params: PreviewParams) {
       await writeFile(configPath, JSON.stringify(params.option, null, 2), {
         encoding: 'utf-8',
       });
-      await generateFile(resolve(cacheDir), params.option); // 输出到缓存目录，进行预览
+      await generateFile(resolve(cacheDir), params.option, true); // 输出到缓存目录，进行预览
     }
   } else if (params.block) {
     emptyBlock(cacheDir);

@@ -39,8 +39,19 @@ export interface SocketConfigChange {
   meta: Required<ComponentMeta>;
 }
 
+export interface SocketSlotChange {
+  type: 'slot-change';
+  id: SocketType;
+  /** 父级结点key */
+  parent: string;
+  /** 所属的slot */
+  slot: string;
+  newIdx: number;
+  oldIdx: number;
+}
+
 /** websocket通信事件 */
-export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange;
+export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange;
 
 export interface PreviewParams {
   block: string;

@@ -8,7 +8,7 @@
       "@/*": ["src/*"] // 路径alias
     },
     "baseUrl": "./",
-    "types": ["element-plus/global"] // volar支持
+    "types": ["element-plus/global", "lodash"] // volar支持
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
