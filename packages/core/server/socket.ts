@@ -30,6 +30,7 @@ function handleEvent(message: string, ws: WebSocket) {
       break;
     case 'config-change':
     case 'slot-change':
+    case 'selected':
       if (data.id === 'app' || !app) {
         return;
       }

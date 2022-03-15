@@ -59,3 +59,9 @@ onMounted(() => {
   initSlotContainer(el);
 });
 </script>
+
+<style>
+*[data-carverry-key]:hover {
+  background-color: rgba(82, 185, 245, 0.4);
+}
+</style>

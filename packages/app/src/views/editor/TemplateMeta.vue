@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
-import { curMeta, curOption, curEditKey } from './state';
+import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
 
 const metaProps = computed(() => curMeta.value?.doc.props || []);
@@ -65,5 +65,8 @@ const metaEvents = computed(() => curMeta.value?.doc.events || []);
 
 watch(curOption, (val) => {
   console.log('curOption', val);
+});
+watch(curMeta, (val) => {
+  console.log('curMeta', val);
 });
 </script>

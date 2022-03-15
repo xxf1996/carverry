@@ -6,6 +6,7 @@
       clearable
       :props="casProps"
       :options="treeOptions"
+      @change="changeFile"
     />
     <el-select
       v-model="proxyMember"
@@ -35,7 +36,7 @@
 <script lang="ts" setup>
 /* eslint-disable no-restricted-syntax */
 import { CascaderOption, CascaderProps } from 'element-plus';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { proxyProp } from '@/composition/props';
 import { fileInfo } from './state';
 import { FileExportMember, FileLeafNode, FileTree } from '@/typings/editor';
@@ -85,8 +86,7 @@ const memberOptions = computed<FileExportMember[]>(() => {
 const proxyFile = proxyProp(props, 'file');
 const proxyMember = proxyProp(props, 'member');
 
-watch(proxyFile, (val) => {
-  console.log(val);
+function changeFile() {
   proxyMember.value = '';
-});
+}
 </script>

@@ -50,8 +50,14 @@ export interface SocketSlotChange {
   oldIdx: number;
 }
 
+export interface SocketSelected {
+  type: 'selected';
+  id: SocketType;
+  key: string;
+}
+
 /** websocket通信事件 */
-export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange;
+export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange | SocketSelected;
 
 export interface PreviewParams {
   block: string;

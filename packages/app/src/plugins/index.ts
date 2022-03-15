@@ -2,7 +2,7 @@ import { Nullable } from '@/typings/common';
 import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
 import { ProjectContext } from '@carverry/core/typings/context';
-import { SocketConfigChange, SocketEvent, SocketInit, SocketSlotChange } from '@carverry/core/typings/server';
+import { SocketConfigChange, SocketEvent, SocketInit, SocketSelected, SocketSlotChange } from '@carverry/core/typings/server';
 import { ComponentMeta, SlotAppendEvent } from '@/typings/editor';
 
 let curMeta: Nullable<Required<ComponentMeta>> = null;
@@ -103,10 +103,40 @@ function emitDragEvent(target: Element, event: 'dragover' | 'dragleave' | 'drage
   }));
 }
 
+function initMouseEvent() {
+  let prevSelected: Nullable<HTMLElement> = null;
+  window.addEventListener('mousedown', (e) => {
+    const hitTarget = document.elementFromPoint(e.x, e.y);
+    if (!hitTarget || !ws) {
+      return;
+    }
+    const hitContainer = hitTarget.closest('[data-carverry-key]');
+    if (!hitContainer) {
+      return;
+    }
+    // const selectedContainer = document.body.querySelector('[data-carverry-selected]');
+    if (prevSelected && prevSelected !== hitContainer) {
+      prevSelected.style.border = 'none';
+      // delete prevSelected.dataset.carverrySelected;
+    }
+    (hitContainer as HTMLElement).style.border = '1px dashed lightcoral';
+    // (hitContainer as HTMLElement).dataset.carverrySelected = '';
+    prevSelected = hitContainer as HTMLElement;
+    const key = (hitContainer as HTMLElement).dataset.carverryKey || '';
+    const data: SocketSelected = {
+      type: 'selected',
+      id: 'target',
+      key,
+    };
+    ws.send(JSON.stringify(data));
+  });
+}
+
 function initSocket() {
   if (wsInited) {
     return;
   }
+  initMouseEvent();
   wsInited = true;
   ws = new WebSocket('ws://localhost:3366');
   let target: Nullable<Element> = null;
@@ -187,7 +217,6 @@ export function initSlotContainer(container: HTMLElement, empty = false) {
   //   }
   //   cur = walker.nextNode() as Comment;
   // }
-  console.log(container);
   const key = container.dataset.carverryKey;
   if (key === undefined) {
     return;
@@ -213,8 +242,7 @@ export async function addCarverryRoute(router: Router) {
   router.addRoute({
     path: '/carverry-preview',
     name: 'CarverryPreview',
-    /* @vite-ignore */
-    component: () => import(cacheDir),
+    component: () => import(/* @vite-ignore */cacheDir),
   });
   setTimeout(() => {
     router.push({
@@ -243,5 +271,3 @@ export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: 
   };
   ws.send(JSON.stringify(data)); // 向可视化应用上报配置变化
 }
-
-export function changeSlotOrder(key: string, )

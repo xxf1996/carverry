@@ -3,7 +3,7 @@ import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
-import { addBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
+import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
 import './socket.js';
 
 const { Http, Router, Response } = farrowHttp;
@@ -53,6 +53,29 @@ http
           block: req.body.block,
         });
       }
+      return Response.text('ok');
+    } catch (err) {
+      console.log(err);
+      return Response.text('error');
+    }
+  });
+
+http
+  .match({
+    url: '/generate',
+    method: 'post',
+    body: {
+      option: String,
+      block: String,
+    },
+  })
+  .use(async (req) => {
+    try {
+      const option: ComponentOption = JSON.parse(req.body.option);
+      await generateBlock({
+        option,
+        block: req.body.block,
+      });
       return Response.text('ok');
     } catch (err) {
       console.log(err);

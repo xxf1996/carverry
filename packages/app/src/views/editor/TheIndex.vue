@@ -2,8 +2,8 @@
   <div>
     <el-container class="h-screen">
       <el-aside width="360px">
-        <p>当前编辑Block为：{{ curBlock || '暂无' }}</p>
-        <div class="flex items-center gap-2 px-1 py-2">
+        <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
+        <div class="flex items-center flex-wrap gap-2 px-1 py-2">
           <el-button
             size="small"
             type="primary"
@@ -17,12 +17,18 @@
           >
             新建Block
           </el-button>
+          <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板） -->
+          <el-button
+            size="small"
+          >
+            保存为模板
+          </el-button>
           <el-button
             type="primary"
             size="small"
-            :disabled="generating"
+            :disabled="generating || !curBlock"
             :loading="generating"
-            @click="generatePage('test')"
+            @click="generateBlock"
           >
             生成源码
           </el-button>
@@ -86,10 +92,10 @@
 import {
   nextTick, ref, watch,
 } from 'vue';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig,
+  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode,
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import PageViewer from './PageViewer.vue';
@@ -116,10 +122,9 @@ async function removeComponent() {
     type: 'warning',
   });
   const paths = curEditKey.value.split('-');
-  if (paths.length < 2 || !renderRef.value) {
+  if (paths.length < 2 || !curBlock.value) {
     return;
   }
-  renderRef.value.toggleSelect(); // 选中最外层
   nextTick(() => {
     const parentPath = paths.slice(0, -2).join('-'); // 找到父级节点路径
     const selfPaths = paths.slice(-2);
@@ -127,19 +132,17 @@ async function removeComponent() {
     const slotIdx = Number(selfPaths[1]);
     const parent = getOptionByKey(blockOption.value, parentPath);
     parent.slots[slotName].splice(slotIdx, 1); // 移除配置
+    curEditKey.value = '';
     updateOptionKey(blockOption.value);
   });
 }
 
-async function generatePage(name: string) {
+async function generateBlock() {
   generating.value = true;
-  // 相同配置会被缓存，需要实时最新
-  await import(`./${Date.now()}/page-generator?option=${JSON.stringify({
-    data: blockOption.value,
-    name,
-  })}`).finally(() => {
+  await generateCode().finally(() => {
     generating.value = false;
   });
+  ElMessage.success(`区块【${curBlock.value}】的源码已生成！`);
 }
 
 async function addBlock() {
@@ -183,5 +186,5 @@ watch(curEditKey, (val) => {
 
 debouncedWatch(() => [curBlock.value, blockOption.value], () => {
   updatePreview();
-}, { debounce: 200, deep: true });
+}, { debounce: 400, deep: true });
 </script>

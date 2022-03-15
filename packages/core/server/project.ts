@@ -57,6 +57,11 @@ export async function updatePreview(params: PreviewParams) {
   }
 }
 
+export async function generateBlock(params: Required<PreviewParams>) {
+  const blockDir = await getBlockDir();
+  await generateFile(resolve(blockDir, params.block), params.option, false);
+}
+
 async function isDir(filePath: string) {
   const stat = await lstat(filePath);
   return stat.isDirectory();

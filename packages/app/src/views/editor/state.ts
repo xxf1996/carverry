@@ -4,9 +4,8 @@ import {
   ComponentInfo,
   ComponentMeta, ComponentOption, FileInfo,
 } from '@/typings/editor';
+import { Nullable } from '@/typings/common';
 
-/** 当前选中模板元信息 */
-export const curMeta = ref<ComponentMeta>();
 export const curOption = ref<ComponentOption>();
 export const fileInfo = ref<FileInfo>({
   fileMap: {},
@@ -22,6 +21,13 @@ export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref('');
 /** 当前进行操作的block名称 */
 export const curBlock = ref('');
+/** 当前选中模板元信息 */
+export const curMeta = computed<Nullable<Required<ComponentMeta>>>(() => {
+  if (!curBlock.value || !curOption.value || !componentInfo.value.componentMap[curOption.value.path]) {
+    return null;
+  }
+  return componentInfo.value.componentMap[curOption.value.path];
+});
 /** 操作的block配置 */
 export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOption', {
   path: '', // 空的path代表是一个空的block，初始状态
@@ -94,6 +100,19 @@ export async function getBlockConfig(name: string) {
 
 export async function updatePreview() {
   await fetch('/editor-api/preview', {
+    method: 'post',
+    body: JSON.stringify({
+      block: curBlock.value,
+      option: JSON.stringify(blockOption.value),
+    }),
+  });
+}
+
+export async function generateCode() {
+  if (!curBlock.value) {
+    return;
+  }
+  await fetch('/editor-api/generate', {
     method: 'post',
     body: JSON.stringify({
       block: curBlock.value,

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curDragComponent, dragging, getOptionByKey, updateOptionKey } from './state';
+import { blockOption, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey } from './state';
 import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
@@ -106,6 +106,9 @@ function handleMessage(message: SocketEvent) {
       break;
     case 'slot-change':
       slotChange(message);
+      break;
+    case 'selected':
+      curEditKey.value = message.key;
       break;
     default:
       break;
