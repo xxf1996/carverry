@@ -16,6 +16,7 @@
     <template #empty>
       <div
         data-carverry-parent="key"
+        data-carverry-empty="true"
         data-carverry-slot="demo"
       >
         这是空的slot，显示名称或备注

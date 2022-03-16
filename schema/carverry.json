@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://xiexuefeng.cc/schema/carverry.json",
+  "title": "用于carverry的schema文件",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "项目名称"
+    },
+    "sourceDir": {
+      "type": "string",
+      "description": "本地源码目录（相对于项目根目录）"
+    },
+    "pageOutDir": {
+      "type": "string",
+      "description": "block源码输出目录（相对于项目根目录）"
+    },
+    "port": {
+      "type": "integer",
+      "description": "可视化应用启动端口"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

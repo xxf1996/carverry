@@ -14,19 +14,32 @@
       :src="previewUrl"
       title="预览"
     />
+    <div
+      v-if="showHover"
+      class="fixed border border-dashed border-green-400 pointer-events-none transition-all"
+      :style="hoverStyle"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey } from './state';
-import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange } from '@carverry/core/typings/server';
+import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey } from './state';
+import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange, SocketHover } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
 const container = ref<HTMLDivElement>();
+const showHover = ref(false);
+const hoverStyle = ref({
+  width: '0px',
+  height: '0px',
+  top: '0px',
+  left: '0px',
+  backgroundColor: 'rgba(45, 178, 112, 0.05)',
+});
 let wsLoaded = false;
 
 /**
@@ -90,6 +103,18 @@ function slotChange(message: SocketSlotChange) {
   updateOptionKey(blockOption.value); // 更新配置树的key
 }
 
+function hoverContainer(message: SocketHover) {
+  if (message.width < 0 || !curBlock.value || !container.value) {
+    showHover.value = false;
+    return;
+  }
+  hoverStyle.value.height = `${message.height}px`;
+  hoverStyle.value.width = `${message.width}px`;
+  hoverStyle.value.left = `${message.x + container.value.offsetLeft}px`;
+  hoverStyle.value.top = `${message.y + container.value.offsetTop}px`;
+  showHover.value = true;
+}
+
 function sendMessage(message: SocketEvent) {
   if (!wsLoaded) {
     return;
@@ -109,6 +134,9 @@ function handleMessage(message: SocketEvent) {
       break;
     case 'selected':
       curEditKey.value = message.key;
+      break;
+    case 'hover':
+      hoverContainer(message);
       break;
     default:
       break;
@@ -203,8 +231,17 @@ function containerDragleave(e: DragEvent) {
   // (e.currentTarget as HTMLElement).classList.remove('bg-brand-300', 'bg-opacity-30');
 }
 
+onMounted(() => {
+  if (!container.value) {
+    return;
+  }
+  container.value.addEventListener('mouseleave', () => {
+    showHover.value = false;
+  });
+});
+
 watch(dragging, (val) => {
-  if (!val && curDragComponent.value) {
+  if (!val) {
     const data: SocketDrop = {
       type: 'drop',
       id: 'app',

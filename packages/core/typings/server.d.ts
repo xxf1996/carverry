@@ -24,8 +24,8 @@ export interface SocketDrop {
   id: SocketType;
   x: number;
   y: number;
-  /** 当前拖拽组件的元数据 */
-  meta: Required<ComponentMeta>;
+  /** 当前拖拽组件的元数据，为空说明拖拽结束了 */
+  meta?: Required<ComponentMeta>;
 }
 
 export interface SocketConfigChange {
@@ -35,6 +35,8 @@ export interface SocketConfigChange {
   key?: string;
   /** 插入的slot */
   slot: string;
+  /** 插入索引，位于现在索引为before的前面，before为空则代表插入到最后 */
+  before?: number;
   /** 插入组件的元数据 */
   meta: Required<ComponentMeta>;
 }
@@ -56,8 +58,18 @@ export interface SocketSelected {
   key: string;
 }
 
+export interface SocketHover {
+  type: 'hover';
+  id: SocketType;
+  x: number;
+  y: number;
+  /** 为负值则代表没有hover命中 */
+  width: number;
+  height: number;
+}
+
 /** websocket通信事件 */
-export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange | SocketSelected;
+export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange | SocketSelected | SocketHover;
 
 export interface PreviewParams {
   block: string;

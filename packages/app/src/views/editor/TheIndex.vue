@@ -36,17 +36,26 @@
             重置
           </el-button>
         </div>
-        <h5>操作</h5>
-        <div class="flex items-center m-2">
-          <el-button
-            type="danger"
-            size="mini"
-            plain
-            :disabled="!curEditKey"
-            @click="removeComponent"
-          >
-            移除组件
-          </el-button>
+        <h5>组件操作</h5>
+        <div class="p-2">
+          <p class="break-all">
+            <span class="font-medium">选中组件：</span>
+            {{ `${curMeta?.doc.displayName || curMeta?.name || '暂未获取到组件名称'}（${curMeta?.doc.description || '暂无描述'}）` }}
+          </p>
+          <p class="break-all">
+            <span class="font-medium">组件标识符：</span>
+            {{ `${curMeta?.path || '暂无标识符'}` }}
+          </p>
+          <div class="flex items-center gap-2">
+            <el-button
+              type="danger"
+              size="small"
+              :disabled="!curEditKey"
+              @click="removeComponent"
+            >
+              移除组件
+            </el-button>
+          </div>
         </div>
         <!-- TODO: 组件/模板信息分类，支持setup方式增加组件描述（异步组件ref默认skip了）； -->
         <h5>组件/模板区</h5>
@@ -95,7 +104,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode,
+  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta,
 } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import PageViewer from './PageViewer.vue';

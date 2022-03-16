@@ -12,6 +12,7 @@
         @change="changeDir"
       />
     </div>
+    <!-- TODO: hover展示组件截图（如果存在）；卡片式展示组件 -->
     <draggable
       :list="componentList"
       :group="{ name: 'source', pull: 'clone', put: false }"
@@ -26,7 +27,7 @@
           class="m-1 p-1"
           :data-source="JSON.stringify(element)"
         >
-          {{ element.name }}
+          {{ element.doc.displayName || element.name }}
           <span
             v-if="element.doc.description"
             class="text-neutral-500"

@@ -2,7 +2,7 @@ import { Nullable } from '@/typings/common';
 import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
 import { ProjectContext } from '@carverry/core/typings/context';
-import { SocketConfigChange, SocketEvent, SocketInit, SocketSelected, SocketSlotChange } from '@carverry/core/typings/server';
+import { SocketConfigChange, SocketEvent, SocketHover, SocketInit, SocketSelected, SocketSlotChange } from '@carverry/core/typings/server';
 import { ComponentMeta, SlotAppendEvent } from '@/typings/editor';
 
 let curMeta: Nullable<Required<ComponentMeta>> = null;
@@ -105,7 +105,45 @@ function emitDragEvent(target: Element, event: 'dragover' | 'dragleave' | 'drage
 
 function initMouseEvent() {
   let prevSelected: Nullable<HTMLElement> = null;
+  let prevHovered: Nullable<HTMLElement> = null;
+  // 监听mousemove显示hover的组件区域
+  window.addEventListener('mousemove', (e) => {
+    if (dragging || !ws) { // 拖拽组件时不触发
+      return;
+    }
+    const hitTarget = document.elementFromPoint(e.x, e.y);
+    if (!hitTarget) {
+      return;
+    }
+    const hitContainer = hitTarget.closest('[data-carverry-key]') as Nullable<HTMLElement>;
+    const data: SocketHover = {
+      type: 'hover',
+      id: 'target',
+      x: 0,
+      y: 0,
+      width: -1,
+      height: -1,
+    };
+    if (!hitContainer || hitContainer === prevSelected) { // 已经选中的组件不再显示hover状态
+      prevHovered = null;
+      ws.send(JSON.stringify(data));
+      return;
+    }
+    if (hitContainer === prevHovered) {
+      return;
+    }
+    prevHovered = hitContainer;
+    const rect = hitContainer.getBoundingClientRect();
+    data.x = rect.x;
+    data.y = rect.y;
+    data.width = rect.width;
+    data.height = rect.height;
+    ws.send(JSON.stringify(data));
+  });
   window.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) { // 仅限左键
+      return;
+    }
     const hitTarget = document.elementFromPoint(e.x, e.y);
     if (!hitTarget || !ws) {
       return;
@@ -119,7 +157,7 @@ function initMouseEvent() {
       prevSelected.style.border = 'none';
       // delete prevSelected.dataset.carverrySelected;
     }
-    (hitContainer as HTMLElement).style.border = '1px dashed lightcoral';
+    (hitContainer as HTMLElement).style.border = '1px solid lightcoral';
     // (hitContainer as HTMLElement).dataset.carverrySelected = '';
     prevSelected = hitContainer as HTMLElement;
     const key = (hitContainer as HTMLElement).dataset.carverryKey || '';
@@ -169,14 +207,16 @@ function initSocket() {
         target = curTarget;
         break;
       case 'drop':
-        curMeta = message.meta;
+        curMeta = message.meta || null;
         const curTarget2 = document.elementFromPoint(message.x, message.y); 
         if (curTarget2 && target && curTarget2 === target) {
           emitDragEvent(target, 'dragleave');
           emitDragEvent(target, 'drop');
         } else if (!curTarget2 && target) {
-          dragging = false;
           emitDragEvent(target, 'dragleave'); // 表示从整个预览区离开了
+          dragging = false;
+        } else {
+          dragging = false;
         }
         target = null;
         break;
@@ -207,16 +247,6 @@ export function initSlotContainer(container: HTMLElement, empty = false) {
   }
   // [document.createTreeWalker() - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createTreeWalker)
   // [javascript - Is there a DOM API for querying comment nodes? - Stack Overflow](https://stackoverflow.com/questions/16151813/is-there-a-dom-api-for-querying-comment-nodes)
-  // const walker = document.createTreeWalker(container, NodeFilter.SHOW_COMMENT, null);
-  // let cur: Comment = walker.currentNode as Comment;
-  // while (cur) {
-  //   if (cur.textContent?.includes('@slot')) {
-  //     const slotContainer = (cur as Comment).parentElement as HTMLElement;
-  //     const slotName = (cur.nextElementSibling as Nullable<HTMLElement>)?.dataset.slot || 'default';
-  //     initSlotEvent(slotContainer, slotName);
-  //   }
-  //   cur = walker.nextNode() as Comment;
-  // }
   const key = container.dataset.carverryKey;
   if (key === undefined) {
     return;
@@ -262,6 +292,7 @@ export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: 
   if (!wsLoaded || !ws) {
     return;
   }
+  // TODO: 优化拖拽插入精准顺序
   const data: SocketConfigChange = {
     type: 'config-change',
     id: 'target',

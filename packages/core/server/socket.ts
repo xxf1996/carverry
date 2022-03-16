@@ -31,6 +31,7 @@ function handleEvent(message: string, ws: WebSocket) {
     case 'config-change':
     case 'slot-change':
     case 'selected':
+    case 'hover':
       if (data.id === 'app' || !app) {
         return;
       }
