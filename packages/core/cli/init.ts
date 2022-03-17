@@ -65,7 +65,10 @@ async function getUserConfig() {
 
 async function saveConfig(config: ProjectConfig) {
   const rootDir = process.cwd();
-  await promises.writeFile(resolve(rootDir, 'carverry.config.json'), JSON.stringify(config, null, 2), {
+  await promises.writeFile(resolve(rootDir, 'carverry.config.json'), JSON.stringify({
+    '$schema': 'https://xiexuefeng.cc/schema/carverry.json',
+    ...config,
+  }, null, 2), {
     encoding: 'utf-8',
   });
 }

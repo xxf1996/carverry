@@ -62,3 +62,9 @@ export async function getLoaclComponents(): Promise<ComponentInfo> {
 export async function getRemoteComponents() {
   // TODO: 解析远端组件信息
 }
+
+export async function getComponentDoc(filePath: string, sourceDir: string) {
+  return parse(filePath, {
+    modules: [sourceDir],
+  });
+}

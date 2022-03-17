@@ -9,12 +9,15 @@
 
 import { Command } from 'commander';
 import { createRequire } from 'module';
+import { success } from '../utils/tip.js';
 import { updatePprojectContext } from './context.js';
 import { initConfig, initProjectFiles, startApp } from './init.js';
+import { buildMaterialProject } from './material.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
 const packageInfo = require('../../../package.json');
+const material = new Command('material');
 
 program
   .version(packageInfo.version, '-v, --version', '运行版本')
@@ -35,5 +38,30 @@ program
   .action((options) => {
     initConfig(options.yes);
   });
+
+material
+  .description('物料相关操作')
+  .command('add <name>')
+  .description('新增一个物料，并进行初始化')
+  .action((name: string) => {
+    console.log(name);
+    // TODO: 往物料文件夹中新建&初始化一个物料文件
+  });
+material
+  .command('build')
+  .description('构建物料库，输出可用的物料文件')
+  .action(async () => {
+    await buildMaterialProject(process.cwd());
+    success('构建成功！');
+    // TODO: loading提示
+  });
+material
+  .command('new <name>')
+  .description('新建一个物料库的项目')
+  .action((name: string) => {
+    console.log(name);
+    // TODO: 优先级不高
+  });
+program.addCommand(material);
 program.parse(process.argv); // 解析命令行参数
 // const options: Partial<ProjectConfig> = program.opts();

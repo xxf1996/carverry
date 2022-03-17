@@ -70,3 +70,16 @@ export interface FileInfo {
   fileTree: FileTree;
   fileMap: Record<string, Record<string, FileExportMember>>
 }
+
+export interface MaterialItemConfig {
+  title: string;
+  type: string;
+  cover?: string;
+  desc?: string;
+  entry?: string;
+}
+
+export interface MaterialItem {
+  meta: Required<ComponentMeta>;
+  config: MaterialItemConfig;
+}

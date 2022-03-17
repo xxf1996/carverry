@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://xiexuefeng.cc/schema/carverry-material.json",
+  "title": "用于carverry物料信息的schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "用简短的中文来描述组件名称"
+    },
+    "cover": {
+      "type": "string",
+      "description": "预览封面的文件名（相对于物料文件夹），默认为cover.(jpg|jpeg|png)"
+    },
+    "desc": {
+      "type": "string",
+      "description": "组件的具体功能描述，暂时可以弥补`setup`模式下`vue-docgen-api`不能解析的不足"
+    },
+    "type": {
+      "type": "string",
+      "description": "物料的分类（从功能上）"
+    },
+    "entry": {
+      "type": "string",
+      "description": "当前物料的入口文件名称，默认为文件夹名（大驼峰）"
+    }
+  },
+  "required": [
+    "title",
+    "type"
+  ]
+}
