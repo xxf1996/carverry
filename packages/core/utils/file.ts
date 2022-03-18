@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import glob from 'glob';
+import { lstat } from 'fs/promises';
 
 /**
  * 在ESM模块中获取`__dirname`等效变量
@@ -40,4 +41,9 @@ export function getFileName(filePath: string, fullName = true): string {
   }
   const info = full.split('.');
   return info[0];
+}
+
+export async function isDir(filePath: string) {
+  const stat = await lstat(filePath);
+  return stat.isDirectory();
 }

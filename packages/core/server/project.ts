@@ -3,9 +3,10 @@ import { PreviewParams } from '../typings/server';
 import { db } from './common.js';
 import { resolve } from 'path';
 import { existsSync, mkdirSync, readdirSync } from 'fs';
-import { writeFile, readFile, lstat } from 'fs/promises';
+import { writeFile, readFile } from 'fs/promises';
 import { emptyBlock, emptyPage, generateFile } from '../plugins/output.js';
 import { ComponentOption } from '@carverry/app/src/typings/editor';
+import { isDir } from '../utils/file.js';
 
 const BLOCK_CONFIG = 'block.config.json';
 
@@ -60,11 +61,6 @@ export async function updatePreview(params: PreviewParams) {
 export async function generateBlock(params: Required<PreviewParams>) {
   const blockDir = await getBlockDir();
   await generateFile(resolve(blockDir, params.block), params.option, false);
-}
-
-async function isDir(filePath: string) {
-  const stat = await lstat(filePath);
-  return stat.isDirectory();
 }
 
 export async function getBlocks(): Promise<string[]> {

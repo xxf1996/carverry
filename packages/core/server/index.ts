@@ -1,7 +1,7 @@
 import { ComponentOption } from '../../app/src/typings/editor';
 import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
-import { getLoaclComponents } from '../plugins/component-meta.js';
+import { getLoaclComponents, getRemoteComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
 import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
 import './socket.js';
@@ -117,6 +117,13 @@ components
   .get('/local')
   .use(async () => {
     const data = await getLoaclComponents();
+    return Response.json(data);
+  });
+
+components
+  .get('/remote')
+  .use(async () => {
+    const data = await getRemoteComponents();
     return Response.json(data);
   });
 

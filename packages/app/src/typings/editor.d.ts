@@ -71,15 +71,46 @@ export interface FileInfo {
   fileMap: Record<string, Record<string, FileExportMember>>
 }
 
+/** 一个物料（组件）的配置信息 */
 export interface MaterialItemConfig {
+  /** 简短标题 */
   title: string;
+  /** 类型 */
   type: string;
+  /** 概览图 */
   cover?: string;
+  /** 物料功能描述 */
   desc?: string;
+  /** 物料入口文件（vue） */
   entry?: string;
 }
 
+/** 单个物料的信息 */
 export interface MaterialItem {
+  /** 组件元数据 */
   meta: Required<ComponentMeta>;
+  /** 物料配置 */
   config: MaterialItemConfig;
+}
+
+/** 物料分组 */
+export interface MaterialPackageGroup {
+  /** 分组名称 */
+  name: string;
+  /** 下属物料 */
+  materials: MaterialItem[];
+}
+
+/** 单个物料包的信息 */
+export interface MaterialPackage {
+  /** 本地项目是否已经安装 */
+  installed: boolean;
+  /** 安装版本 */
+  version?: string;
+  /** 物料包名称 */
+  name: string;
+  /** `npm`包名 */
+  packageName: string;
+  /** 物料分组 */
+  groups: MaterialPackageGroup[];
 }
