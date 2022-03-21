@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import {
   ComponentInfo,
-  ComponentMeta, ComponentOption, FileInfo,
+  ComponentMeta, ComponentOption, FileInfo, MaterialPackage,
 } from '@/typings/editor';
 import { Nullable } from '@/typings/common';
 
@@ -11,22 +11,40 @@ export const fileInfo = ref<FileInfo>({
   fileMap: {},
   fileTree: { children: {} },
 });
-export const componentInfo = ref<ComponentInfo>({
+/** 本地组件信息 */
+export const localComponents = ref<ComponentInfo>({
   componentMap: {},
   componentTree: {
     children: {},
   },
 });
+/** 物料包信息 */
+export const packages = ref<MaterialPackage[]>([]);
 export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref('');
 /** 当前进行操作的block名称 */
 export const curBlock = ref('');
+/** 所有组件（包括已经加载的物料库）元数据映射，key为组件唯一标识符（path），value为组件元数据 */
+export const componentMap = computed<ComponentInfo['componentMap']>(() => {
+  const allMap: ComponentInfo['componentMap'] = Object.assign(localComponents.value.componentMap);
+  for (const pkg of packages.value) {
+    for (const group of pkg.groups) {
+      for (const material of group.materials) {
+        allMap[material.meta.path] = material.meta;
+        if (material.config.desc) {
+          allMap[material.meta.path].doc.description = material.config.desc; // 替换描述
+        }
+      }
+    }
+  }
+  return allMap;
+});
 /** 当前选中模板元信息 */
 export const curMeta = computed<Nullable<Required<ComponentMeta>>>(() => {
-  if (!curBlock.value || !curOption.value || !componentInfo.value.componentMap[curOption.value.path]) {
+  if (!curBlock.value || !curOption.value || !componentMap.value[curOption.value.path]) {
     return null;
   }
-  return componentInfo.value.componentMap[curOption.value.path];
+  return componentMap.value[curOption.value.path];
 });
 /** 操作的block配置 */
 export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOption', {
@@ -75,13 +93,22 @@ export async function updateFileInfo() {
   fileInfo.value = data;
 }
 
-export async function updateComponnetInfo() {
+export async function updateLocalComponents() {
   const data = await fetch('/editor-api/components/local', {
     method: 'get',
   }).then((res) => {
     return res.json() as Promise<ComponentInfo>;
   });
-  componentInfo.value = data;
+  localComponents.value = data;
+}
+
+export async function updatePackages() {
+  const data = await fetch('/editor-api/components/remote', {
+    method: 'get',
+  }).then((res) => {
+    return res.json() as Promise<MaterialPackage[]>;
+  });
+  packages.value = data;
 }
 
 export async function getBlocks() {

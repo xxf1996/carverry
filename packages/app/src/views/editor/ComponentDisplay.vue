@@ -13,45 +13,54 @@
       />
     </div>
     <!-- TODO: hover展示组件截图（如果存在）；卡片式展示组件 -->
-    <draggable
-      :list="componentList"
-      :group="{ name: 'source', pull: 'clone', put: false }"
-      item-key="path"
-      tag="transition-group"
-      ghost-class="border"
-      @start="dragStart"
-      @end="dragEnd"
-    >
-      <template #item="{ element }">
-        <p
-          class="m-1 p-1"
-          :data-source="JSON.stringify(element)"
-        >
-          {{ element.doc.displayName || element.name }}
-          <span
-            v-if="element.doc.description"
-            class="text-neutral-500"
+    <div class="grid grid-cols-3">
+      <draggable
+        :list="componentList"
+        :group="{ name: 'source', pull: 'clone', put: false }"
+        item-key="path"
+        tag="transition-group"
+        ghost-class="border"
+        @start="dragStart"
+        @end="dragEnd"
+      >
+        <template #item="{ element }">
+          <div
+            class="p-1 text-center h-20 break-all"
+            :data-source="JSON.stringify(element)"
           >
-            ({{ element.doc.description }})
-          </span>
-        </p>
-      </template>
-    </draggable>
+            <p>暂无预览</p>
+            <p class="font-medium">
+              {{ element.doc.displayName || element.name }}
+              <!-- <span
+                v-if="element.doc.description"
+                class="text-neutral-500"
+              >
+                ({{ element.doc.description }})
+              </span> -->
+            </p>
+          </div>
+        </template>
+      </draggable>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
-import { componentInfo, curDragComponent } from './state';
+import { localComponents, curDragComponent } from './state';
 import { ComponentLeafNode, ComponentMeta, ComponentTree } from '@/typings/editor';
 import { CascaderOption, CascaderProps } from 'element-plus';
 
 const casProps: CascaderProps = { emitPath: false };
-const componentList = ref<Required<ComponentMeta>[]>(Object.values(componentInfo.value.componentMap));
+const componentList = ref<Required<ComponentMeta>[]>([]);
 const componentDirMap = ref<Record<string, Required<ComponentMeta>[]>>({});
 const curDir = ref('');
 const dirOptions = ref<CascaderOption[]>([]);
+const emit = defineEmits<{
+  /** 开始进行拖拽操作 */
+  (event: 'start'): void;
+}>();
 
 function isLeaf(node: ComponentTree | ComponentLeafNode): node is ComponentLeafNode {
   return 'path' in node;
@@ -68,21 +77,11 @@ function getTree(node: ComponentTree): CascaderOption[] {
     const child = node.children[key];
     if (isLeaf(child)) {
       leafs.push(child);
-      // options.push({
-      //   label: key,
-      //   value: child.fullPath,
-      //   leaf: true,
-      // });
     } else {
       others.push({
         node: child,
         key,
       });
-      // options.push({
-      //   label: key,
-      //   value: key,
-      //   children: getTree(child),
-      // });
     }
   }
 
@@ -95,7 +94,7 @@ function getTree(node: ComponentTree): CascaderOption[] {
       value: dir,
       leaf: true,
     });
-    componentDirMap.value[dir] = leafs.map((leaf) => componentInfo.value.componentMap[leaf.path]);
+    componentDirMap.value[dir] = leafs.map((leaf) => localComponents.value.componentMap[leaf.path]);
   }
 
   if (others.length > 0) {
@@ -120,6 +119,7 @@ function dragStart(data) {
   const fromItem = data.item as HTMLElement;
   const source = JSON.parse(fromItem.dataset.source || '{}') as Required<ComponentMeta>;
   curDragComponent.value = source;
+  emit('start');
 }
 
 function dragEnd() {
@@ -128,9 +128,9 @@ function dragEnd() {
   }, 100);
 }
 
-watch(componentInfo, (val) => {
+watch(localComponents, (val) => {
   componentDirMap.value = {};
   dirOptions.value = getTree(val.componentTree);
   curDir.value = '';
-});
+}, { immediate: true });
 </script>

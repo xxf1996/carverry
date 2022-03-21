@@ -40,6 +40,37 @@ function getRelativePathFromLoacl(curPath: string, localPath: string) {
   return `'${relative(curPath, targetPath)}'`;
 }
 
+function toCamlCase(str: string) {
+  return str.split('-').map((word) => capitalize(word)).join('');
+}
+
+function getComponentImport(curPath: string, componentPath: string): string {
+  const packageRule = /package:\/\/([^#]+)#(.+)/; // 物料包识别
+  const isPackage = packageRule.test(componentPath);
+  if (!isPackage) {
+    return `import ${getFileName(componentPath, false)} from ${getRelativePathFromLoacl(curPath, componentPath)};`;
+  }
+  const packageInfo = componentPath.match(packageRule);
+
+  if (!packageInfo) {
+    return '';
+  }
+
+  const componentName = toCamlCase(packageInfo[2]);
+
+  return `import ${componentName} from '${packageInfo[1]}/dist/materials/${packageInfo[2]}'`;
+}
+
+function getComponentName(componentPath: string) {
+  const packageRule = /package:\/\/([^#]+)#(.+)/; // 物料包识别
+  const packageInfo = componentPath.match(packageRule);
+  if (!packageInfo) {
+    return getFileName(componentPath, false);
+  }
+
+  return toCamlCase(packageInfo[2]);
+}
+
 export function getImport(curPath: string, filePath: string, member: string) {
   return `import { ${member} } from ${getRelativePathFromLoacl(curPath, filePath)};`;
 }
@@ -83,7 +114,7 @@ function getTemplate(option: ComponentOption): string {
     .map((name) => `<template #${name}>${option.slots[name].map((child, idx) => `<slot-${name}-${idx} />`).join('')}</template>`)
     .flat()
     .join('\n');
-  const name = getFileName(option.path, false);
+  const name = getComponentName(option.path);
 
   return `<template>
   <${name} ${props} ${events}>
@@ -106,7 +137,7 @@ function getPreviewTemplate(option: ComponentOption): string {
     })
     .flat()
     .join('\n');
-  const name = getFileName(option.path, false);
+  const name = getComponentName(option.path);
 
   return `<template>
   <${name} ref="containerRef" data-carverry-key="${option.key}" @slot-append.stop="slotAppend" ${props} ${events}>
@@ -119,7 +150,7 @@ function getScript(dir: string, option: ComponentOption): string {
   // 去重避免重复引入；
   const propImports = uniq(Object.values(getValidProps(option.props)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const eventImports = uniq(Object.values(getValidEvents(option.events)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
-  const componentImport = `import ${getFileName(option.path, false)} from ${getRelativePathFromLoacl(dir, option.path)};`;
+  const componentImport = getComponentImport(dir, option.path);
   const slots = Object.keys(getValidSlots(option.slots));
   const slotsImport = slots
     .map((name) => option.slots[name].map((child, idx) => `import Slot${capitalize(name)}${idx} from './slot-${name}-${idx}/index.vue';`))
@@ -145,7 +176,7 @@ function getPreviewScript(dir: string, option: ComponentOption): string {
   // 去重避免重复引入；
   const propImports = uniq(Object.values(getValidProps(option.props)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const eventImports = uniq(Object.values(getValidEvents(option.events)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
-  const componentImport = `import ${getFileName(option.path, false)} from ${getRelativePathFromLoacl(dir, option.path)};`;
+  const componentImport = getComponentImport(dir, option.path);
   const slots = Object.keys(getValidSlots(option.slots));
   const slotsImport = slots
     .map((name) => option.slots[name].map((child, idx) => `import Slot${capitalize(name)}${idx} from './slot-${name}-${idx}/index.vue';`))

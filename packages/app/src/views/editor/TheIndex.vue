@@ -57,9 +57,14 @@
             </el-button>
           </div>
         </div>
-        <!-- TODO: 组件/模板信息分类，支持setup方式增加组件描述（异步组件ref默认skip了）； -->
-        <h5>组件/模板区</h5>
-        <component-display />
+        <h5>物料库</h5>
+        <!-- <component-display /> -->
+        <el-button
+          class="m-2"
+          @click="showMaterial = true;"
+        >
+          打开物料库面板
+        </el-button>
         <h5>属性区</h5>
         <template-meta />
       </el-aside>
@@ -94,6 +99,7 @@
         placeholder="请输入Block名称"
       />
     </drawer-container>
+    <material-displayer v-model:visible="showMaterial" />
   </div>
 </template>
 
@@ -104,12 +110,12 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateComponnetInfo, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages,
 } from './state';
-import ComponentDisplay from './ComponentDisplay.vue';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
+import MaterialDisplayer from './MaterialDisplayer.vue';
 
 const generating = ref(false);
 const showLoad = ref(false);
@@ -117,6 +123,7 @@ const showAdd = ref(false);
 const loadedBlock = ref('');
 const blocks = ref<string[]>([]);
 const blockName = ref('');
+const showMaterial = ref(false);
 
 async function updateBlocks() {
   const data = await getBlocks();
@@ -185,7 +192,8 @@ async function selectBlock() {
 }
 
 updateFileInfo();
-updateComponnetInfo();
+updateLocalComponents();
+updatePackages();
 updatePreview();
 updateBlocks();
 

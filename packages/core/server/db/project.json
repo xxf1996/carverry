@@ -5,7 +5,7 @@
     "port": 3300,
     "pageOutDir": "src/blocks",
     "$schema": "https://xiexuefeng.cc/schema/carverry.json",
-    "root": "/Users/snowdream/Desktop/github/carverry-demo",
+    "root": "/Users/xuefengxie/Desktop/self/carverry-demo",
     "alias": {}
   }
 }
