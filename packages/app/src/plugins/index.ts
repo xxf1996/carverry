@@ -79,7 +79,7 @@ function containerDragenter(e: DragEvent) {
     return;
   }
   e.stopPropagation(); // 停止冒泡
-  // TODO: 将tailwind样式替换成内联样式，减少依赖
+  // TODO: 将tailwind样式替换成内联样式，减少依赖【优先级高】
   (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
 }
 
@@ -292,7 +292,7 @@ export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: 
   if (!wsLoaded || !ws) {
     return;
   }
-  // TODO: 优化拖拽插入精准顺序
+  // TODO: 优化拖拽插入精准顺序【优先级高】
   const data: SocketConfigChange = {
     type: 'config-change',
     id: 'target',

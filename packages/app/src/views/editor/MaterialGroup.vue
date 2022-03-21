@@ -17,6 +17,14 @@
           <p>暂无预览</p>
           <p class="font-medium">
             {{ element.config.title || element.meta.name }}
+            <el-tooltip
+              v-if="element.config.desc"
+              :content="element.config.desc"
+            >
+              <el-icon class="mx-1">
+                <warning />
+              </el-icon>
+            </el-tooltip>
           </p>
         </div>
       </template>
@@ -29,6 +37,7 @@ import { listProps } from '@/composition/props';
 import { MaterialItem } from '@/typings/editor';
 import Draggable from 'vuedraggable';
 import { curDragComponent } from './state';
+import { Warning } from '@element-plus/icons-vue';
 
 const props = defineProps({
   items: listProps<MaterialItem>(),

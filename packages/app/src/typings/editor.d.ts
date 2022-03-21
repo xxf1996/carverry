@@ -40,7 +40,6 @@ export interface ComponentOption {
   path: string;
   /** 配置树结构中的标识 */
   key: string;
-  // TODO: 通用指令支持（v-if/v-show/v-loading）
   /** props映射配置 */
   props: Record<string, ComponentDependence & {
     /** 是否绑定v-model */

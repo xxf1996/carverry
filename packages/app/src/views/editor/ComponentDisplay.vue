@@ -12,7 +12,7 @@
         @change="changeDir"
       />
     </div>
-    <!-- TODO: hover展示组件截图（如果存在）；卡片式展示组件 -->
+    <!-- TODO: hover展示组件截图（如果存在）； -->
     <div class="grid grid-cols-3">
       <draggable
         :list="componentList"
@@ -31,12 +31,14 @@
             <p>暂无预览</p>
             <p class="font-medium">
               {{ element.doc.displayName || element.name }}
-              <!-- <span
+              <el-tooltip
                 v-if="element.doc.description"
-                class="text-neutral-500"
+                :content="element.doc.description"
               >
-                ({{ element.doc.description }})
-              </span> -->
+                <el-icon class="mx-1">
+                  <warning />
+                </el-icon>
+              </el-tooltip>
             </p>
           </div>
         </template>
@@ -51,6 +53,7 @@ import Draggable from 'vuedraggable';
 import { localComponents, curDragComponent } from './state';
 import { ComponentLeafNode, ComponentMeta, ComponentTree } from '@/typings/editor';
 import { CascaderOption, CascaderProps } from 'element-plus';
+import { Warning } from '@element-plus/icons-vue';
 
 const casProps: CascaderProps = { emitPath: false };
 const componentList = ref<Required<ComponentMeta>[]>([]);

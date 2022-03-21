@@ -10,6 +10,7 @@
     "lint": "eslint ./src --ext .ts --ext .vue"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^1.1.3",
     "@vueuse/core": "^7.6.2",
     "element-plus": "^2.0.2",
     "lodash": "^4.17.21",

@@ -17,7 +17,7 @@
           >
             新建Block
           </el-button>
-          <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板） -->
+          <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板）【优先级高】 -->
           <el-button
             size="small"
           >
@@ -69,7 +69,6 @@
         <template-meta />
       </el-aside>
       <el-main class="p-0">
-        <!-- TODO: 优化异步组件重载逻辑 -->
         <page-viewer />
       </el-main>
     </el-container>
