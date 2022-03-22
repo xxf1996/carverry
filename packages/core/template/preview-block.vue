@@ -11,6 +11,7 @@
       <slot-demo-0
         data-carverry-parent="key"
         data-carverry-slot="demo"
+        data-carverry-child="0"
       />
     </template>
     <template #empty>

@@ -80,7 +80,11 @@ function changeConfig(message: SocketConfigChange) {
     const parent = getOptionByKey(blockOption.value, message.key); // 获取父级配置结点
     const childKey = `${message.slot}-0`;
     const option = getInitOption(message.meta.path, message.key ? `${message.key}-${childKey}` : childKey, message.meta.doc);
-    parent.slots[message.slot].push(option); // 往指定容器插入新组件配置
+    if (message.before !== undefined) {
+      parent.slots[message.slot].splice(message.before, 0, option); // 往指定索引之前插入新组件
+    } else {
+      parent.slots[message.slot].push(option); // 往指定容器插入新组件配置
+    }
   } else if (message.key === undefined) { // 初始容器插入
     const option = getInitOption(message.meta.path, '', message.meta.doc);
     blockOption.value = option;

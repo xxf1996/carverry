@@ -10,6 +10,7 @@ export interface ComponentMeta {
 export interface SlotAppendEvent {
   meta: Nullable<Required<ComponentMeta>>;
   slot: string;
+  before?: number;
 }
 
 export interface ComponentLeafNode {

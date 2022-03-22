@@ -5,12 +5,29 @@ import { ProjectContext } from '@carverry/core/typings/context';
 import { SocketConfigChange, SocketEvent, SocketHover, SocketInit, SocketSelected, SocketSlotChange } from '@carverry/core/typings/server';
 import { ComponentMeta, SlotAppendEvent } from '@/typings/editor';
 
+/** 当前拖拽插入的组件元数据 */
 let curMeta: Nullable<Required<ComponentMeta>> = null;
+/** websocket是否已经建立连接 */
 let wsLoaded = false;
+/** websocket事件是否初始化 */
 let wsInited = false;
+/** websocket实例 */
 let ws: Nullable<WebSocket> = null;
 /** 是否为左侧组件进行拖拽 */
 let dragging = false;
+/** 当前鼠标x位置（相对于iframe） */
+let curX = 0;
+/** 当前鼠标y位置（相对于iframe） */
+let curY = 0;
+
+/** 隐藏插入位置的引导条 */
+function hideBar() {
+  const bar = document.getElementById('carverry-bar');
+  if (!bar) {
+    return;
+  }
+  bar.style.display = 'none';
+}
 
 /**
  * 为目标DOM（容器）添加排序功能
@@ -78,6 +95,7 @@ function containerDragenter(e: DragEvent) {
   if (!e.currentTarget) {
     return;
   }
+  hideBar();
   e.stopPropagation(); // 停止冒泡
   // TODO: 将tailwind样式替换成内联样式，减少依赖【优先级高】
   (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
@@ -170,6 +188,7 @@ function initMouseEvent() {
   });
 }
 
+/** 初始化websocket */
 function initSocket() {
   if (wsInited) {
     return;
@@ -192,6 +211,8 @@ function initSocket() {
     // 自行触发drag相关事件（从父级窗口进行参数传递）
     switch (message.type) {
       case 'dragover':
+        curX = message.x;
+        curY = message.y;
         dragging = true;
         const curTarget = document.elementFromPoint(message.x, message.y); // hit testing，得到当前鼠标位置命中的元素
         if (curTarget && target && target !== curTarget) {
@@ -207,6 +228,8 @@ function initSocket() {
         target = curTarget;
         break;
       case 'drop':
+        curX = message.x;
+        curY = message.y;
         curMeta = message.meta || null;
         const curTarget2 = document.elementFromPoint(message.x, message.y); 
         if (curTarget2 && target && curTarget2 === target) {
@@ -219,6 +242,7 @@ function initSocket() {
           dragging = false;
         }
         target = null;
+        hideBar();
         break;
       default:
         break;
@@ -226,23 +250,131 @@ function initSocket() {
   };
 }
 
-function initSlotEvent(target: HTMLElement, name: string) {
-  target.dataset.slot = name;
-  // 给slot容器加上样式
-  target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
-  // 容器拖拽交互和样式
-  target.addEventListener('dragover', containerDragover);
-  target.addEventListener('drop', containerDrop);
-  target.addEventListener('dragenter', containerDragenter);
-  target.addEventListener('dragleave', containerDragleave);
-  initSort(target, name);
+/**
+ * 初始化slot容器相关事件
+ * @param target 容器DOM
+ * @param name slot名称
+ * @param empty 是否为空的容器（即目前没有子组件）
+ */
+function initSlotEvent(target: HTMLElement, name: string, empty: boolean) {
+  if (empty) { // 空的容器才需要直接的拖拽插入处理（因为不需要精准插入）
+    target.dataset.slot = name;
+    // 给slot容器加上样式
+    target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
+    // 容器拖拽交互和样式
+    target.addEventListener('dragover', containerDragover);
+    target.addEventListener('drop', containerDrop);
+    target.addEventListener('dragenter', containerDragenter);
+    target.addEventListener('dragleave', containerDragleave);
+  } else {
+    initSort(target, name); // 非空容器则添加子组件之间的拖拽排序交互处理
+  }
+}
+
+/** 非空容器内的精准位置插入相关事件处理 */
+function initBlockInsert() {
+  /** 之前命中的容器内组件 */
+  let prevTarget: Nullable<HTMLElement> = null;
+  /** 命中组件对应的DOMRect */
+  let prevRect: Nullable<DOMRect> = null;
+  document.body.addEventListener('dragover', () => {
+    const hitTarget = document.elementFromPoint(curX, curY) as Nullable<HTMLElement>;
+    if (!hitTarget || hitTarget.dataset.carverryEmpty) {
+      prevTarget = null;
+      return;
+    }
+    /** 最近命中的组件节点 */
+    const closestTarget = hitTarget.closest('[data-carverry-child]') as Nullable<HTMLElement>;
+    if (!closestTarget) {
+      return;
+    }
+    const targetRect = prevTarget === closestTarget && prevRect ? prevRect : closestTarget.getBoundingClientRect();
+    prevTarget = closestTarget;
+    prevRect = targetRect;
+    const left = curX - targetRect.left;
+    const right = targetRect.right - curX;
+    const top = curY - targetRect.top;
+    const bottom = targetRect.bottom - curY;
+    /** 距离边框的最近距离 */
+    const minDist = Math.min(left, right, top, bottom);
+    let originX = 0;
+    let originY = 0;
+    let width = 0;
+    let height = 0;
+    let bar = document.getElementById('carverry-bar');
+    const curIdx = Number(closestTarget.dataset.carverryChild);
+    let insertBefore = 0;
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'carverry-bar';
+      bar.style.position = 'fixed';
+      bar.style.backgroundColor = 'rgb(50, 240, 200)';
+      document.body.appendChild(bar);
+    }
+    // 根据鼠标距离命中目标DOMRect的最近边框是哪个，决定插入的位置和方向
+    if (minDist === left) {
+      width = 8;
+      height = targetRect.height + 8;
+      originX = targetRect.left - 8;
+      originY = targetRect.top - 4;
+      insertBefore = curIdx;
+    } else if (minDist === right) {
+      width = 8;
+      height = targetRect.height + 8;
+      originX = targetRect.right;
+      originY = targetRect.top - 4;
+      insertBefore = curIdx + 1;
+    } else if (minDist === top) {
+      height = 8;
+      width = targetRect.width + 8;
+      originX = targetRect.left - 4;
+      originY = targetRect.top - 8;
+      insertBefore = curIdx;
+    } else if (minDist === bottom) {
+      height = 8;
+      width = targetRect.width + 8;
+      originX = targetRect.left - 4;
+      originY = targetRect.bottom;
+      insertBefore = curIdx + 1;
+    }
+    // 插入位置引导条样式
+    bar.style.display = 'block';
+    bar.style.left = `${originX}px`;
+    bar.style.top = `${originY}px`;
+    bar.style.width = `${width}px`;
+    bar.style.height = `${height}px`;
+    bar.dataset.carverryBefore = insertBefore.toString(); // 保存插入位置
+  });
+  document.body.addEventListener('drop', (e) => {
+    e.stopImmediatePropagation(); // 避免多次触发
+    const bar = document.getElementById('carverry-bar');
+    const hitTarget = document.elementFromPoint(curX, curY) as Nullable<HTMLElement>;
+    if (!hitTarget || hitTarget.dataset.carverryEmpty || !bar || !curMeta || !ws) {
+      prevTarget = null;
+      return;
+    }
+    const closestTarget = hitTarget.closest('[data-carverry-child]') as Nullable<HTMLElement>;
+    if (!closestTarget || closestTarget !== prevTarget) { // 检测是否跟之前的命中目标一致
+      prevTarget = null;
+      return;
+    }
+    const data: SocketConfigChange = {
+      type: 'config-change',
+      id: 'target',
+      key: closestTarget.dataset.carverryParent,
+      slot: closestTarget.dataset.carverrySlot || 'default',
+      meta: curMeta,
+      before: Number(bar.dataset.carverryBefore),
+    };
+    ws.send(JSON.stringify(data));
+  });
 }
 
 /** 初始化slot容器事件和样式 */
 export function initSlotContainer(container: HTMLElement, empty = false) {
   initSocket();
   if (empty) {
-    initSlotEvent(container, 'carverry-empty');
+    initSlotEvent(container, 'carverry-empty', true);
     return;
   }
   // [document.createTreeWalker() - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createTreeWalker)
@@ -258,8 +390,9 @@ export function initSlotContainer(container: HTMLElement, empty = false) {
       return;
     }
     slotContainers.push(el.parentElement);
-    initSlotEvent(el.parentElement, el.dataset.carverrySlot || ''); // 初始化slot容器（默认假设所有的slot都是放在某个区域/容器里的）
+    initSlotEvent(el.parentElement, el.dataset.carverrySlot || '', !!el.dataset.carverryEmpty); // 初始化slot容器（默认假设所有的slot都是放在某个区域/容器里的）
   });
+  initBlockInsert();
 }
 
 export async function addCarverryRoute(router: Router) {
@@ -292,7 +425,6 @@ export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: 
   if (!wsLoaded || !ws) {
     return;
   }
-  // TODO: 优化拖拽插入精准顺序【优先级高】
   const data: SocketConfigChange = {
     type: 'config-change',
     id: 'target',
