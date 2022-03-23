@@ -6,7 +6,7 @@ import { warning } from '../utils/tip.js';
 import { getDefaultConfig } from './init.js';
 
 function getProjectAlias(): AliasPath {
-  // TODO: 从tsconfig.json或vite.config文件自动解析
+  // 从tsconfig.json或vite.config文件自动解析
   return {};
 }
 

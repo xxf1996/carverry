@@ -1,15 +1,18 @@
 import { parse } from 'vue-docgen-api';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-import { readdir } from 'fs/promises';
+import { readdir, readFile } from 'fs/promises';
 import { createRequire } from 'module';
 import { getContext } from '../server/project.js';
 import { getFileName, getRelativePath, globAsync, isDir } from '../utils/file.js';
 import { ComponentInfo, ComponentLeafNode, ComponentTree, MaterialItem, MaterialPackage, MaterialPackageGroup } from '@carverry/app/src/typings/editor';
+import { Nullable } from '@carverry/app/src/typings/common';
 
 const require = createRequire(import.meta.url);
+/** 物料包信息，key为包名，value为包的中文名称 */
 const MATERIAL_PACKAGE: Record<string, string> = {
   'carverry-material': '示例物料包',
+  'carverry-404': '不存在的包',
 };
 
 function getComponentTree(files: string[], rootDir: string): ComponentTree {
@@ -67,6 +70,37 @@ export async function getLoaclComponents(): Promise<ComponentInfo> {
   };
 }
 
+async function getMaterialCover(dir: string, cover?: string): Promise<Nullable<string>> {
+  if (cover) {
+    const coverPath = resolve(dir, cover);
+    if (!existsSync(coverPath)) {
+      return null;
+    }
+    const res = await readFile(coverPath, {
+      encoding: 'base64',
+    });
+    return res;
+  }
+  const suffixList = ['jpg', 'jpeg', 'png'];
+  let coverPath = '';
+  let coverSuffix = suffixList[0];
+  for (const suffix of suffixList) {
+    const curPath = resolve(dir, `cover.${suffix}`);
+    if (existsSync(curPath)) {
+      coverPath = curPath;
+      coverSuffix = suffix;
+      break;
+    }
+  }
+  if (!coverPath) {
+    return null;
+  }
+  const res = await readFile(coverPath, {
+    encoding: 'base64',
+  });
+  return `data:image/${coverSuffix};base64,${res}`;
+}
+
 async function getPackageInfo(rootDir: string, name: string): Promise<MaterialPackage> {
   const info: MaterialPackage = {
     packageName: name,
@@ -96,9 +130,11 @@ async function getPackageInfo(rootDir: string, name: string): Promise<MaterialPa
     }
     const meta: MaterialItem['meta'] = require(resolve(materialPath, 'carverry.meta.json'));
     const config: MaterialItem['config'] = require(resolve(materialPath, 'carverry.material.json'));
+    const cover = await getMaterialCover(materialPath, config.cover);
     const materialItem: MaterialItem = {
       meta,
       config,
+      cover: cover || undefined,
     };
     if (groupMap[config.type]) {
       groupMap[config.type].materials.push(materialItem);

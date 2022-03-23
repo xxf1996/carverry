@@ -1,4 +1,4 @@
-import { getDirname, getFileName } from '../utils/file.js';
+import { getDirname, getFileName, toCamlCase } from '../utils/file.js';
 import { resolve, relative } from 'path';
 import { rmSync, copyFileSync, existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
@@ -38,10 +38,6 @@ export function emptyBlock(cacheDir: string) {
 function getRelativePathFromLoacl(curPath: string, localPath: string) {
   const targetPath = resolve(context.root, localPath);
   return `'${relative(curPath, targetPath)}'`;
-}
-
-function toCamlCase(str: string) {
-  return str.split('-').map((word) => capitalize(word)).join('');
 }
 
 function getComponentImport(curPath: string, componentPath: string): string {

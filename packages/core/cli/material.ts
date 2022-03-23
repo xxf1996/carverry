@@ -4,10 +4,11 @@ import { rm, mkdir, writeFile, readdir } from 'fs/promises';
 import fse from 'fs-extra';
 import replace from 'replace-in-file';
 import { createRequire } from 'module';
-import { getFileName, globAsync, isDir } from '../utils/file.js';
+import { getFileName, globAsync, isDir, toCamlCase } from '../utils/file.js';
 import { MaterialItem, MaterialItemConfig } from '@carverry/app/src/typings/editor';
 import lodash from 'lodash';
 import { getComponentDoc } from '../plugins/component-meta.js';
+import { success } from '../utils/tip.js';
 
 const require = createRequire(import.meta.url);
 const { capitalize } = lodash;
@@ -101,4 +102,32 @@ export async function buildMaterialProject(rootDir: string) {
     }
     generateMaterialInfo(materialPath, outputDir, packageInfo.name);
   }
+}
+
+export async function initMaterialDir(rootDir: string, name: string) {
+  const materialRoot = resolve(rootDir, 'src', 'materials');
+  if (!existsSync(materialRoot)) {
+    return Promise.reject(new Error('没有发现物料文件夹！'));
+  }
+  const targetDir = resolve(materialRoot, name);
+  if (existsSync(targetDir)) {
+    return Promise.reject(new Error(`物料【${name}】已存在！`));
+  }
+  const componentName = toCamlCase(name);
+  await mkdir(targetDir);
+  await writeFile(resolve(targetDir, 'carverry.material.json'), JSON.stringify({
+    '$schema': 'https://xiexuefeng.cc/schema/carverry-material.json',
+    title: componentName,
+    desc: `【${componentName}】的描述`,
+    type: 'test',
+  }, null, 2), {
+    encoding: 'utf-8',
+  });
+  await writeFile(resolve(targetDir, `${componentName}.vue`), '', {
+    encoding: 'utf-8',
+  });
+  await writeFile(resolve(targetDir, 'index.ts'), `import ${componentName} from './${componentName}.vue';\nexport default ${componentName};\n`, {
+    encoding: 'utf-8',
+  });
+  success(`物料【${name}】初始化完成！`);
 }

@@ -11,10 +11,35 @@
     >
       <template #item="{ element }">
         <div
-          class="p-1 text-center h-20 break-all hover:border hover:border-blue-200 cursor-move"
+          class="flex flex-col p-1 text-center h-30 break-all hover:border hover:border-blue-200 cursor-move"
           :data-source="JSON.stringify(element.meta)"
         >
-          <p>暂无预览</p>
+          <!-- 点击显示预览大图 -->
+          <el-popover
+            v-if="element.cover"
+            placement="left"
+            trigger="click"
+            :width="600"
+          >
+            <template #reference>
+              <el-image
+                class="flex-1"
+                :src="element.cover"
+                fit="contain"
+              />
+            </template>
+            <el-image
+              class="w-150"
+              fit="contain"
+              :src="element.cover"
+            />
+          </el-popover>
+          <p
+            v-else
+            class="flex-1"
+          >
+            暂无预览
+          </p>
           <p class="font-medium">
             {{ element.config.title || element.meta.name }}
             <el-tooltip
@@ -61,3 +86,13 @@ function dragEnd() {
   }, 100);
 }
 </script>
+
+<style lang="scss">
+.material-group {
+  &__cover {
+    .el-image__inner {
+      @apply inline-block max-w-150 w-auto;
+    }
+  }
+}
+</style>

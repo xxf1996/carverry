@@ -91,6 +91,8 @@ export interface MaterialItem {
   meta: Required<ComponentMeta>;
   /** 物料配置 */
   config: MaterialItemConfig;
+  /** 预览图（base64） */
+  cover?: string;
 }
 
 /** 物料分组 */

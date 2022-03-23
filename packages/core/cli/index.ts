@@ -12,7 +12,7 @@ import { createRequire } from 'module';
 import { success } from '../utils/tip.js';
 import { updatePprojectContext } from './context.js';
 import { initConfig, initProjectFiles, startApp } from './init.js';
-import { buildMaterialProject } from './material.js';
+import { buildMaterialProject, initMaterialDir } from './material.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
@@ -44,8 +44,8 @@ material
   .command('add <name>')
   .description('新增一个物料，并进行初始化')
   .action((name: string) => {
-    console.log(name);
-    // TODO: 往物料文件夹中新建&初始化一个物料文件
+    // 往物料文件夹中新建&初始化一个物料文件
+    initMaterialDir(process.cwd(), name);
   });
 material
   .command('build')

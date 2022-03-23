@@ -58,6 +58,18 @@ function initSort(target: HTMLElement, slot: string) {
   });
 }
 
+/**
+ * 添加拖拽命中样式
+ * @param target 目标容器
+ */
+function addDropStyle(target: HTMLElement) {
+  target.style.backgroundColor = 'rgba(60, 120, 240, 0.15)';
+}
+
+function removeDropStyle(target: HTMLElement) {
+  target.style.backgroundColor = '';
+}
+
 function containerDragover(e: DragEvent) {
   if (!dragging) {
     return;
@@ -67,7 +79,7 @@ function containerDragover(e: DragEvent) {
     return;
   }
   e.stopPropagation(); // 停止冒泡
-  (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
+  addDropStyle(e.currentTarget as HTMLElement);
 }
 
 function containerDrop(e: DragEvent) {
@@ -97,8 +109,7 @@ function containerDragenter(e: DragEvent) {
   }
   hideBar();
   e.stopPropagation(); // 停止冒泡
-  // TODO: 将tailwind样式替换成内联样式，减少依赖【优先级高】
-  (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
+  addDropStyle(e.currentTarget as HTMLElement);
 }
 
 function containerDragleave(e: DragEvent) {
@@ -109,7 +120,7 @@ function containerDragleave(e: DragEvent) {
     return;
   }
   e.stopPropagation(); // 停止冒泡
-  (e.currentTarget as HTMLElement).classList.remove('bg-brand-300', 'bg-opacity-30');
+  removeDropStyle(e.currentTarget as HTMLElement);
 }
 
 function emitDragEvent(target: Element, event: 'dragover' | 'dragleave' | 'dragenter' | 'drop') {

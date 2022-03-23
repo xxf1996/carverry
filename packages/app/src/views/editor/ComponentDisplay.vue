@@ -12,7 +12,6 @@
         @change="changeDir"
       />
     </div>
-    <!-- TODO: hover展示组件截图（如果存在）； -->
     <div class="grid grid-cols-3">
       <draggable
         :list="componentList"
