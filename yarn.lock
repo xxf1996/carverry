@@ -4381,10 +4381,10 @@ vue-demi@*:
   resolved "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.12.1.tgz#f7e18efbecffd11ab069d1472d7a06e319b4174c"
   integrity sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==
 
-vue-docgen-api@^4.44.16:
-  version "4.44.17"
-  resolved "https://registry.npmmirror.com/vue-docgen-api/-/vue-docgen-api-4.44.17.tgz#07227054077f6dc30ece948acee76ddfc931df0c"
-  integrity sha512-bU1V9gvXDv5GPaOmXYcnHrc3EjwRxZ8IKFE+Hk7QWpnI5/MYriyt7rf/g/z0JS8u0vGdiYqqUVx6CB+Ghmkm5g==
+vue-docgen-api@^4.44.22:
+  version "4.44.22"
+  resolved "https://registry.npmjs.org/vue-docgen-api/-/vue-docgen-api-4.44.22.tgz#21e42e26924d5e758d899348b35e145265c20621"
+  integrity sha512-r99SeIZRqVsu1MJ49sgSmONFbqWXN9HnPxS1W1hfhOGKVqgfBWzXpJsexBuLN7XIerQM8Y1908S7AAV6GJVbRQ==
   dependencies:
     "@babel/parser" "^7.13.12"
     "@babel/types" "^7.13.12"
@@ -4396,7 +4396,7 @@ vue-docgen-api@^4.44.16:
     pug "^3.0.2"
     recast "0.20.5"
     ts-map "^1.0.3"
-    vue-inbrowser-compiler-utils "^4.44.17"
+    vue-inbrowser-compiler-utils "^4.44.22"
 
 vue-eslint-parser@^8.0.1:
   version "8.3.0"
@@ -4411,12 +4411,18 @@ vue-eslint-parser@^8.0.1:
     lodash "^4.17.21"
     semver "^7.3.5"
 
-vue-inbrowser-compiler-utils@^4.44.17:
-  version "4.44.17"
-  resolved "https://registry.npmmirror.com/vue-inbrowser-compiler-utils/-/vue-inbrowser-compiler-utils-4.44.17.tgz#2e169afdccdc0b24487bd1b73ab10623eafe66b4"
-  integrity sha512-dvxumVgIzR4FXjAWYWIOnpD+6bW0dLkoAv43UShER8gVIhLFo9UEmbF31wD6YWJj94lUpbVIuWl2qc6axYNEAQ==
+vue-inbrowser-compiler-demi@^4.44.22:
+  version "4.44.22"
+  resolved "https://registry.npmjs.org/vue-inbrowser-compiler-demi/-/vue-inbrowser-compiler-demi-4.44.22.tgz#ed6272adfa4153db4f0055aabc8cf71adfa649d8"
+  integrity sha512-J+VcduUx6iwj3cfz+huB2yhwrhL8Gk4cmXe4gspURfmDMc9uukgiDWJEEDUHQCxFT+R/zA4uQgBjKexWcHZKUw==
+
+vue-inbrowser-compiler-utils@^4.44.22:
+  version "4.44.22"
+  resolved "https://registry.npmjs.org/vue-inbrowser-compiler-utils/-/vue-inbrowser-compiler-utils-4.44.22.tgz#f4d95f2bfb811e41f6f7c4e9e34b976eea922fd4"
+  integrity sha512-wOW6JSG+YXzrYMglP6AVkERM+1Yp371UT88eTkkZe4z/LFRuTGhZZFUKV1u9SuUEwIzd0nC+seEVzLdEwGGZvA==
   dependencies:
     camelcase "^5.3.1"
+    vue-inbrowser-compiler-demi "^4.44.22"
 
 vue-router@^4.0.12:
   version "4.0.13"

@@ -13,6 +13,7 @@ const require = createRequire(import.meta.url);
 const MATERIAL_PACKAGE: Record<string, string> = {
   'carverry-material': '示例物料包',
   'carverry-404': '不存在的包',
+  'carverry-element-plus': 'Element Plus组件',
 };
 
 function getComponentTree(files: string[], rootDir: string): ComponentTree {

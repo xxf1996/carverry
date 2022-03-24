@@ -9,3 +9,11 @@
 - `chalk`：彩色，格式化命令行输出；
 
 - [All in one：项目级 monorepo 策略最佳实践 - SegmentFault 思否](https://segmentfault.com/a/1190000039157365###)
+
+
+
+## todo
+
+- [ ] 组件获取prop的精准类型（可从组件实例化和language server两个角度），支持字面量编辑；
+- [ ] 第三方UI库导入（适配）；
+

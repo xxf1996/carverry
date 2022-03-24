@@ -1,5 +1,5 @@
-import { getFileInfo } from './plugins/file-meta.js';
+import { getComponentDoc } from './plugins/component-meta.js';
+import button from 'element-plus/es/components/button';
 
-const info = await getFileInfo();
+console.log(button);
 
-console.log(info);

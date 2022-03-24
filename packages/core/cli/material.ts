@@ -7,8 +7,10 @@ import { createRequire } from 'module';
 import { getFileName, globAsync, isDir, toCamlCase } from '../utils/file.js';
 import { MaterialItem, MaterialItemConfig } from '@carverry/app/src/typings/editor';
 import lodash from 'lodash';
+import inquirer from 'inquirer';
 import { getComponentDoc } from '../plugins/component-meta.js';
 import { success } from '../utils/tip.js';
+import { elementPlusTransformer } from '../plugins/transformer.js';
 
 const require = createRequire(import.meta.url);
 const { capitalize } = lodash;
@@ -130,4 +132,30 @@ export async function initMaterialDir(rootDir: string, name: string) {
     encoding: 'utf-8',
   });
   success(`物料【${name}】初始化完成！`);
+}
+
+/**
+ * 第三方UI库转换
+ * @param rootDir 物料根目录
+ */
+export async function transformPackage(rootDir: string) {
+  const answers = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'package',
+      choices: [
+        {
+          name: 'Element-plus',
+          value: 'element',
+        },
+      ],
+    },
+  ]);
+  switch (answers.package) {
+    case 'element':
+      await elementPlusTransformer(rootDir);
+      break;
+    default:
+      break;
+  }
 }
