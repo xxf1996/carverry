@@ -40,6 +40,12 @@ function getRelativePathFromLoacl(curPath: string, localPath: string) {
   return `'${relative(curPath, targetPath)}'`;
 }
 
+/**
+ * 根据组件路径输出对应的import语句
+ * @param curPath 当前文件夹
+ * @param componentPath 组件路径
+ * @returns 
+ */
 function getComponentImport(curPath: string, componentPath: string): string {
   const packageRule = /package:\/\/([^#]+)#(.+)/; // 物料包识别
   const isPackage = packageRule.test(componentPath);
@@ -53,8 +59,18 @@ function getComponentImport(curPath: string, componentPath: string): string {
   }
 
   const componentName = toCamlCase(packageInfo[2]);
+  let importStr = `import ${componentName} from '${packageInfo[1]}/dist/materials/${packageInfo[2]}';`; // 符合标准的自建物料库结构
 
-  return `import ${componentName} from '${packageInfo[1]}/dist/materials/${packageInfo[2]}'`;
+  switch (packageInfo[1]) {
+    // 针对第三方UI库单独适配
+    case 'carverry-element-plus':
+      importStr = `import { ${componentName} } from 'element-plus';`;
+      break;
+    default:
+      break;
+  }
+
+  return importStr;
 }
 
 function getComponentName(componentPath: string) {

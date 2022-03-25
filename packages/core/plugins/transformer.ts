@@ -166,7 +166,7 @@ export async function elementPlusTransformer(rootDir: string) {
     }, null, 2), {
       encoding: 'utf-8',
     });
-    await writeFile(resolve(materialPath, 'index.ts'), `import { ${libDoc.displayName} } from 'element-plus';\nimport 'element-plus/es/components/${name}/style/css';\nexport default ${libDoc.displayName};`, {
+    await writeFile(resolve(materialPath, 'index.ts'), `import { ${libDoc.displayName} } from 'element-plus';\nimport 'element-plus/es/components/${name}/style/index';\nexport default ${libDoc.displayName};`, {
       encoding: 'utf-8',
     });
   });
