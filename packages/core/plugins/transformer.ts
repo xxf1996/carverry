@@ -29,6 +29,11 @@ function getProptype(propType: PropType<unknown>): string {
   return type;
 }
 
+/**
+ * 将组件选项中的单个prop信息解析为doc描述
+ * @param prop prop选项
+ * @param name prop key
+ */
 function propToDescriptor(prop: Prop<unknown>, name: string): PropDescriptor {
   const descriptor: PropDescriptor = {
     name,
@@ -56,6 +61,10 @@ function propToDescriptor(prop: Prop<unknown>, name: string): PropDescriptor {
   return descriptor;
 }
 
+/**
+ * 将组件emit选项转换为doc描述
+ * @param events emit选项
+ */
 function eventsToDescriptors(events: EmitsOptions): EventDescriptor[] {
   const descriptors: EventDescriptor[] = [];
   if (Array.isArray(events)) {
@@ -76,6 +85,10 @@ function eventsToDescriptors(events: EmitsOptions): EventDescriptor[] {
   return descriptors;
 }
 
+/**
+ * 将组件的选项信息转换为对应的元数据
+ * @param options 组件选项
+ */
 function optionsToDoc(options: ComponentOptionsWithObjectProps): ComponentDoc {
   const doc: ComponentDoc = {
     displayName: options.name || '',
