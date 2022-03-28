@@ -5,12 +5,18 @@ import { mkdir, writeFile } from 'fs/promises';
 import { ComponentOption } from '@carverry/app/src/typings/editor';
 import lodash from 'lodash';
 import { getContext } from '../server/project.js';
+import { getDefaultConfig } from '../cli/init.js';
+import { ProjectContext } from '../typings/context';
 
 const { uniq, capitalize } = lodash;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = getDirname(import.meta.url);
 const templateDir = resolve(__dirname, '../template');
-const context = await getContext();
+let context: ProjectContext = {
+  root: '',
+  alias: {},
+  ...getDefaultConfig(),
+};
 
 function cleanDir(dir: string) {
   // TODO：怎样在保存index.vue不被删除的前提下删除文件下其他文件？或者干脆就这样？也许可以整个文件夹进行替换？
@@ -253,6 +259,7 @@ export async function generateFile(dir: string, option: ComponentOption, preview
   if (!existsSync(dir)) { // 检测目录是否存在
     await mkdir(dir);
   }
+  context = await getContext();
   const template = preview ? getPreviewTemplate(option) : getTemplate(option);
   const script = preview ? getPreviewScript(dir, option) : getScript(dir, option);
   const source = [template, script].join('\n\n');

@@ -11,7 +11,7 @@ import { Command } from 'commander';
 import { createRequire } from 'module';
 import { success } from '../utils/tip.js';
 import { updatePprojectContext } from './context.js';
-import { initConfig, initProjectFiles, startApp } from './init.js';
+import { checkData, initConfig, initProjectFiles, startApp } from './init.js';
 import { buildMaterialProject, initMaterialDir, transformPackage } from './material.js';
 
 const program = new Command();
@@ -28,7 +28,7 @@ program
   .option('-p, --port <port>', '指定可视化搭建应用端口', '3300')
   .option('-r, --read-only', '只读预览模式')
   .action(async (options) => {
-    console.log(options);
+    await checkData();
     await updatePprojectContext(options);
     await initProjectFiles();
     await startApp();

@@ -2,6 +2,12 @@
   <div>
     <el-container class="h-screen">
       <el-aside width="360px">
+        <h3
+          v-if="projectContext?.readOnly"
+          class="text-red-500"
+        >
+          【只读模式】
+        </h3>
         <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
         <div class="flex items-center flex-wrap gap-2 px-1 py-2">
           <el-button
@@ -13,12 +19,14 @@
           </el-button>
           <el-button
             size="small"
+            :disabled="projectContext?.readOnly"
             @click="showAdd = true;"
           >
             新建Block
           </el-button>
           <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板）【优先级高】 -->
           <el-button
+            :disabled="projectContext?.readOnly"
             size="small"
           >
             保存为模板
@@ -26,13 +34,16 @@
           <el-button
             type="primary"
             size="small"
-            :disabled="generating || !curBlock"
+            :disabled="generating || !curBlock || projectContext?.readOnly"
             :loading="generating"
             @click="generateBlock"
           >
             生成源码
           </el-button>
-          <el-button size="small">
+          <el-button
+            size="small"
+            :disabled="projectContext?.readOnly"
+          >
             重置
           </el-button>
         </div>
@@ -50,23 +61,25 @@
             <el-button
               type="danger"
               size="small"
-              :disabled="!curEditKey"
+              :disabled="!curEditKey || projectContext?.readOnly"
               @click="removeComponent"
             >
               移除组件
             </el-button>
           </div>
         </div>
-        <h5>物料库</h5>
-        <!-- <component-display /> -->
-        <el-button
-          class="m-2"
-          @click="showMaterial = true;"
-        >
-          打开物料库面板
-        </el-button>
-        <h5>属性区</h5>
-        <template-meta />
+        <!-- 只读模式下不需要编辑相关的功能 -->
+        <template v-if="!projectContext?.readOnly">
+          <h5>物料库</h5>
+          <el-button
+            class="m-2"
+            @click="showMaterial = true;"
+          >
+            打开物料库面板
+          </el-button>
+          <h5>属性区</h5>
+          <template-meta />
+        </template>
       </el-aside>
       <el-main class="p-0">
         <page-viewer />
@@ -109,7 +122,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
@@ -195,6 +208,7 @@ updateLocalComponents();
 updatePackages();
 updatePreview();
 updateBlocks();
+updateContext();
 
 watch(curEditKey, (val) => {
   curOption.value = getOptionByKey(blockOption.value, val);

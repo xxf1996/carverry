@@ -29,6 +29,13 @@ function hideBar() {
   bar.style.display = 'none';
 }
 
+async function getContext() {
+  const data = await fetch('http://localhost:3344/context', {
+    method: 'get',
+  }).then((res) => res.json() as Promise<ProjectContext>);
+  return data;
+}
+
 /**
  * 为目标DOM（容器）添加排序功能
  * @param target 目标DOM
@@ -382,11 +389,15 @@ function initBlockInsert() {
 }
 
 /** 初始化slot容器事件和样式 */
-export function initSlotContainer(container: HTMLElement, empty = false) {
+export async function initSlotContainer(container: HTMLElement, empty = false) {
+  const context = await getContext();
   initSocket();
   if (empty) {
     initSlotEvent(container, 'carverry-empty', true);
     return;
+  }
+  if (context.readOnly) {
+    return; // 只读模式下拖拽交互都不需要了
   }
   // [document.createTreeWalker() - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createTreeWalker)
   // [javascript - Is there a DOM API for querying comment nodes? - Stack Overflow](https://stackoverflow.com/questions/16151813/is-there-a-dom-api-for-querying-comment-nodes)

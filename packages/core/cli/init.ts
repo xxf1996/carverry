@@ -1,6 +1,7 @@
 import { ProjectConfig } from '../typings/context';
 import inquirer from 'inquirer';
-import { promises, existsSync } from 'fs';
+import { existsSync } from 'fs';
+import { writeFile, copyFile, mkdir } from 'fs/promises';
 import { resolve } from 'path';
 import { warning } from '../utils/tip.js';
 import { getContext } from '../server/project.js';
@@ -28,6 +29,22 @@ export function getDefaultConfig(): ProjectConfig {
     pageOutDir: 'src/blocks',
     readOnly: false,
   };
+}
+
+export async function checkData() {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const dirname = resolve(__dirname, '../server');
+  const dbDir = resolve(dirname, 'db');
+  if (!existsSync(dbDir)) {
+    await mkdir(dbDir);
+  }
+  const dbFile = resolve(dbDir, 'project.json');
+  if (!existsSync(dbFile)) {
+    const config = getDefaultConfig();
+    await writeFile(dbFile, JSON.stringify(config, null, 2), {
+      encoding: 'utf-8',
+    });
+  }
 }
 
 /**
@@ -66,7 +83,7 @@ async function getUserConfig() {
 
 async function saveConfig(config: ProjectConfig) {
   const rootDir = process.cwd();
-  await promises.writeFile(resolve(rootDir, 'carverry.config.json'), JSON.stringify({
+  await writeFile(resolve(rootDir, 'carverry.config.json'), JSON.stringify({
     '$schema': 'https://xiexuefeng.cc/schema/carverry.json',
     ...config,
   }, null, 2), {
@@ -89,15 +106,15 @@ export async function initProjectFiles() {
   const context = await getContext();
   const output = resolve(context.root, context.pageOutDir);
   if (!existsSync(output)) {
-    await promises.mkdir(output);
-    await promises.writeFile(resolve(output, '.gitignore'), '.cache', {
+    await mkdir(output);
+    await writeFile(resolve(output, '.gitignore'), '.cache', {
       encoding: 'utf-8',
     });
   }
   const cache = resolve(output, '.cache');
   if (!existsSync(cache)) {
-    await promises.mkdir(cache);
-    await promises.copyFile(resolve(__dirname, '../template/empty.vue'), resolve(cache, 'index.vue')); // 空白入口文件
+    await mkdir(cache);
+    await copyFile(resolve(__dirname, '../template/empty.vue'), resolve(cache, 'index.vue')); // 空白入口文件
   }
 }
 

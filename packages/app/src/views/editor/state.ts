@@ -5,6 +5,7 @@ import {
   ComponentMeta, ComponentOption, FileInfo, MaterialPackage,
 } from '@/typings/editor';
 import { Nullable } from '@/typings/common';
+import { ProjectContext } from '@carverry/core/typings/context';
 
 export const curOption = ref<ComponentOption>();
 export const fileInfo = ref<FileInfo>({
@@ -56,6 +57,7 @@ export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOptio
 });
 /** 是否正在拖拽组件 */
 export const dragging = computed(() => !!curDragComponent.value);
+export const projectContext = ref<ProjectContext>();
 
 // TODO: 组件类设置支持，共享项目上下文（taliwind）
 
@@ -133,6 +135,13 @@ export async function updatePreview() {
       option: JSON.stringify(blockOption.value),
     }),
   });
+}
+
+export async function updateContext() {
+  const context: ProjectContext = await fetch('/editor-api/context', {
+    method: 'get',
+  }).then((res) => res.json());
+  projectContext.value = context;
 }
 
 export async function generateCode() {
