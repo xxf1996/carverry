@@ -26,6 +26,7 @@ export function getDefaultConfig(): ProjectConfig {
     sourceDir: 'src',
     port: 3300,
     pageOutDir: 'src/blocks',
+    readOnly: false,
   };
 }
 

@@ -22,7 +22,7 @@ export async function updatePprojectContext(cliConfig: Partial<ProjectConfig> = 
   });
   const config: ProjectConfig = Object.assign(getDefaultConfig(), JSON.parse(configSource), cliConfig, {
     port: Number(cliConfig.port),
-  });
+  }); // 优先级：默认配置 < 项目配置文件 < 命令行参数
   const context: ProjectContext = {
     ...config,
     root: rootDir,

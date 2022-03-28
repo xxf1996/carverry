@@ -26,7 +26,9 @@ program
   })
   .description('启动可视化搭建应用')
   .option('-p, --port <port>', '指定可视化搭建应用端口', '3300')
+  .option('-r, --read-only', '只读预览模式')
   .action(async (options) => {
+    console.log(options);
     await updatePprojectContext(options);
     await initProjectFiles();
     await startApp();

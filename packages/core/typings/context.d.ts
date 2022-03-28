@@ -7,6 +7,8 @@ export interface ProjectConfig {
   pageOutDir: string;
   /** 可视化搭建应用端口 */
   port: number;
+  /** 是否为只读模式（只读不可编辑，只可查看） */
+  readOnly: boolean;
 }
 
 interface AliasPath {
