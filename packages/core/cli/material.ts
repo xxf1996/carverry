@@ -1,18 +1,20 @@
 import { resolve, relative, dirname } from 'path';
 import { existsSync } from 'fs';
-import { rm, mkdir, writeFile, readdir } from 'fs/promises';
+import { rm, mkdir, writeFile, readdir, copyFile } from 'fs/promises';
 import fse from 'fs-extra';
 import replace from 'replace-in-file';
 import { createRequire } from 'module';
-import { getFileName, globAsync, isDir, toCamlCase } from '../utils/file.js';
+import { getDirname, getFileName, globAsync, isDir, toCamlCase } from '../utils/file.js';
 import { MaterialItem, MaterialItemConfig } from '@carverry/app/src/typings/editor';
 import lodash from 'lodash';
 import inquirer from 'inquirer';
 import { getComponentDoc } from '../plugins/component-meta.js';
-import { success } from '../utils/tip.js';
+import { info, promiseError, success } from '../utils/tip.js';
 import { elementPlusTransformer } from '../plugins/transformer.js';
 
 const require = createRequire(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = getDirname(import.meta.url);
 const { capitalize } = lodash;
 
 function getReplace(key: string, val: string[]) {
@@ -157,5 +159,61 @@ export async function transformPackage(rootDir: string) {
       break;
     default:
       break;
+  }
+}
+
+export async function initMaterialStory(dir: string, name: string, storyDir: string) {
+  const configPath = resolve(dir, 'carverry.material.json');
+  if (!existsSync(configPath)) {
+    return promiseError(`【${name}】没有发现carverry.material.json！`);
+  }
+  const config: MaterialItemConfig = require(configPath);
+  const defaultEntry = toCamlCase(name);
+  const entryName = config.entry || defaultEntry;
+  const entryPath = resolve(dir, `${entryName}.vue`);
+  if (!existsSync(entryPath)) {
+    return promiseError(`【${name}】没有发现入口文件！`);
+  }
+  const storyPath = resolve(storyDir, `${entryName}.stories.ts`);
+  if (existsSync(storyPath)) {
+    info(`【${storyPath}】已存在！`);
+    return;
+  }
+  const content = `import ${entryName} from '${relative(storyDir, entryPath)}';
+import { basicTemplate, getComponentPropInfo } from './tool';
+
+type ${entryName}Props = InstanceType<typeof ${entryName}>['$props'];
+
+export default {
+  title: '${config.type}/${entryName}',
+  component: ${entryName},
+  argTypes: getComponentPropInfo(${entryName}.props, ${entryName}['__docgenInfo']),
+};
+
+const Template = basicTemplate<${entryName}Props>(${entryName});
+
+export const Basic = Template.bind({});
+Basic.args = {};
+Basic.storyName = '基本使用';
+`;
+  await writeFile(storyPath, content, {
+    encoding: 'utf-8',
+  });
+  success(`【${storyPath}】已生成！`);
+}
+
+export async function buildStory(rootDir: string) {
+  const sourceDir = resolve(rootDir, 'src');
+  const storyDir = resolve(sourceDir, 'stories');
+  if (!existsSync(storyDir)) {
+    await mkdir(storyDir);
+  }
+  const tool = resolve(storyDir, 'tool.ts');
+  if (!existsSync(tool)) {
+    await copyFile(resolve(__dirname, '..', 'template', 'story-tool.ts'), tool);
+  }
+  const materials = await readdir(resolve(sourceDir, 'materials'));
+  for (const name of materials) {
+    await initMaterialStory(resolve(sourceDir, 'materials', name), name, storyDir);
   }
 }

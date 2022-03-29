@@ -12,7 +12,7 @@ import { createRequire } from 'module';
 import { success } from '../utils/tip.js';
 import { updatePprojectContext } from './context.js';
 import { checkData, initConfig, initProjectFiles, startApp } from './init.js';
-import { buildMaterialProject, initMaterialDir, transformPackage } from './material.js';
+import { buildMaterialProject, buildStory, initMaterialDir, transformPackage } from './material.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
@@ -63,6 +63,12 @@ material
   .action(async () => {
     await transformPackage(process.cwd());
     success('转换成功！');
+  });
+material
+  .command('story')
+  .description('自动初始化已有物料的storybook文件')
+  .action(async () => {
+    await buildStory(process.cwd());
   });
 material
   .command('new <name>')
