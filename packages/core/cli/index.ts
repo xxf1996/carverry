@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --no-warnings --loader ts-node/esm
+#!/usr/bin/env ts-node-esm
 
 /**
  * 命令脚本；`#!/usr/bin/env -S`可以指定执行程序的同时加上命令参数，就跟在`script`写的命令一样；
@@ -16,7 +16,7 @@ import { buildMaterialProject, buildStory, initMaterialDir, transformPackage } f
 
 const program = new Command();
 const require = createRequire(import.meta.url);
-const packageInfo = require('../../../package.json');
+const packageInfo = require('../package.json');
 const material = new Command('material');
 
 program.version(packageInfo.version, '-v, --version', '运行版本');
