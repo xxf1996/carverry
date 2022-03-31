@@ -19,8 +19,8 @@ const require = createRequire(import.meta.url);
 const packageInfo = require('../../../package.json');
 const material = new Command('material');
 
+program.version(packageInfo.version, '-v, --version', '运行版本');
 program
-  .version(packageInfo.version, '-v, --version', '运行版本')
   .command('start', {
     isDefault: true,
   })
