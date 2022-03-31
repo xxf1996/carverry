@@ -214,7 +214,7 @@ function getPreviewScript(dir: string, option: ComponentOption): string {
 
   return `<script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { initSlotContainer, changeConfig } from 'carverry';
+import { initSlotContainer, changeConfig } from '@carverry/app/src/plugins';
 import { SlotAppendEvent } from '@carverry/app/src/typings/editor';
 ${componentImport}
 ${slotsImport}

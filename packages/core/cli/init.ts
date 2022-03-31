@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import { existsSync } from 'fs';
 import { writeFile, copyFile, mkdir } from 'fs/promises';
 import { resolve } from 'path';
-import { warning } from '../utils/tip.js';
+import { promiseError, warning } from '../utils/tip.js';
 import { getContext } from '../server/project.js';
 import { getDirname } from '../utils/file.js';
 import { execShellOrigin } from '../utils/shell.js';
@@ -93,6 +93,9 @@ async function saveConfig(config: ProjectConfig) {
 
 export async function startApp() {
   const appDir = resolve(__dirname, '../../app');
+  if (!existsSync(appDir)) {
+    return promiseError('没有发现@carverry/app包！');
+  }
   const curDir = resolve(__dirname, '..');
   execShellOrigin(`cd ${curDir} && yarn server`); // 先启动服务器
   await setTimeout(3000); // 服务器和应用分属两个不同的线程

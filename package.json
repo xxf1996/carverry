@@ -1,12 +1,7 @@
 {
-  "name": "carverry",
-  "version": "0.1.0",
   "private": true,
   "engines": {
     "node": ">=16.0.0"
-  },
-  "bin": {
-    "carverry": "./packages/core/cli/index.ts"
   },
   "main": "index.ts",
   "workspaces": [
@@ -16,6 +11,10 @@
     "cz": "git add . && git cz"
   },
   "license": "MIT",
+  "dependencies": {
+    "@carverry/app": "workspace:*",
+    "@carverry/core": "workspace:*"
+  },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
     "@commitlint/config-conventional": "^16.2.1",

@@ -1,13 +1,17 @@
 {
   "name": "@carverry/app",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "main": "index.ts",
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "autofix": "eslint ./src --ext .ts --ext .vue --fix",
     "lint": "eslint ./src --ext .ts --ext .vue"
+  },
+  "peerDependencies": {
+    "vue": ">=3.2.0",
+    "vue-router": ">=4.0.0"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.3",
