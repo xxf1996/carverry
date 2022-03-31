@@ -1,10 +1,10 @@
 {
   "name": "@carverry/core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts",
+    "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts --project=./tsconfig.json",
     "server": "node --no-warnings --loader ts-node/esm ./server/index.ts",
     "demo": "node --no-warnings --loader ts-node/esm ./test.ts"
   },
