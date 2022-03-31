@@ -433,7 +433,7 @@ export async function addCarverryRoute(router: Router) {
     router.push({
       name: 'CarverryPreview',
     });
-  }, 1000);
+  }, 3000);
 }
 
 /**

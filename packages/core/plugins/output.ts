@@ -148,6 +148,10 @@ function getPreviewTemplate(option: ComponentOption): string {
   // 同级slot转为对应的slot-{name}-{idx}组件形式
   const slots = Object.keys(option.slots)
     .map((name) => {
+      const skip = option.slots[name].some((slot) => slot.skip);
+      if (skip) { // 跳过slot，直接为空
+        return '';
+      }
       if (option.slots[name].length > 0) {
         return `<template #${name}>${option.slots[name].map((child, idx) => `<slot-${name}-${idx} carverry-parent="${option.key}" carverry-slot="${name}" data-carverry-child="${idx}" key="${[option.key, name, idx, Date.now()].join('-')}" />`).join('')}</template>`; // 加上key是为了保证交换顺序时强制更新
       }

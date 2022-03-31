@@ -49,7 +49,10 @@ export interface ComponentOption {
   /** events映射配置 */
   events: Record<string, ComponentDependence>;
   /** slots填充配置 */
-  slots: Record<string, ComponentOption[]>;
+  slots: Record<string, (ComponentOption & {
+    /** 直接跳过为空，即不给该slot填充一个默认的内容，以便有些组件本身就有默认slot内容； */
+    skip?: boolean; // TODO: 增加交互设置skip属性
+  })[]>;
 }
 
 export interface FileExportMember {

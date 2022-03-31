@@ -1,4 +1,5 @@
-import { computed, PropType, getCurrentInstance } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
+import type { PropType } from 'vue';
 
 /**
  * 用于快速代理某个组件prop；
