@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node-esm
-
+// ts-node-esm适用于全局安装ts-node，然后以esm模式运行；如果是以node + loader的模式，ts-node会以cwd模式运行，这样不便于在任意位置进行执行；
 /**
  * 命令脚本；`#!/usr/bin/env -S`可以指定执行程序的同时加上命令参数，就跟在`script`写的命令一样；
  * 
