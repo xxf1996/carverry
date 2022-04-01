@@ -4,6 +4,10 @@
   "main": "index.ts",
   "type": "module",
   "license": "MIT",
+  "keywords": [
+    "carverry",
+    "ts-node"
+  ],
   "scripts": {
     "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts --project=./tsconfig.json",
     "server": "node --no-warnings --loader ts-node/esm ./server/index.ts",
