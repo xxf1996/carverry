@@ -3,6 +3,7 @@
   "version": "0.1.5",
   "main": "index.ts",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "cli": "node --no-warnings --loader ts-node/esm ./cli/index.ts --project=./tsconfig.json",
     "server": "node --no-warnings --loader ts-node/esm ./server/index.ts",

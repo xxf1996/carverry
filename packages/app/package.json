@@ -2,6 +2,7 @@
   "name": "@carverry/app",
   "version": "0.1.8",
   "main": "index.ts",
+  "license": "MIT",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
