@@ -99,7 +99,7 @@ export async function startApp() {
   const curDir = resolve(__dirname, '..');
   execShellOrigin(`cd ${curDir} && yarn server`); // 先启动服务器
   await setTimeout(3000); // 服务器和应用分属两个不同的线程
-  await execShellOrigin(`cd ${appDir} && yarn dev`); // 再启动可视化应用
+  await execShellOrigin(`cd ${appDir} && yarn preview`); // 再启动可视化应用
 }
 
 /**

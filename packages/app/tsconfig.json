@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "useDefineForClassFields": true,
     "lib": ["esnext", "dom"],
     "paths": {
       "@/*": ["src/*"] // 路径alias

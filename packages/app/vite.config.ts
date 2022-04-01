@@ -48,4 +48,7 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    port: 3300,
+  },
 });
