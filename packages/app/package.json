@@ -1,10 +1,11 @@
 {
   "name": "@carverry/app",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "index.ts",
   "scripts": {
     "dev": "vite --host",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
+    "lint:ts": "vue-tsc --noEmit",
     "preview": "vite preview",
     "autofix": "eslint ./src --ext .ts --ext .vue --fix",
     "lint": "eslint ./src --ext .ts --ext .vue"
