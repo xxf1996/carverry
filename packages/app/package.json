@@ -1,6 +1,6 @@
 {
   "name": "@carverry/app",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.ts",
   "scripts": {
     "dev": "vite --host",
@@ -8,10 +8,6 @@
     "preview": "vite preview",
     "autofix": "eslint ./src --ext .ts --ext .vue --fix",
     "lint": "eslint ./src --ext .ts --ext .vue"
-  },
-  "peerDependencies": {
-    "vue": ">=3.2.0",
-    "vue-router": ">=4.0.0"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.3",
