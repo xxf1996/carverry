@@ -40,6 +40,10 @@
           >
             生成源码
           </el-button>
+          <!-- TODO: 重新加载右侧页面 -->
+          <el-button size="small">
+            重新加载
+          </el-button>
           <el-button
             size="small"
             :disabled="projectContext?.readOnly"
