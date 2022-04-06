@@ -96,7 +96,8 @@ export function getImport(curPath: string, filePath: string, member: string) {
 function getValidSlots(slots: ComponentOption['slots']): ComponentOption['slots'] {
   const res: ComponentOption['slots'] = {};
   Object.entries(slots).forEach(([name, children]) => {
-    if (children.length > 0) {
+    const skip = children.some((child) => child.skip); // skip为true，直接跳过该slot
+    if (children.length > 0 && !skip) {
       res[name] = children;
     }
   });

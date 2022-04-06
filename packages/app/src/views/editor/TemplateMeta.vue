@@ -46,6 +46,36 @@
         v-model:member="curOption.events[event.name].member"
       />
     </template>
+    <p v-if="metaSlots.length > 0">
+      Slots
+    </p>
+    <template v-for="slot in metaSlots" :key="`${curEditKey}-${slot.name}`">
+      <div class="flex items-center my-1 text-neutral-500">
+        <span>{{ slot.description || slot.name }}</span>
+        <span
+          v-if="slot.description"
+          class="text-red-600"
+        >({{ slot.name }})</span>
+        <el-tooltip
+          content="是否使用空的slot内容（通常是为了使用组件的默认slot内容）"
+          placement="right"
+          :show-after="200"
+        >
+          <el-switch
+            v-if="curOption.slots[slot.name].length > 0"
+            v-model="curOption.slots[slot.name][0].skip"
+            class="ml-auto"
+            @change="val => changeSkip(val, slot.name)"
+          />
+          <el-switch
+            v-else
+            v-model="skipState"
+            class="ml-auto"
+            @change="val => changeSkip(val, slot.name)"
+          />
+        </el-tooltip>
+      </div>
+    </template>
   </div>
   <p
     v-else
@@ -56,12 +86,41 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
 
 const metaProps = computed(() => curMeta.value?.doc.props || []);
 const metaEvents = computed(() => curMeta.value?.doc.events || []);
+const metaSlots = computed(() => curMeta.value?.doc.slots || []);
+const skipState = ref(false);
+
+/**
+ * 处理skip筛选状态
+ * @param skip 是否skip
+ * @param slot slot name
+ */
+function changeSkip(skip: boolean, slot: string) {
+  if (skip) {
+    if (curOption.value.slots[slot].length === 0) { // 空的slot
+      curOption.value.slots[slot] = [
+        {
+          skip: true,
+          key: '',
+          path: '',
+          props: {},
+          events: {},
+          slots: {}
+        }
+      ];
+    } else {
+      curOption.value.slots[slot][0].skip = true;
+    }
+    skipState.value = false;
+  } else {
+    curOption.value.slots[slot] = []; // 取消skip时清空slot内容
+  }
+}
 
 watch(curOption, (val) => {
   console.log('curOption', val);
