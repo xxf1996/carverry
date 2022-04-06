@@ -40,8 +40,8 @@
           >
             生成源码
           </el-button>
-          <!-- TODO: 重新加载右侧页面 -->
-          <el-button size="small">
+          <!-- 重新加载右侧页面 -->
+          <el-button size="small" @click="reloadPreview">
             重新加载
           </el-button>
           <el-button
@@ -126,7 +126,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
@@ -205,6 +205,11 @@ async function selectBlock() {
     initBlockOption();
   }
   showLoad.value = false;
+}
+
+/** 重新加载右侧预览页 */
+function reloadPreview() {
+  pageBus.emit('reload');
 }
 
 updateFileInfo();

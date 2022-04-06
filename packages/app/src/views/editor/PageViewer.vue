@@ -9,6 +9,7 @@
   >
     <!-- 拖拽组件时，iframe进行指针事件穿透，避免阻断事件传递 -->
     <iframe
+      ref="iframeRef"
       class="w-full h-full"
       :class="dragging ? 'pointer-events-none' : ''"
       :src="previewUrl"
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey } from './state';
+import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey, pageBus } from './state';
 import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange, SocketHover } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
@@ -32,6 +33,7 @@ import { onMounted, ref, watch } from 'vue';
 const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
 const container = ref<HTMLDivElement>();
+const iframeRef = ref<HTMLIFrameElement>();
 const showHover = ref(false);
 const hoverStyle = ref({
   width: '0px',
@@ -93,8 +95,9 @@ function changeConfig(message: SocketConfigChange) {
 }
 
 function slotChange(message: SocketSlotChange) {
+  // FIXME: 交换顺序页面渲染与输出不一致
   const parent = getOptionByKey(blockOption.value, message.parent); // 获取父级配置结点
-  const slot = parent.slots[message.slot];
+  const slot: ComponentOption['slots']['key'] = JSON.parse(JSON.stringify(parent.slots[message.slot])); // 先拷贝之前的slot数据
   const curIdx = new Array(slot.length).fill(0).map((val, idx) => idx);
   if (message.newIdx > message.oldIdx) {
     curIdx.splice(message.newIdx + 1, 0, message.oldIdx);
@@ -123,12 +126,11 @@ function sendMessage(message: SocketEvent) {
   if (!wsLoaded) {
     return;
   }
-  // console.log(message);
   ws.send(JSON.stringify(message));
 }
 
 function handleMessage(message: SocketEvent) {
-  console.log(message);
+  // console.log(message);
   switch (message.type) {
     case 'config-change':
       changeConfig(message);
@@ -241,6 +243,12 @@ onMounted(() => {
   }
   container.value.addEventListener('mouseleave', () => {
     showHover.value = false;
+  });
+  pageBus.on((e) => {
+    if (e === 'reload' && iframeRef.value) {
+      console.log('reload iframe');
+      iframeRef.value.src = previewUrl;
+    }
   });
 });
 

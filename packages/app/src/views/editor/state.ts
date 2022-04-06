@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { useLocalStorage, useEventBus } from '@vueuse/core';
 import {
   ComponentInfo,
   ComponentMeta, ComponentOption, FileInfo, MaterialPackage,
@@ -7,6 +7,7 @@ import {
 import { Nullable } from '@/typings/common';
 import { ProjectContext } from '@carverry/core/typings/context';
 
+export const pageBus = useEventBus<string>(Symbol('page'));
 export const curOption = ref<ComponentOption>();
 export const fileInfo = ref<FileInfo>({
   fileMap: {},
@@ -135,6 +136,7 @@ export async function updatePreview() {
       option: JSON.stringify(blockOption.value),
     }),
   });
+  // pageBus.emit('reload');
 }
 
 export async function updateContext() {
