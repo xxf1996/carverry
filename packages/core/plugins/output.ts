@@ -212,6 +212,7 @@ function getPreviewScript(dir: string, option: ComponentOption): string {
     });
   });
 
+  // TODO: 用模板渲染引擎进行渲染
   return `<script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { initSlotContainer, changeConfig } from '@carverry/app/src/plugins';
@@ -231,6 +232,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  carverryChild: {
+    type: String,
+    default: '0',
+  },
 }); // 组件的dataset设置不一定有作用
 
 function slotAppend(e: CustomEvent<SlotAppendEvent>) {
@@ -248,6 +253,7 @@ onMounted(() => {
   el.dataset.carverryKey = '${option.key}'; // 双重保险，避免有些组件吞了attribute设置
   el.dataset.carverryParent = props.carverryParent;
   el.dataset.carverrySlot = props.carverrySlot;
+  el.dataset.carverryChild = props.carverryChild;
   initSlotContainer(el);
 });
 </script>`;

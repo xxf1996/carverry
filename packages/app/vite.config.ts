@@ -48,6 +48,9 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    sourcemap: true,
+  },
   preview: {
     port: 3300,
   },

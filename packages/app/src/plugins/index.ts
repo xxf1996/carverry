@@ -275,10 +275,10 @@ function initSocket() {
  * @param empty 是否为空的容器（即目前没有子组件）
  */
 function initSlotEvent(target: HTMLElement, name: string, empty: boolean) {
+  target.dataset.slot = name;
+  // 给slot容器加上样式
+  target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
   if (empty) { // 空的容器才需要直接的拖拽插入处理（因为不需要精准插入）
-    target.dataset.slot = name;
-    // 给slot容器加上样式
-    target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
     // 容器拖拽交互和样式
     target.addEventListener('dragover', containerDragover);
     target.addEventListener('drop', containerDrop);

@@ -41,6 +41,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  carverryChild: {
+    type: String,
+    default: '0',
+  },
 }); // 组件的dataset设置不一定有作用
 
 function slotAppend(e: CustomEvent<SlotAppendEvent>) {
@@ -58,6 +62,7 @@ onMounted(() => {
   el.dataset.carverryKey = 'key'; // 双重保险，避免有些组件吞了attribute设置
   el.dataset.carverryParent = props.carverryParent;
   el.dataset.carverrySlot = props.carverrySlot;
+  el.dataset.carverryChild = props.carverryChild;
   initSlotContainer(el);
 });
 </script>
