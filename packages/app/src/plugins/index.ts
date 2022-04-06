@@ -327,6 +327,7 @@ function initBlockInsert() {
       bar.id = 'carverry-bar';
       bar.style.position = 'fixed';
       bar.style.backgroundColor = 'rgb(50, 240, 200)';
+      bar.style.zIndex = '9999';
       document.body.appendChild(bar);
     }
     // 根据鼠标距离命中目标DOMRect的最近边框是哪个，决定插入的位置和方向
