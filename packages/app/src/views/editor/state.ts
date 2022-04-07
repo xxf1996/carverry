@@ -23,7 +23,7 @@ export const localComponents = ref<ComponentInfo>({
 /** 物料包信息 */
 export const packages = ref<MaterialPackage[]>([]);
 export const curDragComponent = ref<Required<ComponentMeta>>();
-export const curEditKey = ref('');
+export const curEditKey = ref<string>();
 /** 当前进行操作的block名称 */
 export const curBlock = ref('');
 /** 所有组件（包括已经加载的物料库）元数据映射，key为组件唯一标识符（path），value为组件元数据 */
@@ -43,7 +43,7 @@ export const componentMap = computed<ComponentInfo['componentMap']>(() => {
 });
 /** 当前选中模板元信息 */
 export const curMeta = computed<Nullable<Required<ComponentMeta>>>(() => {
-  if (!curBlock.value || !curOption.value || !componentMap.value[curOption.value.path]) {
+  if (!curBlock.value || !curOption.value || !componentMap.value[curOption.value.path] || curEditKey.value === undefined) {
     return null;
   }
   return componentMap.value[curOption.value.path];

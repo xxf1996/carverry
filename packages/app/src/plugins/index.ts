@@ -418,23 +418,41 @@ export async function initSlotContainer(container: HTMLElement, empty = false) {
   initBlockInsert();
 }
 
-export async function addCarverryRoute(router: Router) {
-  const data = await fetch('http://localhost:3344/context', {
-    method: 'get',
-  }).then((res) => res.json() as Promise<ProjectContext>);
-  // const source = [data.root, data.sourceDir].join('/');
-  const output = [data.root, data.pageOutDir].join('/');
-  const cacheDir = `${output.split(data.root)[1]}/.cache/index.vue`; // 相对路径（相对于根目录）
+/**
+ * 注册carverry预览路由
+ * @param router 路由实例
+ * @param entry 预览路由入口文件，默认为`/src/blocks/.cache/index.vue`
+ */
+export async function addCarverryRoute(router: Router, entry = '/src/blocks/.cache/index.vue') {
+  let inited = false;
   router.addRoute({
     path: '/carverry-preview',
     name: 'CarverryPreview',
-    component: () => import(/* @vite-ignore */cacheDir),
+    component: () => import(/* @vite-ignore */entry),
   });
-  setTimeout(() => {
-    router.push({
-      name: 'CarverryPreview',
-    });
-  }, 3000);
+  router.beforeEach(async (to, from, next) => {
+    if (to.path.includes('carverry-preview') && !inited) {
+      /** 异步注册路由会造成HMR不生效 */
+      // const data = await fetch('http://localhost:3344/context', {
+      //   method: 'get',
+      // }).then((res) => res.json() as Promise<ProjectContext>);
+      // // const source = [data.root, data.sourceDir].join('/');
+      // const output = [data.root, data.pageOutDir].join('/');
+      // const cacheDir = `${output.split(data.root)[1]}/.cache/index.vue`; // 相对路径（相对于根目录）
+      // router.addRoute({
+      //   path: '/carverry-preview',
+      //   name: 'CarverryPreview',
+      //   component: () => import(/* @vite-ignore */cacheDir),
+      // });
+      inited = true;
+      setTimeout(() => {
+        router.push({
+          name: 'CarverryPreview',
+        });
+      }, 100);
+    }
+    next();
+  });
 }
 
 /**

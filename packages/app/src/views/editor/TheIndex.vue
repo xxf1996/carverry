@@ -172,7 +172,7 @@ async function removeComponent() {
     const slotIdx = Number(selfPaths[1]);
     const parent = getOptionByKey(blockOption.value, parentPath);
     parent.slots[slotName].splice(slotIdx, 1); // 移除配置
-    curEditKey.value = '';
+    curEditKey.value = undefined;
     updateOptionKey(blockOption.value);
   });
 }
@@ -222,7 +222,7 @@ function reloadPreview() {
 
 /** 更新项目相关的元数据 */
 async function updateProjectInfo() {
-  updateLoading.value = false;
+  updateLoading.value = true;
   await Promise.all([
     updateFileInfo(),
     updateLocalComponents(),
@@ -230,7 +230,7 @@ async function updateProjectInfo() {
     updateBlocks(),
     updateContext(),
   ]).finally(() => {
-    updateLoading.value = true;
+    updateLoading.value = false;
   });
 }
 
@@ -238,6 +238,9 @@ updateProjectInfo();
 updatePreview();
 
 watch(curEditKey, (val) => {
+  if (val === undefined) {
+    return;
+  }
   curOption.value = getOptionByKey(blockOption.value, val);
 }, { immediate: true });
 
