@@ -46,6 +46,13 @@
           </el-button>
           <el-button
             size="small"
+            :disabled="updateLoading"
+            :loading="updateLoading"
+            @click="updateProjectInfo">
+            更新项目信息
+          </el-button>
+          <el-button
+            size="small"
             :disabled="projectContext?.readOnly"
           >
             重置
@@ -140,6 +147,7 @@ const loadedBlock = ref('');
 const blocks = ref<string[]>([]);
 const blockName = ref('');
 const showMaterial = ref(false);
+const updateLoading = ref(false);
 
 async function updateBlocks() {
   const data = await getBlocks();
@@ -212,12 +220,22 @@ function reloadPreview() {
   pageBus.emit('reload');
 }
 
-updateFileInfo();
-updateLocalComponents();
-updatePackages();
+/** 更新项目相关的元数据 */
+async function updateProjectInfo() {
+  updateLoading.value = false;
+  await Promise.all([
+    updateFileInfo(),
+    updateLocalComponents(),
+    updatePackages(),
+    updateBlocks(),
+    updateContext(),
+  ]).finally(() => {
+    updateLoading.value = true;
+  });
+}
+
+updateProjectInfo();
 updatePreview();
-updateBlocks();
-updateContext();
 
 watch(curEditKey, (val) => {
   curOption.value = getOptionByKey(blockOption.value, val);
