@@ -421,10 +421,20 @@ export async function initSlotContainer(container: HTMLElement, empty = false) {
 /**
  * 注册carverry预览路由
  * @param router 路由实例
+ * @param afterInit 注册完路由后的事件钩子，默认会直接跳转到预览页；如果要增加自定义路由参数可以自行使用钩子；
  * @param entry 预览路由入口文件，默认为`/src/blocks/.cache/index.vue`
  */
-export async function addCarverryRoute(router: Router, entry = '/src/blocks/.cache/index.vue') {
+export async function addCarverryRoute(router: Router, afterInit?: () => void, entry = '/src/blocks/.cache/index.vue') {
   let inited = false;
+  /** 默认处理 */
+  const defaultCb = () => {
+    setTimeout(() => {
+      router.push({
+        name: 'CarverryPreview',
+      });
+    }, 100);
+  };
+  const cb = afterInit || defaultCb;
   router.addRoute({
     path: '/carverry-preview',
     name: 'CarverryPreview',
@@ -445,11 +455,7 @@ export async function addCarverryRoute(router: Router, entry = '/src/blocks/.cac
       //   component: () => import(/* @vite-ignore */cacheDir),
       // });
       inited = true;
-      setTimeout(() => {
-        router.push({
-          name: 'CarverryPreview',
-        });
-      }, 100);
+      cb();
     }
     next();
   });

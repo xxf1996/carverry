@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
 
@@ -122,10 +122,45 @@ function changeSkip(skip: boolean, slot: string) {
   }
 }
 
+/** 检查当前组件元数据是否初始化，避免组件元数据结构发生变化 */
+function checkMetaValid() {
+  if (!curMeta.value || !curOption.value) {
+    return;
+  }
+  if (curMeta.value.path !== curOption.value.path) {
+    return;
+  }
+  metaProps.value.forEach((prop) => {
+    if (curOption.value.props[prop.name]) {
+      return;
+    }
+    curOption.value.props[prop.name] = {
+      path: '',
+      member: ''
+    };
+  });
+  metaEvents.value.forEach((event) => {
+    if (curOption.value.events[event.name]) {
+      return;
+    }
+    curOption.value.events[event.name] = {
+      path: '',
+      member: ''
+    };
+  });
+  metaSlots.value.forEach((slot) => {
+    if (curOption.value.slots[slot.name]) {
+      return;
+    }
+    curOption.value.slots[slot.name] = [];
+  })
+}
+
 watch(curOption, (val) => {
   console.log('curOption', val);
 });
 watch(curMeta, (val) => {
   console.log('curMeta', val);
+  nextTick(checkMetaValid);
 });
 </script>
