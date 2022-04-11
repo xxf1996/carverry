@@ -1,5 +1,11 @@
 <template>
   <div v-if="curOption">
+    <p>Ref绑定</p>
+    <file-member
+      v-if="curOption.ref"
+      v-model:file="curOption.ref.path"
+      v-model:member="curOption.ref.member"
+    />
     <p v-if="metaProps.length > 0">
       Props
     </p>
@@ -153,7 +159,13 @@ function checkMetaValid() {
       return;
     }
     curOption.value.slots[slot.name] = [];
-  })
+  });
+  if (!curOption.value.ref) {
+    curOption.value.ref = {
+      path: '',
+      member: ''
+    }
+  }
 }
 
 watch(curOption, (val) => {

@@ -53,6 +53,8 @@ export interface ComponentOption {
     /** 直接跳过为空，即不给该slot填充一个默认的内容，以便有些组件本身就有默认slot内容； */
     skip?: boolean; // TODO: 增加交互设置skip属性
   })[]>;
+  /** TODO：绑定ref */
+  ref?: ComponentDependence;
 }
 
 export interface FileExportMember {
