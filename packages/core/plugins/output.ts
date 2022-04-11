@@ -126,7 +126,7 @@ function getValidEvents(events: ComponentOption['events']): ComponentOption['eve
 
 function getTemplate(option: ComponentOption): string {
   // 映射props，注意v-model绑定
-  const props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
+  let props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
   const events = Object.entries(getValidEvents(option.events)).map(([name, dep]) => `@${name}="${dep.member}"`).join(' ');
   // 同级slot转为对应的slot-{name}-{idx}组件形式
   const slots = Object.keys(getValidSlots(option.slots))
@@ -134,6 +134,10 @@ function getTemplate(option: ComponentOption): string {
     .flat()
     .join('\n');
   const name = getComponentName(option.path);
+
+  if (option.ref && option.ref.path && option.ref.member) { // 添加组件Ref
+    props = `:ref="(el) => {${option.ref.member} = el;}" ${props}`;
+  }
 
   return `<template>
   <${name} ${props} ${events}>
@@ -144,7 +148,7 @@ function getTemplate(option: ComponentOption): string {
 
 function getPreviewTemplate(option: ComponentOption): string {
   // 映射props，注意v-model绑定
-  const props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
+  let props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
   const events = Object.entries(getValidEvents(option.events)).map(([name, dep]) => `@${name}="${dep.member}"`).join(' ');
   // 同级slot转为对应的slot-{name}-{idx}组件形式
   const slots = Object.keys(option.slots)
@@ -161,9 +165,17 @@ function getPreviewTemplate(option: ComponentOption): string {
     .flat()
     .join('\n');
   const name = getComponentName(option.path);
+  let customRef = '';
 
+  if (option.ref && option.ref.path && option.ref.member) { // 添加组件Ref
+    customRef = option.ref.member;
+  }
+
+  const refName = customRef || 'containerRef';
+
+  // 采用ref函数可以兼容外部导入的ref变量：https://vuejs.org/guide/essentials/template-refs.html#function-refs
   return `<template>
-  <${name} ref="containerRef" data-carverry-key="${option.key}" @slot-append.stop="slotAppend" ${props} ${events}>
+  <${name} :ref="(el) => {${refName} = el;}" data-carverry-key="${option.key}" @slot-append.stop="slotAppend" ${props} ${events}>
     ${slots}
   </${name}>
 </template>`;
@@ -171,7 +183,11 @@ function getPreviewTemplate(option: ComponentOption): string {
 
 function getScript(dir: string, option: ComponentOption): string {
   // 去重避免重复引入；
-  const propImports = uniq(Object.values(getValidProps(option.props)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
+  const propsInfo = option.props;
+  if (option.ref) { // ref绑定
+    propsInfo.ref = option.ref;
+  }
+  const propImports = uniq(Object.values(getValidProps(propsInfo)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const eventImports = uniq(Object.values(getValidEvents(option.events)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const componentImport = getComponentImport(dir, option.path);
   const slots = Object.keys(getValidSlots(option.slots));
@@ -197,7 +213,11 @@ ${eventImports}
 
 function getPreviewScript(dir: string, option: ComponentOption): string {
   // 去重避免重复引入；
-  const propImports = uniq(Object.values(getValidProps(option.props)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
+  const propsInfo = option.props;
+  if (option.ref) { // ref绑定
+    propsInfo.ref = option.ref;
+  }
+  const propImports = uniq(Object.values(getValidProps(propsInfo)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const eventImports = uniq(Object.values(getValidEvents(option.events)).map((dep) => getImport(dir, dep.path, dep.member))).join('\n');
   const componentImport = getComponentImport(dir, option.path);
   const slots = Object.keys(getValidSlots(option.slots));
@@ -212,6 +232,11 @@ function getPreviewScript(dir: string, option: ComponentOption): string {
       generateFile(resolve(dir, `slot-${name}-${idx}`), option.slots[name][idx], true);
     });
   });
+  let customRef = '';
+  if (option.ref && option.ref.path && option.ref.member) { // 添加组件Ref
+    customRef = option.ref.member;
+  }
+  const refName = customRef || 'containerRef';
 
   // TODO: 用模板渲染引擎进行渲染
   return `<script lang="ts" setup>
@@ -223,7 +248,7 @@ ${slotsImport}
 ${propImports}
 ${eventImports}
 
-const containerRef = ref<HTMLElement>();
+${customRef ? '' : 'const containerRef = ref<HTMLElement>();'}
 const props = defineProps({
   carverryParent: {
     type: String,
@@ -244,10 +269,10 @@ function slotAppend(e: CustomEvent<SlotAppendEvent>) {
 }
 
 onMounted(() => {
-  if (!containerRef.value) {
+  if (!${refName}.value) {
     return;
   }
-  let el: HTMLElement = containerRef.value.$el || containerRef.value;
+  let el: HTMLElement = ${refName}.value.$el || ${refName}.value;
   if (el.nodeName === '#text' && el.nextElementSibling) {
     el = el.nextElementSibling as HTMLElement;
   }
