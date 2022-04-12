@@ -1,6 +1,6 @@
 {
   "name": "@carverry/core",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "index.ts",
   "type": "module",
   "license": "MIT",
