@@ -8,7 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "cz": "git add . && git cz"
+    "cz": "git add . && git cz",
+    "changelog": "npx lerna version --conventional-commits"
   },
   "license": "MIT",
   "devDependencies": {
@@ -23,7 +24,8 @@
     "eslint": "^8.9.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-plugin-vue": "^8.5.0",
-    "husky": "^7.0.4"
+    "husky": "^7.0.4",
+    "lerna": "^4.0.0"
   },
   "peerDependencies": {
     "ts-node": ">=10.0.0",
@@ -39,5 +41,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "name": "carverry"
 }
