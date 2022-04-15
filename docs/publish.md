@@ -8,8 +8,12 @@
   yarn publish --access public
   ```
 
-- 
+-
 
+### 基于workspace多包管理
+
+- [结合 lerna 和 yarn workspace 管理多项目工作流 - SegmentFault 思否](https://segmentfault.com/a/1190000025173538)
+- [changesets/changesets: 🦋 A way to manage your versioning and changelogs with a focus on monorepos](https://github.com/changesets/changesets)
 
 
 
