@@ -140,6 +140,7 @@ import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 
+// TODO: 将block name放到路由参数中，用于快速跳转
 const generating = ref(false);
 const showLoad = ref(false);
 const showAdd = ref(false);
