@@ -1,6 +1,6 @@
 {
   "name": "@carverry/app",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "main": "index.ts",
   "license": "MIT",
   "keywords": [
