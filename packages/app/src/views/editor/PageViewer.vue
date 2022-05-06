@@ -29,6 +29,7 @@ import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
 import { onMounted, ref, watch } from 'vue';
+import { useThrottleFn } from '@vueuse/core';
 
 const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
@@ -129,6 +130,9 @@ function sendMessage(message: SocketEvent) {
   ws.send(JSON.stringify(message));
 }
 
+// 事件节流
+const throttleSend = useThrottleFn(sendMessage, 100);
+
 function handleMessage(message: SocketEvent) {
   // console.log(message);
   switch (message.type) {
@@ -196,8 +200,7 @@ function containerDragover(e: DragEvent) {
     id: 'app',
     ...pos,
   };
-  sendMessage(data);
-  // (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
+  throttleSend(data);
 }
 
 function containerDrop(e: DragEvent) {
