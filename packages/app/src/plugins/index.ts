@@ -19,6 +19,10 @@ let dragging = false;
 let curX = 0;
 /** 当前鼠标y位置（相对于iframe） */
 let curY = 0;
+/** 需要更新项目上下文信息 */
+let needUpdateContext = false;
+let contextInfo: Nullable<ProjectContext> = null;
+let contextQueue: Promise<ProjectContext>[] = [];
 
 /** 隐藏插入位置的引导条 */
 function hideBar() {
@@ -30,10 +34,22 @@ function hideBar() {
 }
 
 async function getContext() {
-  const data = await fetch('http://localhost:3344/context', {
+  if (contextInfo) {
+    return contextInfo;
+  }
+  if (contextQueue.length > 0) {
+    return contextQueue[0]; // 从请求队列直接返回promise，避免组件过多时引起的大量请求，毫无必要
+  }
+  /** 清空上下文信息后的第一次请求 */
+  const firstReq = fetch('http://localhost:3344/context', {
     method: 'get',
-  }).then((res) => res.json() as Promise<ProjectContext>);
-  return data;
+  }).then((res) => res.json() as Promise<ProjectContext>).then((info) => {
+    contextInfo = info;
+    contextQueue = [];
+    return info;
+  });
+  contextQueue.push(firstReq);
+  return firstReq;
 }
 
 /**
