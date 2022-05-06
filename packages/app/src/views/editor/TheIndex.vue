@@ -139,17 +139,24 @@ import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
+import { useRouter } from 'vue-router';
 
-// TODO: 将block name放到路由参数中，用于快速跳转
+/** 源码生成中 */
 const generating = ref(false);
+/** 是否显示加载block弹窗 */
 const showLoad = ref(false);
+/** 是否显示新增block弹窗 */
 const showAdd = ref(false);
 const loadedBlock = ref('');
 const blocks = ref<string[]>([]);
 const blockName = ref('');
+/** 显示物料列表弹窗 */
 const showMaterial = ref(false);
+/** 项目信息更新中 */
 const updateLoading = ref(false);
+const router = useRouter();
 
+/** 更新block列表 */
 async function updateBlocks() {
   const data = await getBlocks();
   blocks.value = data;
@@ -178,6 +185,7 @@ async function removeComponent() {
   });
 }
 
+/** 生成block配置对应的源码文件 */
 async function generateBlock() {
   generating.value = true;
   await generateCode().finally(() => {
@@ -186,6 +194,19 @@ async function generateBlock() {
   ElMessage.success(`区块【${curBlock.value}】的源码已生成！`);
 }
 
+/**
+ * 跳转到指定block
+ */
+function toBlock(name: string) {
+  router.push({
+    name: 'Editor',
+    query: {
+      block: name,
+    },
+  });
+}
+
+/** 新增block */
 async function addBlock() {
   if (!blockName.value) {
     return;
@@ -196,24 +217,27 @@ async function addBlock() {
       name: blockName.value,
     }),
   });
-  updateBlocks();
-  curBlock.value = blockName.value;
-  initBlockOption();
   showAdd.value = false;
+  toBlock(blockName.value);
 }
 
+/** 选中某个block */
 async function selectBlock() {
   if (!loadedBlock.value) {
     return;
   }
-  curBlock.value = loadedBlock.value;
-  const curConfig = await getBlockConfig(loadedBlock.value);
+  showLoad.value = false;
+  toBlock(loadedBlock.value);
+}
+
+/** 根据当前block初始化相关信息 */
+async function updateBlockOption() {
+  const curConfig = await getBlockConfig(curBlock.value);
   if (curConfig.path) {
     blockOption.value = curConfig;
   } else {
     initBlockOption();
   }
-  showLoad.value = false;
 }
 
 /** 重新加载右侧预览页 */
@@ -244,6 +268,12 @@ watch(curEditKey, (val) => {
   }
   curOption.value = getOptionByKey(blockOption.value, val);
 }, { immediate: true });
+
+watch(curBlock, () => {
+  updateBlockOption();
+}, {
+  immediate: true,
+});
 
 debouncedWatch(() => [curBlock.value, blockOption.value], () => {
   updatePreview();

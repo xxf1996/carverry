@@ -6,6 +6,7 @@ import {
 } from '@/typings/editor';
 import { Nullable } from '@/typings/common';
 import { ProjectContext } from '@carverry/core/typings/context';
+import router from '@/router';
 
 export const pageBus = useEventBus<string>(Symbol('page'));
 export const curOption = ref<ComponentOption>();
@@ -25,7 +26,7 @@ export const packages = ref<MaterialPackage[]>([]);
 export const curDragComponent = ref<Required<ComponentMeta>>();
 export const curEditKey = ref<string>();
 /** 当前进行操作的block名称 */
-export const curBlock = ref('');
+export const curBlock = computed<string>(() => (router.currentRoute.value.query.block as string) || '');
 /** 所有组件（包括已经加载的物料库）元数据映射，key为组件唯一标识符（path），value为组件元数据 */
 export const componentMap = computed<ComponentInfo['componentMap']>(() => {
   const allMap: ComponentInfo['componentMap'] = Object.assign(localComponents.value.componentMap);
