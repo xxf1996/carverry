@@ -158,7 +158,7 @@ function getPreviewTemplate(option: ComponentOption): string {
         return '';
       }
       if (option.slots[name].length > 0) {
-        return `<template #${name}>${option.slots[name].map((child, idx) => `<slot-${name}-${idx} carverry-parent="${option.key}" carverry-slot="${name}" data-carverry-child="${idx}" key="${[option.key, name, idx, Date.now()].join('-')}" />`).join('')}</template>`; // 加上key是为了保证交换顺序时强制更新
+        return `<template #${name}>${option.slots[name].map((child, idx) => `<slot-${name}-${idx} carverry-parent="${option.key}" carverry-slot="${name}" carverry-child="${idx}" key="${[option.key, name, idx, Date.now()].join('-')}" />`).join('')}</template>`; // 加上key是为了保证交换顺序时强制更新
       }
       return `<template #${name}><div data-carverry-parent="${option.key}" data-carverry-slot="${name}" data-carverry-empty="true">${name}【将组件拖拽到此处进行添加】</div></template>`;
     })
