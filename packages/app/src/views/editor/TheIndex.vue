@@ -10,63 +10,111 @@
         </h3>
         <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
         <div class="flex items-center flex-wrap gap-2 px-1 py-2">
-          <el-button
-            size="small"
-            type="primary"
-            @click="showLoad = true;"
+          <el-tooltip
+            content="从项目中已有的Block进行选择，然后加载"
+            :show-after="100"
           >
-            加载Block
-          </el-button>
-          <el-button
-            size="small"
-            :disabled="projectContext?.readOnly"
-            @click="showAdd = true;"
+            <el-button
+              size="small"
+              type="primary"
+              @click="showLoad = true;"
+            >
+              加载Block
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="创建一个新的Block"
+            :show-after="100"
           >
-            新建Block
-          </el-button>
+            <el-button
+              size="small"
+              :disabled="projectContext?.readOnly"
+              @click="showAdd = true;"
+            >
+              新建Block
+            </el-button>
+          </el-tooltip>
           <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板）【优先级高】 -->
-          <el-button
-            :disabled="projectContext?.readOnly"
-            size="small"
+          <el-tooltip
+            content="将当前选中组件配置保存为一个本地模板（暂未实现）"
+            :show-after="100"
           >
-            保存为模板
-          </el-button>
-          <el-button
-            type="primary"
-            size="small"
-            :disabled="generating || !curBlock || projectContext?.readOnly"
-            :loading="generating"
-            @click="generateBlock"
+            <el-button
+              :disabled="projectContext?.readOnly"
+              size="small"
+            >
+              保存为模板
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="将当前Block的配置转换为对应的Vue源码"
+            :show-after="100"
           >
-            生成源码
-          </el-button>
-          <!-- 重新加载右侧页面 -->
-          <el-button size="small" @click="reloadPreview">
-            重新加载
-          </el-button>
-          <el-button
-            size="small"
-            :disabled="updateLoading"
-            :loading="updateLoading"
-            @click="updateProjectInfo">
-            更新项目信息
-          </el-button>
-          <el-button
+            <el-button
+              type="primary"
+              size="small"
+              :disabled="generating || !curBlock || projectContext?.readOnly"
+              :loading="generating"
+              @click="generateBlock"
+            >
+              生成源码
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="重新加载右侧预览页面（相当于单独刷新iframe）"
+            :show-after="100"
+          >
+            <!-- 重新加载右侧页面 -->
+            <el-button
+              size="small"
+              @click="reloadPreview"
+            >
+              重新加载
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="更新本地项目信息，主要用于刷新项目文件等本地信息"
+            :show-after="100"
+          >
+            <el-button
+              size="small"
+              :disabled="updateLoading"
+              :loading="updateLoading"
+              @click="updateProjectInfo"
+            >
+              更新项目信息
+            </el-button>
+          </el-tooltip>
+          <!-- <el-button
             size="small"
             :disabled="projectContext?.readOnly"
           >
             重置
-          </el-button>
+          </el-button> -->
           <!-- undo/redo操作 -->
-          <el-tooltip content="Undo" :show-after="100">
-            <el-button size="small" :disabled="!blockCanUndo" @click="blockUndo">
+          <el-tooltip
+            content="Undo"
+            :show-after="100"
+          >
+            <el-button
+              size="small"
+              :disabled="!blockCanUndo"
+              @click="blockUndo"
+            >
               <el-icon :size="16">
                 <refresh-left />
               </el-icon>
             </el-button>
           </el-tooltip>
-           <el-tooltip content="Redo" :show-after="100">
-            <el-button size="small" :disabled="!blockCanRedo" @click="blockRedo">
+          <el-tooltip
+            content="Redo"
+            :show-after="100"
+          >
+            <el-button
+              size="small"
+              :disabled="!blockCanRedo"
+              @click="blockRedo"
+            >
               <el-icon :size="16">
                 <refresh-right />
               </el-icon>
