@@ -61,14 +61,14 @@
           <el-tooltip content="Undo" :show-after="100">
             <el-button size="small" :disabled="!blockCanUndo" @click="blockUndo">
               <el-icon :size="16">
-                <back />
+                <refresh-left />
               </el-icon>
             </el-button>
           </el-tooltip>
            <el-tooltip content="Redo" :show-after="100">
             <el-button size="small" :disabled="!blockCanRedo" @click="blockRedo">
               <el-icon :size="16">
-                <right />
+                <refresh-right />
               </el-icon>
             </el-button>
           </el-tooltip>
@@ -155,7 +155,7 @@ import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
-import { Back, Right } from '@element-plus/icons-vue';
+import { RefreshLeft, RefreshRight } from '@element-plus/icons-vue';
 
 /** 源码生成中 */
 const generating = ref(false);

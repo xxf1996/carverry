@@ -69,11 +69,12 @@ export const {
 } = useRefHistory(blockOption, {
   deep: true,
 });
+/** 最近使用的文件路径（最多记录10条） */
+export const recentPaths = useLocalStorage<string[]>('carverry_recentPaths', []);
 /** 是否正在拖拽组件 */
 export const dragging = computed(() => !!curDragComponent.value);
+/** 当前项目上下文信息 */
 export const projectContext = ref<ProjectContext>();
-
-// TODO: 组件类设置支持，共享项目上下文（taliwind）
 
 export function initBlockOption() {
   blockOption.value = {
@@ -179,5 +180,20 @@ export function updateOptionKey(option: ComponentOption, prefix = '') {
       item.key = prefix ? `${prefix}-${slot}-${idx}` : `${slot}-${idx}`;
       updateOptionKey(item, item.key);
     });
+  }
+}
+
+export function updateRecentPaths(filePath: string) {
+  if (!filePath) {
+    return;
+  }
+  if (recentPaths.value.includes(filePath)) {
+    const idx = recentPaths.value.indexOf(filePath);
+    recentPaths.value.splice(idx, 1);
+    recentPaths.value.unshift(filePath);
+  } else if (recentPaths.value.length < 10) {
+    recentPaths.value.unshift(filePath);
+  } else {
+    recentPaths.value = [filePath, ...recentPaths.value.slice(0, -1)]
   }
 }

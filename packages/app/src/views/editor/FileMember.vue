@@ -1,17 +1,40 @@
 <template>
   <div class="flex gap-2 items-center">
+    <!-- 最近使用路径快捷交互 -->
+    <el-dropdown @command="selectRecent">
+      <el-icon :size="16">
+        <opportunity />
+      </el-icon>
+      <template #dropdown>
+        <el-dropdown-item disabled>
+          最近使用路径
+        </el-dropdown-item>
+        <el-dropdown-item
+          v-for="(path, idx) in recentPaths"
+          :key="path"
+          :divided="idx === 0"
+          :command="path"
+        >
+          {{ path }}
+        </el-dropdown-item>
+      </template>
+    </el-dropdown>
+    <!-- 文件路径选择 -->
     <el-cascader
       v-model="proxyFile"
       filterable
       clearable
+      placeholder="输入关键词或直接选择"
       :props="casProps"
       :options="treeOptions"
       @change="changeFile"
     />
+    <!-- 文件变量选择 -->
     <el-select
       v-model="proxyMember"
       filterable
       clearable
+      placeholder="输入关键词或直接选择"
     >
       <el-option
         v-for="option in memberOptions"
@@ -38,13 +61,15 @@
 import { CascaderOption, CascaderProps } from 'element-plus';
 import { computed } from 'vue';
 import { proxyProp } from '@/composition/props';
-import { fileInfo } from './state';
+import { fileInfo, recentPaths, updateRecentPaths } from './state';
 import { FileExportMember, FileLeafNode, FileTree } from '@/typings/editor';
+import { Opportunity } from '@element-plus/icons-vue';
 
 function isLeaf(node: FileTree | FileLeafNode): node is FileLeafNode {
   return 'fullPath' in node;
 }
 
+/** 获取可用的逻辑文件树 */
 function getTree(node: FileTree): CascaderOption[] {
   const options: CascaderOption[] = [];
   for (const key of Object.keys(node.children)) {
@@ -86,7 +111,16 @@ const memberOptions = computed<FileExportMember[]>(() => {
 const proxyFile = proxyProp(props, 'file');
 const proxyMember = proxyProp(props, 'member');
 
-function changeFile() {
+function changeFile(val: string) {
+  updateRecentPaths(val);
   proxyMember.value = '';
+}
+
+/**
+ * 选中某个最近使用的路径
+ */
+function selectRecent(path: string) {
+  proxyFile.value = path;
+  changeFile(path);
 }
 </script>
