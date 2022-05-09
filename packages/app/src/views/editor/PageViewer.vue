@@ -108,7 +108,7 @@ function slotChange(message: SocketSlotChange) {
   }
   parent.slots[message.slot] = curIdx.map((idx) => slot[idx]); // 按照当前排序进行交换
   updateOptionKey(blockOption.value); // 更新配置树的key
-  pageBus.emit('reload'); // TODO: [优化]交换顺序页面渲染与输出不一致
+  pageBus.emit('reload');
 }
 
 function hoverContainer(message: SocketHover) {

@@ -51,7 +51,7 @@ export interface ComponentOption {
   /** slots填充配置 */
   slots: Record<string, (ComponentOption & {
     /** 直接跳过为空，即不给该slot填充一个默认的内容，以便有些组件本身就有默认slot内容； */
-    skip?: boolean; // TODO: 增加交互设置skip属性
+    skip?: boolean;
   })[]>;
   /** TODO：绑定ref */
   ref?: ComponentDependence;
