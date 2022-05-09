@@ -6,6 +6,7 @@
       "@/*": ["src/*"] // 路径alias
     },
     "baseUrl": "./",
+    "jsx": "preserve",
     "types": ["element-plus/global", "lodash"] // volar支持
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

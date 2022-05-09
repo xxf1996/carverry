@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { useLocalStorage, useEventBus } from '@vueuse/core';
+import { useLocalStorage, useEventBus, useRefHistory } from '@vueuse/core';
 import {
   ComponentInfo,
   ComponentMeta, ComponentOption, FileInfo, MaterialPackage,
@@ -9,6 +9,7 @@ import { ProjectContext } from '@carverry/core/typings/context';
 import router from '@/router';
 
 export const pageBus = useEventBus<string>(Symbol('page'));
+/** 当前选中的组件配置 */
 export const curOption = ref<ComponentOption>();
 export const fileInfo = ref<FileInfo>({
   fileMap: {},
@@ -56,6 +57,17 @@ export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOptio
   props: {},
   events: {},
   slots: {},
+});
+export const {
+  history: blockHistory,
+  /** redo block配置 */
+  redo: blockRedo,
+  /** undo block配置 */
+  undo: blockUndo,
+  canRedo: blockCanRedo,
+  canUndo: blockCanUndo,
+} = useRefHistory(blockOption, {
+  deep: true,
 });
 /** 是否正在拖拽组件 */
 export const dragging = computed(() => !!curDragComponent.value);

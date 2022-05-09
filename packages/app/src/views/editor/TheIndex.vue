@@ -57,6 +57,21 @@
           >
             重置
           </el-button>
+          <!-- undo/redo操作 -->
+          <el-tooltip content="Undo" :show-after="100">
+            <el-button size="small" :disabled="!blockCanUndo" @click="blockUndo">
+              <el-icon :size="16">
+                <back />
+              </el-icon>
+            </el-button>
+          </el-tooltip>
+           <el-tooltip content="Redo" :show-after="100">
+            <el-button size="small" :disabled="!blockCanRedo" @click="blockRedo">
+              <el-icon :size="16">
+                <right />
+              </el-icon>
+            </el-button>
+          </el-tooltip>
         </div>
         <h5>组件操作</h5>
         <div class="p-2">
@@ -133,13 +148,14 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
+import { Back, Right } from '@element-plus/icons-vue';
 
 /** 源码生成中 */
 const generating = ref(false);
