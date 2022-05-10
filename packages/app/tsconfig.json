@@ -9,6 +9,6 @@
     "jsx": "preserve",
     "types": ["element-plus/global", "lodash"] // volar支持
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "components.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

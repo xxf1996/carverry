@@ -40,8 +40,9 @@
             :show-after="100"
           >
             <el-button
-              :disabled="projectContext?.readOnly"
+              :disabled="projectContext?.readOnly || !curOption"
               size="small"
+              @click="toSaveTemplate"
             >
               保存为模板
             </el-button>
@@ -174,19 +175,9 @@
         />
       </el-select>
     </drawer-container>
-    <!-- <drawer-container
-      v-model="showAdd"
-      title="新建Block"
-      @ok="addBlock"
-      @cancel="showAdd = false;"
-    >
-      <el-input
-        v-model="blockName"
-        placeholder="请输入Block名称"
-      />
-    </drawer-container> -->
     <material-displayer v-model:visible="showMaterial" />
     <block-form v-model:visible="showAdd" />
+    <template-form v-model:visible="showAddTemplate" />
   </div>
 </template>
 
@@ -206,6 +197,7 @@ import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
 import { RefreshLeft, RefreshRight } from '@element-plus/icons-vue';
 import BlockForm from './BlockForm.vue';
+import TemplateForm from './TemplateForm.vue';
 
 /** 源码生成中 */
 const generating = ref(false);
@@ -213,6 +205,7 @@ const generating = ref(false);
 const showLoad = ref(false);
 /** 是否显示新增block弹窗 */
 const showAdd = ref(false);
+const showAddTemplate = ref(false);
 const loadedBlock = ref('');
 /** 显示物料列表弹窗 */
 const showMaterial = ref(false);
@@ -300,6 +293,14 @@ async function updateProjectInfo() {
   ]).finally(() => {
     updateLoading.value = false;
   });
+}
+
+function toSaveTemplate() {
+  if (!curOption.value?.path) {
+    ElMessage.warning('请先选中一个组件区域！');
+    return;
+  }
+  showAddTemplate.value = true;
 }
 
 updateProjectInfo();

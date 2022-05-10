@@ -29,11 +29,11 @@
 
 <script lang="ts" setup>
 import { boolProps, proxyProp } from '@/composition/props';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { simpleRule, simpleValidator } from '@/utils/form';
-import { ElForm } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { blocks, updateBlocks } from './state';
+import { ElFormInstance } from '@/typings/common';
 
 const router = useRouter();
 const props = defineProps({
@@ -42,12 +42,12 @@ const props = defineProps({
 const formData = reactive({
   name: '',
 });
-const formRef = ref<InstanceType<typeof ElForm>>();
+const formRef = ref<ElFormInstance>();
 const submitting = ref(false);
 const rules = computed(() => ({
   name: [
     simpleRule('请输入Block名称'),
-    simpleValidator<string>((val) => /[A-Za-z0-9\-_]+/.test(val), '只能使用英文字母、数字、\'-\'、\'_\''),
+    simpleValidator<string>((val) => /^[A-Za-z0-9\-_]+$/.test(val), '只能使用英文字母、数字、\'-\'、\'_\''),
     simpleValidator<string>((val) => !blocks.value.includes(val), '名称已存在'),
   ],
 }));
@@ -84,4 +84,15 @@ async function addBlock() {
   toBlock(formData.name);
   updateBlocks();
 }
+
+function initData() {
+  formData.name = '';
+  updateBlocks();
+}
+
+watch(() => props.visible, (val) => {
+  if (val) {
+    initData();
+  }
+});
 </script>
