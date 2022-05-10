@@ -75,6 +75,8 @@ export const recentPaths = useLocalStorage<string[]>('carverry_recentPaths', [])
 export const dragging = computed(() => !!curDragComponent.value);
 /** 当前项目上下文信息 */
 export const projectContext = ref<ProjectContext>();
+/** 项目block列表 */
+export const blocks = ref<string[]>([]);
 
 export function initBlockOption() {
   blockOption.value = {
@@ -129,10 +131,10 @@ export async function updatePackages() {
 }
 
 export async function getBlocks() {
-  const blocks: string[] = await fetch('/editor-api/block', {
+  const list: string[] = await fetch('/editor-api/block', {
     method: 'get',
   }).then((res) => res.json());
-  return blocks;
+  return list;
 }
 
 export async function getBlockConfig(name: string) {
@@ -194,6 +196,12 @@ export function updateRecentPaths(filePath: string) {
   } else if (recentPaths.value.length < 10) {
     recentPaths.value.unshift(filePath);
   } else {
-    recentPaths.value = [filePath, ...recentPaths.value.slice(0, -1)]
+    recentPaths.value = [filePath, ...recentPaths.value.slice(0, -1)];
   }
+}
+
+/** 更新block列表 */
+export async function updateBlocks() {
+  const data = await getBlocks();
+  blocks.value = data;
 }

@@ -174,7 +174,7 @@
         />
       </el-select>
     </drawer-container>
-    <drawer-container
+    <!-- <drawer-container
       v-model="showAdd"
       title="新建Block"
       @ok="addBlock"
@@ -184,8 +184,9 @@
         v-model="blockName"
         placeholder="请输入Block名称"
       />
-    </drawer-container>
+    </drawer-container> -->
     <material-displayer v-model:visible="showMaterial" />
+    <block-form v-model:visible="showAdd" />
   </div>
 </template>
 
@@ -196,7 +197,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, getBlocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
@@ -204,6 +205,7 @@ import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
 import { RefreshLeft, RefreshRight } from '@element-plus/icons-vue';
+import BlockForm from './BlockForm.vue';
 
 /** 源码生成中 */
 const generating = ref(false);
@@ -212,19 +214,11 @@ const showLoad = ref(false);
 /** 是否显示新增block弹窗 */
 const showAdd = ref(false);
 const loadedBlock = ref('');
-const blocks = ref<string[]>([]);
-const blockName = ref('');
 /** 显示物料列表弹窗 */
 const showMaterial = ref(false);
 /** 项目信息更新中 */
 const updateLoading = ref(false);
 const router = useRouter();
-
-/** 更新block列表 */
-async function updateBlocks() {
-  const data = await getBlocks();
-  blocks.value = data;
-}
 
 /** 从配置中移除当前选中组件 */
 async function removeComponent() {
@@ -268,21 +262,6 @@ function toBlock(name: string) {
       block: name,
     },
   });
-}
-
-/** 新增block */
-async function addBlock() {
-  if (!blockName.value) {
-    return;
-  }
-  await fetch('/editor-api/block', {
-    method: 'post',
-    body: JSON.stringify({
-      name: blockName.value,
-    }),
-  });
-  showAdd.value = false;
-  toBlock(blockName.value);
 }
 
 /** 选中某个block */
