@@ -36,6 +36,12 @@ export function getRelativePath(root: string, filePath: string): string {
   return other.startsWith('/') ? other.slice(1) : other;
 }
 
+/**
+ * 根据文件路径获取文件名
+ * @param filePath 文件路径
+ * @param fullName 是否返回完整文件名（即包括文件后缀）
+ * @returns 
+ */
 export function getFileName(filePath: string, fullName = true): string {
   const paths = filePath.split('/');
   const full = paths[paths.length - 1];

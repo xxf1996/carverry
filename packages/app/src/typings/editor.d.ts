@@ -121,3 +121,17 @@ export interface MaterialPackage {
   /** 物料分组 */
   groups: MaterialPackageGroup[];
 }
+
+/** 单个模板信息 */
+export interface TemplateInfo {
+  /** 模板配置 */
+  config: ComponentOption;
+  /** 模板名称 */
+  name: string;
+  /** 模板描述 */
+  desc?: string;
+  /** 模板类型 */
+  type?: string;
+  /** 模板预览图（base64） */
+  cover?: string;
+}

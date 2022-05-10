@@ -188,7 +188,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import DrawerContainer from '@/components/DrawerContainer.vue';
@@ -290,6 +290,7 @@ async function updateProjectInfo() {
     updatePackages(),
     updateBlocks(),
     updateContext(),
+    updateTemplates(),
   ]).finally(() => {
     updateLoading.value = false;
   });

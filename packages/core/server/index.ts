@@ -1,21 +1,26 @@
-import { ComponentOption } from '../../app/src/typings/editor';
+import { ComponentOption, TemplateInfo } from '../../app/src/typings/editor';
 import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents, getRemoteComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
 import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
 import './socket.js';
+import { addTemplate, getTemplates } from '../plugins/template.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
 const http = Http();
 const components = Router();
+const templates = Router();
 
 http.use(cors()); // 跨域支持
 
 http
   .route('/components')
   .use(components);
+http
+  .route('/templates')
+  .use(templates);
 
 http
   .get('/context')
@@ -125,6 +130,26 @@ components
   .use(async () => {
     const data = await getRemoteComponents();
     return Response.json(data);
+  });
+
+templates
+  .get('/all')
+  .use(async () => {
+    const data = await getTemplates();
+    return Response.json(data);
+  });
+templates
+  .match({
+    method: 'post',
+    url: '/add',
+    body: {
+      config: String,
+    },
+  })
+  .use(async (req) => {
+    const info: TemplateInfo = JSON.parse(req.body.config);
+    await addTemplate(info);
+    return Response.text('ok');
   });
 
 http.listen(3344);

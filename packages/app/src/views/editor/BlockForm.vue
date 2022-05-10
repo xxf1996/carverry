@@ -34,6 +34,7 @@ import { simpleRule, simpleValidator } from '@/utils/form';
 import { useRouter } from 'vue-router';
 import { blocks, updateBlocks } from './state';
 import { ElFormInstance } from '@/typings/common';
+import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 const props = defineProps({
@@ -81,6 +82,7 @@ async function addBlock() {
     submitting.value = false;
   });
   proxyVisible.value = false;
+  ElMessage.success('新建Block成功！');
   toBlock(formData.name);
   updateBlocks();
 }

@@ -3,6 +3,8 @@
     v-model="proxyVisible"
     title="保存模板"
     :loading="submitting"
+    @ok="addTemplate"
+    @cancel="proxyVisible = false;"
   >
     <el-form
       ref="formRef"
@@ -59,10 +61,13 @@
 <script lang="ts" setup>
 import { boolProps, proxyProp } from '@/composition/props';
 import { ElFormInstance } from '@/typings/common';
+import { TemplateInfo } from '@/typings/editor';
 import { simpleRule, simpleValidator } from '@/utils/form';
 import { defaultBoolean, defaultString } from '@/utils/struct';
+import { ElMessage } from 'element-plus';
 import { create, object } from 'superstruct';
 import { computed, reactive, ref, watch } from 'vue';
+import { curOption, templates, updateTemplates } from './state';
 
 const formDataType = object({
   name: defaultString(),
@@ -75,17 +80,48 @@ const props = defineProps({
 });
 const formRef = ref<ElFormInstance>();
 const submitting = ref(false);
-let formData = reactive(create({}, formDataType));
+let formData = ref(create({}, formDataType));
+const templateNames = computed<string[]>(() => templates.value.map((template) => template.name));
 const rules = computed(() => ({
   name: [
     simpleRule('请输入模板名称'),
     simpleValidator<string>((val) => /^[A-Za-z0-9\-_]+$/.test(val), '只能使用英文字母、数字、\'-\'、\'_\''),
+    simpleValidator<string>((val) => !templateNames.value.includes(val), '名称已存在'),
   ],
 }));
 const proxyVisible = proxyProp(props, 'visible');
 
 function initData() {
-  formData = reactive(create({}, formDataType));
+  formData.value = reactive(create({}, formDataType));
+}
+
+async function addTemplate() {
+  if (!formRef.value || !curOption.value) {
+    return;
+  }
+  await formRef.value.validate();
+  submitting.value = true;
+  console.log(formData.value);
+  const info: TemplateInfo = {
+    ...formData.value,
+    config: curOption.value,
+    cover: '', // TODO: 支持截图
+  };
+  await fetch('/editor-api/templates/add', {
+    method: 'post',
+    body: JSON.stringify({
+      config: JSON.stringify(info),
+    }),
+  }).then((res) => {
+    if (res.status !== 200) {
+      return Promise.reject(res);
+    }
+  }).finally(() => {
+    submitting.value = false;
+  });
+  proxyVisible.value = false;
+  ElMessage.success('模板保存成功！');
+  updateTemplates();
 }
 
 watch(() => props.visible, (val) => {

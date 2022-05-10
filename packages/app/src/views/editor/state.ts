@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 import { useLocalStorage, useEventBus, useRefHistory } from '@vueuse/core';
 import {
   ComponentInfo,
-  ComponentMeta, ComponentOption, FileInfo, MaterialPackage,
+  ComponentMeta, ComponentOption, FileInfo, MaterialPackage, TemplateInfo,
 } from '@/typings/editor';
 import { Nullable } from '@/typings/common';
 import { ProjectContext } from '@carverry/core/typings/context';
@@ -77,6 +77,8 @@ export const dragging = computed(() => !!curDragComponent.value);
 export const projectContext = ref<ProjectContext>();
 /** 项目block列表 */
 export const blocks = ref<string[]>([]);
+/** 本地模板列表 */
+export const templates = ref<TemplateInfo[]>([]);
 
 export function initBlockOption() {
   blockOption.value = {
@@ -160,6 +162,13 @@ export async function updateContext() {
     method: 'get',
   }).then((res) => res.json());
   projectContext.value = context;
+}
+
+export async function updateTemplates() {
+  const list: TemplateInfo[] = await fetch('/editor-api/templates/all', {
+    method: 'get',
+  }).then((res) => res.json());
+  templates.value = list;
 }
 
 export async function generateCode() {
