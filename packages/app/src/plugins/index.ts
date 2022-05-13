@@ -3,10 +3,12 @@ import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
 import { ProjectContext } from '@carverry/core/typings/context';
 import { SocketConfigChange, SocketEvent, SocketHover, SocketInit, SocketSelected, SocketSlotChange } from '@carverry/core/typings/server';
-import { ComponentMeta, SlotAppendEvent } from '@/typings/editor';
+import { ComponentMeta, SlotAppendEvent, TemplateInfo } from '@/typings/editor';
 
 /** 当前拖拽插入的组件元数据 */
 let curMeta: Nullable<Required<ComponentMeta>> = null;
+/** 当前拖拽插入的模板数据 */
+let curTemplate: Nullable<TemplateInfo> = null;
 /** websocket是否已经建立连接 */
 let wsLoaded = false;
 /** websocket事件是否初始化 */
@@ -115,7 +117,7 @@ function containerDrop(e: DragEvent) {
     cancelable: true,
     bubbles: true,
     detail: {
-      meta: curMeta,
+      meta: curMeta || curTemplate,
       slot: (e.currentTarget as HTMLElement).dataset.slot || '',
     }, // 传递当前要添加的组件的元数据
   }));
@@ -265,7 +267,8 @@ function initSocket() {
         curX = message.x;
         curY = message.y;
         curMeta = message.meta || null;
-        const curTarget2 = document.elementFromPoint(message.x, message.y); 
+        curTemplate = message.template || null;
+        const curTarget2 = document.elementFromPoint(message.x, message.y);
         if (curTarget2 && target && curTarget2 === target) {
           emitDragEvent(target, 'dragleave');
           emitDragEvent(target, 'drop');
@@ -384,7 +387,7 @@ function initBlockInsert() {
     e.stopImmediatePropagation(); // 避免多次触发
     const bar = document.getElementById('carverry-bar');
     const hitTarget = document.elementFromPoint(curX, curY) as Nullable<HTMLElement>;
-    if (!hitTarget || hitTarget.dataset.carverryEmpty || !bar || !curMeta || !ws) {
+    if (!hitTarget || hitTarget.dataset.carverryEmpty || !bar || (!curMeta && !curTemplate) || !ws) { // 判断是否有数据（模板或组件）
       prevTarget = null;
       return;
     }
@@ -393,15 +396,28 @@ function initBlockInsert() {
       prevTarget = null;
       return;
     }
-    const data: SocketConfigChange = {
+    // 根据拖拽数据区分结构
+    const data: SocketConfigChange = curMeta ? {
       type: 'config-change',
+      insertType: 'component',
       id: 'target',
       key: closestTarget.dataset.carverryParent,
       slot: closestTarget.dataset.carverrySlot || 'default',
       meta: curMeta,
       before: Number(bar.dataset.carverryBefore),
+    } : {
+      type: 'config-change',
+      insertType: 'template',
+      id: 'target',
+      key: closestTarget.dataset.carverryParent,
+      slot: closestTarget.dataset.carverrySlot || 'default',
+      template: curTemplate,
+      before: Number(bar.dataset.carverryBefore),
     };
     ws.send(JSON.stringify(data));
+    // 清空历史数据
+    curMeta = null;
+    curTemplate = null;
   });
 }
 
@@ -484,16 +500,24 @@ export async function addCarverryRoute(router: Router, afterInit?: () => void, e
  * @param key 捕获drop事件的组件所在配置树中的key
  * @returns 
  */
-export function changeConfig(slot: string, meta: Required<ComponentMeta>, key?: string) {
+export function changeConfig(slot: string, meta: Required<ComponentMeta> | TemplateInfo, key?: string) {
   if (!wsLoaded || !ws) {
     return;
   }
-  const data: SocketConfigChange = {
+  const data: SocketConfigChange = 'patn' in meta ? {
     type: 'config-change',
+    insertType: 'component',
     id: 'target',
     key,
     slot,
     meta,
+  } : {
+    type: 'config-change',
+    insertType: 'template',
+    id: 'target',
+    key,
+    slot,
+    template: meta as TemplateInfo,
   };
   ws.send(JSON.stringify(data)); // 向可视化应用上报配置变化
 }

@@ -83,14 +83,18 @@ function changeConfig(message: SocketConfigChange) {
     const parent = getOptionByKey(blockOption.value, message.key); // 获取父级配置结点
     const childKey = `${message.slot}-0`;
     // 如果是组件插入，则初始化配置；如果是模板，直接插入模板配置即可；
-    const option = getInitOption(message.meta.path, message.key ? `${message.key}-${childKey}` : childKey, message.meta.doc);
+    const option = message.insertType === 'component' ?
+      getInitOption(message.meta.path, message.key ? `${message.key}-${childKey}` : childKey, message.meta.doc) :
+      message.template.config;
     if (message.before !== undefined) {
       parent.slots[message.slot].splice(message.before, 0, option); // 往指定索引之前插入新组件
     } else {
       parent.slots[message.slot].push(option); // 往指定容器插入新组件配置
     }
   } else if (message.key === undefined) { // 初始容器插入
-    const option = getInitOption(message.meta.path, '', message.meta.doc);
+    const option = message.insertType === 'component' ?
+      getInitOption(message.meta.path, '', message.meta.doc) :
+      message.template.config;
     blockOption.value = option;
   }
   updateOptionKey(blockOption.value); // 更新配置树的key
@@ -215,8 +219,13 @@ function containerDrop(e: DragEvent) {
     type: 'drop',
     id: 'app',
     ...pos,
-    meta: curDragComponent.value,
   };
+  // 根据拖拽数据类型进行区分
+  if (curDragComponent.value) {
+    data.meta = curDragComponent.value;
+  } else if (curDragTemplate.value) {
+    data.template = curDragTemplate.value;
+  }
   sendMessage(data);
 }
 
@@ -257,6 +266,7 @@ watch(dragging, (val) => {
       x: -1,
       y: -1,
       meta: curDragComponent.value,
+      template: curDragTemplate.value,
     }; // 拖拽结束后也要通知一下，避免保持dragover状态
     sendMessage(data);
   }

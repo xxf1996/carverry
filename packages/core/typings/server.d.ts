@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentOption } from '@carverry/app/src/typings/editor';
+import { ComponentMeta, ComponentOption, TemplateInfo } from '@carverry/app/src/typings/editor';
 import { ProjectContext } from './context';
 
 interface ProjectDB {
@@ -26,10 +26,13 @@ export interface SocketDrop {
   y: number;
   /** 当前拖拽组件的元数据，为空说明拖拽结束了 */
   meta?: Required<ComponentMeta>;
+  /** 当前拖拽的模板信息 */
+  template?: TemplateInfo;
 }
 
-export interface SocketConfigChange {
+export type SocketConfigChange = {
   type: 'config-change';
+  insertType: 'component';
   id: SocketType;
   /** 位于配置树上的key，没有说明配置是空的，空字符串则代表为树节点 */
   key?: string;
@@ -39,7 +42,19 @@ export interface SocketConfigChange {
   before?: number;
   /** 插入组件的元数据 */
   meta: Required<ComponentMeta>;
-}
+} | {
+  type: 'config-change';
+  insertType: 'template';
+  id: SocketType;
+  /** 位于配置树上的key，没有说明配置是空的，空字符串则代表为树节点 */
+  key?: string;
+  /** 插入的slot */
+  slot: string;
+  /** 插入索引，位于现在索引为before的前面，before为空则代表插入到最后 */
+  before?: number;
+  /** 插入的模板信息 */
+  template: TemplateInfo;
+};
 
 export interface SocketSlotChange {
   type: 'slot-change';

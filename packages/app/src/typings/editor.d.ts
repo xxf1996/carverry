@@ -8,7 +8,7 @@ export interface ComponentMeta {
 }
 
 export interface SlotAppendEvent {
-  meta: Nullable<Required<ComponentMeta>>;
+  meta: Nullable<Required<ComponentMeta>> | Nullable<TemplateInfo>;
   slot: string;
   before?: number;
 }
