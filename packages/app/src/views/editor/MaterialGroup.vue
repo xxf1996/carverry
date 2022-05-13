@@ -73,7 +73,6 @@ const emit = defineEmits<{
 }>();
 
 function dragStart(data) {
-  // const ev = data.originalEvent as DragEvent;
   const fromItem = data.item as HTMLElement;
   const source = JSON.parse(fromItem.dataset.source || '{}') as MaterialItem['meta'];
   curDragComponent.value = source;

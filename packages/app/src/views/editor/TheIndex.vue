@@ -152,6 +152,12 @@
           >
             打开物料库面板
           </el-button>
+          <el-button
+            class="m-2"
+            @click="showTemplate = true;"
+          >
+            打开本地模板
+          </el-button>
           <h5>属性区</h5>
           <template-meta />
         </template>
@@ -176,6 +182,7 @@
       </el-select>
     </drawer-container>
     <material-displayer v-model:visible="showMaterial" />
+    <template-displayer v-model:visible="showTemplate" />
     <block-form v-model:visible="showAdd" />
     <template-form v-model:visible="showAddTemplate" />
   </div>
@@ -198,6 +205,7 @@ import { useRouter } from 'vue-router';
 import { RefreshLeft, RefreshRight } from '@element-plus/icons-vue';
 import BlockForm from './BlockForm.vue';
 import TemplateForm from './TemplateForm.vue';
+import TemplateDisplayer from './TemplateDisplayer.vue';
 
 /** 源码生成中 */
 const generating = ref(false);
@@ -205,6 +213,8 @@ const generating = ref(false);
 const showLoad = ref(false);
 /** 是否显示新增block弹窗 */
 const showAdd = ref(false);
+/** 显示本地模板列表 */
+const showTemplate = ref(false);
 const showAddTemplate = ref(false);
 const loadedBlock = ref('');
 /** 显示物料列表弹窗 */

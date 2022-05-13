@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey, pageBus } from './state';
+import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey, pageBus, curDragTemplate } from './state';
 import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange, SocketHover } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
@@ -82,6 +82,7 @@ function changeConfig(message: SocketConfigChange) {
   if (message.key !== undefined && message.slot) { // 正常插入
     const parent = getOptionByKey(blockOption.value, message.key); // 获取父级配置结点
     const childKey = `${message.slot}-0`;
+    // 如果是组件插入，则初始化配置；如果是模板，直接插入模板配置即可；
     const option = getInitOption(message.meta.path, message.key ? `${message.key}-${childKey}` : childKey, message.meta.doc);
     if (message.before !== undefined) {
       parent.slots[message.slot].splice(message.before, 0, option); // 往指定索引之前插入新组件
@@ -190,7 +191,7 @@ ws.onmessage = (e) => {
 
 function containerDragover(e: DragEvent) {
   e.preventDefault();
-  if (!e.currentTarget || !curDragComponent.value) {
+  if (!e.currentTarget || (!curDragComponent.value && !curDragTemplate.value)) { // 识别是否有拖拽物体
     return;
   }
   e.stopPropagation(); // 停止冒泡
@@ -206,7 +207,7 @@ function containerDragover(e: DragEvent) {
 function containerDrop(e: DragEvent) {
   e.preventDefault();
   e.stopPropagation(); // 停止冒泡
-  if (!curDragComponent.value) {
+  if (!curDragComponent.value && !curDragTemplate.value) { // 识别是否有拖拽物体
     return;
   }
   const pos = getPosition(e);
@@ -217,27 +218,20 @@ function containerDrop(e: DragEvent) {
     meta: curDragComponent.value,
   };
   sendMessage(data);
-  // e.currentTarget?.dispatchEvent(new Event('slot-append', {
-  //   cancelable: true,
-  //   bubbles: true,
-  // }));
-  // console.log('containerDrop');
 }
 
 function containerDragenter(e: DragEvent) {
-  if (!e.currentTarget || !curDragComponent.value) {
+  if (!e.currentTarget || (!curDragComponent.value && !curDragTemplate.value)) {
     return;
   }
   e.stopPropagation(); // 停止冒泡
-  // (e.currentTarget as HTMLElement).classList.add('bg-brand-300', 'bg-opacity-30');
 }
 
 function containerDragleave(e: DragEvent) {
-  if (!e.currentTarget || !curDragComponent.value) {
+  if (!e.currentTarget || (!curDragComponent.value && !curDragTemplate.value)) {
     return;
   }
   e.stopPropagation(); // 停止冒泡
-  // (e.currentTarget as HTMLElement).classList.remove('bg-brand-300', 'bg-opacity-30');
 }
 
 onMounted(() => {

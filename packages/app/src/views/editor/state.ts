@@ -24,10 +24,14 @@ export const localComponents = ref<ComponentInfo>({
 });
 /** 物料包信息 */
 export const packages = ref<MaterialPackage[]>([]);
+/** 当前进行拖拽的组件元数据 */
 export const curDragComponent = ref<Required<ComponentMeta>>();
+/** 当前编辑的配置节点key */
 export const curEditKey = ref<string>();
 /** 当前进行操作的block名称 */
 export const curBlock = computed<string>(() => (router.currentRoute.value.query.block as string) || '');
+/** 当前进行拖拽的本地模板信息 */
+export const curDragTemplate = ref<TemplateInfo>();
 /** 所有组件（包括已经加载的物料库）元数据映射，key为组件唯一标识符（path），value为组件元数据 */
 export const componentMap = computed<ComponentInfo['componentMap']>(() => {
   const allMap: ComponentInfo['componentMap'] = Object.assign(localComponents.value.componentMap);
@@ -72,7 +76,7 @@ export const {
 /** 最近使用的文件路径（最多记录10条） */
 export const recentPaths = useLocalStorage<string[]>('carverry_recentPaths', []);
 /** 是否正在拖拽组件 */
-export const dragging = computed(() => !!curDragComponent.value);
+export const dragging = computed(() => !!curDragComponent.value || !!curDragTemplate.value);
 /** 当前项目上下文信息 */
 export const projectContext = ref<ProjectContext>();
 /** 项目block列表 */

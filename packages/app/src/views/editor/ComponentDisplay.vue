@@ -117,7 +117,6 @@ function changeDir() {
 }
 
 function dragStart(data) {
-  // const ev = data.originalEvent as DragEvent;
   const fromItem = data.item as HTMLElement;
   const source = JSON.parse(fromItem.dataset.source || '{}') as Required<ComponentMeta>;
   curDragComponent.value = source;
