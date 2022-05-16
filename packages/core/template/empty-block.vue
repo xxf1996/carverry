@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { initSlotContainer, changeConfig } from '@carverry/app/src/plugins';
+import { initSlotContainer, changeConfig } from '@carverry/helper';
 import { SlotAppendEvent } from '@carverry/app/src/typings/editor';
 
 const containerRef = ref<HTMLElement>();

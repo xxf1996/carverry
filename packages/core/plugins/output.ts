@@ -241,7 +241,7 @@ function getPreviewScript(dir: string, option: ComponentOption): string {
   // TODO: 用模板渲染引擎进行渲染
   return `<script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { initSlotContainer, changeConfig } from '@carverry/app/src/plugins';
+import { initSlotContainer, changeConfig } from '@carverry/helper';
 import { SlotAppendEvent } from '@carverry/app/src/typings/editor';
 ${componentImport}
 ${slotsImport}
