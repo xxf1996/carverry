@@ -1,0 +1,16 @@
+{
+  "name": "@carverry/helper",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "keywords": [
+    "carverry"
+  ],
+  "peerDependencies": {
+    "sortablejs": ">=1.14.0"
+  },
+  "devDependencies": {
+    "sortablejs": "^1.15.0",
+    "vue-router": "^4.0.15"
+  }
+}
