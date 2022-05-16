@@ -35,8 +35,8 @@
     'large': 18px,
     'medium': 16px,
     'base': 14px,
-    'small': 14px,
-    'extra-small': 13px,
+    'small': 12px,
+    'extra-small': 11px,
   ),
 
   $border-color: (
@@ -78,12 +78,12 @@
     'circle': 100%,
   ),
 
-  // Input
+  // Input（可以控制button高度）
   $input-height: (
-    'default': 40px,
-    'medium': 48px,
-    'small': 32px,
-    'mini': 28px,
+    'default': 32px,
+    'medium': 40px,
+    'small': 28px,
+    'mini': 24px,
   ),
   
   $input-font-size: (
@@ -106,8 +106,8 @@
 
   // Button
   $button-font-size: (
-  'small': 14px,
-  'mini': 12px,
+  'small': 12px,
+  'mini': 11px,
   ),
   $button-padding-vertical: (
   'default': 0,
@@ -118,8 +118,8 @@
   $button-padding-horizontal: (
     'default': 16px,
     'medium': 16px,
-    'small': 12px,
-    'mini': 8px,
+    'small': 10px,
+    'mini': 6px,
   ),
   $button-border-radius: (
     'default': $--borderRadius-sm,

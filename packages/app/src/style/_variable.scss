@@ -136,8 +136,8 @@ $--shadow-none:    none;
   The default radius for element-UI is 2px.
   We also provide a value of 6 sizes for different situations.
 */
-$--borderRadius-none:    0;
-$--borderRadius-sm:      0.125rem; // 2px
+$--borderRadius-none:    0px;
+$--borderRadius-sm:      0.125 * 0.5rem; // 2px
 $--borderRadius-default: 0.25rem;  // 4px
 $--borderRadius-md:      0.375rem; // 6px
 $--borderRadius-lg:      0.5rem;   // 8px

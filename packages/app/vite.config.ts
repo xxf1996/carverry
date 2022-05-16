@@ -35,7 +35,9 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    ElementPlus(),
+    ElementPlus({
+      useSource: true,
+    }),
   ],
   server: {
     port: 3300,

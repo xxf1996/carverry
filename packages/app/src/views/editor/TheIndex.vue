@@ -1,97 +1,11 @@
 <template>
   <div>
     <el-container class="h-screen">
-      <el-aside width="360px">
-        <h3
-          v-if="projectContext?.readOnly"
-          class="text-red-500"
-        >
-          【只读模式】
-        </h3>
-        <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
-        <div class="flex items-center flex-wrap gap-2 px-1 py-2">
-          <el-tooltip
-            content="从项目中已有的Block进行选择，然后加载"
-            :show-after="100"
-          >
-            <el-button
-              size="small"
-              type="primary"
-              @click="showLoad = true;"
-            >
-              加载Block
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="创建一个新的Block"
-            :show-after="100"
-          >
-            <el-button
-              size="small"
-              :disabled="projectContext?.readOnly"
-              @click="showAdd = true;"
-            >
-              新建Block
-            </el-button>
-          </el-tooltip>
-          <!-- TODO：模板就是配置的复用（分为本地和纯远程/更通用的模板）【优先级高】 -->
-          <el-tooltip
-            content="将当前选中组件配置保存为一个本地模板（暂未实现）"
-            :show-after="100"
-          >
-            <el-button
-              :disabled="projectContext?.readOnly || !curOption"
-              size="small"
-              @click="toSaveTemplate"
-            >
-              保存为模板
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="将当前Block的配置转换为对应的Vue源码"
-            :show-after="100"
-          >
-            <el-button
-              type="primary"
-              size="small"
-              :disabled="generating || !curBlock || projectContext?.readOnly"
-              :loading="generating"
-              @click="generateBlock"
-            >
-              生成源码
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="重新加载右侧预览页面（相当于单独刷新iframe）"
-            :show-after="100"
-          >
-            <!-- 重新加载右侧页面 -->
-            <el-button
-              size="small"
-              @click="reloadPreview"
-            >
-              重新加载
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="更新本地项目信息，主要用于刷新项目文件等本地信息"
-            :show-after="100"
-          >
-            <el-button
-              size="small"
-              :disabled="updateLoading"
-              :loading="updateLoading"
-              @click="updateProjectInfo"
-            >
-              更新项目信息
-            </el-button>
-          </el-tooltip>
-          <!-- <el-button
-            size="small"
-            :disabled="projectContext?.readOnly"
-          >
-            重置
-          </el-button> -->
+      <el-header class="flex items-center h-11 bg-white border-b border-b-gray-300">
+        <div>
+          Logo
+        </div>
+        <div class="ml-auto flex items-center gap-2">
           <!-- undo/redo操作 -->
           <el-tooltip
             content="Undo"
@@ -121,50 +35,150 @@
               </el-icon>
             </el-button>
           </el-tooltip>
-        </div>
-        <h5>组件操作</h5>
-        <div class="p-2">
-          <p class="break-all">
-            <span class="font-medium">选中组件：</span>
-            {{ `${curMeta?.doc.displayName || curMeta?.name || '暂未获取到组件名称'}（${curMeta?.doc.description || '暂无描述'}）` }}
-          </p>
-          <p class="break-all">
-            <span class="font-medium">组件标识符：</span>
-            {{ `${curMeta?.path || '暂无标识符'}` }}
-          </p>
-          <div class="flex items-center gap-2">
+          <el-tooltip
+            content="重新加载右侧预览页面（相当于单独刷新iframe）"
+            :show-after="100"
+          >
+            <!-- 重新加载右侧页面 -->
             <el-button
-              type="danger"
+              type="primary"
               size="small"
-              :disabled="!curEditKey || projectContext?.readOnly"
-              @click="removeComponent"
+              @click="reloadPreview"
             >
-              移除组件
+              重新加载
             </el-button>
-          </div>
+          </el-tooltip>
+          <el-tooltip
+            content="更新本地项目信息，主要用于刷新项目文件等本地信息"
+            :show-after="100"
+          >
+            <el-button
+              size="small"
+              :disabled="updateLoading"
+              :loading="updateLoading"
+              @click="updateProjectInfo"
+            >
+              更新项目信息
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="将当前选中组件配置保存为一个本地模板（暂未实现）"
+            :show-after="100"
+          >
+            <el-button
+              :disabled="projectContext?.readOnly || !curOption"
+              type="primary"
+              size="small"
+              @click="toSaveTemplate"
+            >
+              保存为模板
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="创建一个新的Block"
+            :show-after="100"
+          >
+            <el-button
+              size="small"
+              :disabled="projectContext?.readOnly"
+              @click="showAdd = true;"
+            >
+              新建Block
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="将当前Block的配置转换为对应的Vue源码"
+            :show-after="100"
+          >
+            <el-button
+              type="primary"
+              size="small"
+              :disabled="generating || !curBlock || projectContext?.readOnly"
+              :loading="generating"
+              @click="generateBlock"
+            >
+              生成源码
+            </el-button>
+          </el-tooltip>
         </div>
-        <!-- 只读模式下不需要编辑相关的功能 -->
-        <template v-if="!projectContext?.readOnly">
-          <h5>物料库</h5>
-          <el-button
-            class="m-2"
-            @click="showMaterial = true;"
+      </el-header>
+      <!-- 不知道为啥flex-1不能自动填充高度，主要是子级元素高度超过不会控制 -->
+      <el-container class="content">
+        <el-aside
+          class="bg-white border-r border-r-gray-300 overflow-y-auto"
+          width="360px"
+        >
+          <h3
+            v-if="projectContext?.readOnly"
+            class="text-red-500"
           >
-            打开物料库面板
-          </el-button>
-          <el-button
-            class="m-2"
-            @click="showTemplate = true;"
-          >
-            打开本地模板
-          </el-button>
-          <h5>属性区</h5>
-          <template-meta />
-        </template>
-      </el-aside>
-      <el-main class="p-0">
-        <page-viewer />
-      </el-main>
+            【只读模式】
+          </h3>
+          <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
+          <div class="flex items-center flex-wrap gap-2 px-1 py-2">
+            <el-tooltip
+              content="从项目中已有的Block进行选择，然后加载"
+              :show-after="100"
+            >
+              <el-button
+                size="small"
+                type="primary"
+                @click="showLoad = true;"
+              >
+                加载Block
+              </el-button>
+            </el-tooltip>
+            <!-- <el-button
+              size="small"
+              :disabled="projectContext?.readOnly"
+            >
+              重置
+            </el-button> -->
+          </div>
+          <h5>组件操作</h5>
+          <div class="p-2">
+            <p class="break-all">
+              <span class="font-medium">选中组件：</span>
+              {{ `${curMeta?.doc.displayName || curMeta?.name || '暂未获取到组件名称'}（${curMeta?.doc.description || '暂无描述'}）` }}
+            </p>
+            <p class="break-all">
+              <span class="font-medium">组件标识符：</span>
+              {{ `${curMeta?.path || '暂无标识符'}` }}
+            </p>
+            <div class="flex items-center gap-2">
+              <el-button
+                type="danger"
+                size="small"
+                :disabled="!curEditKey || projectContext?.readOnly"
+                @click="removeComponent"
+              >
+                移除组件
+              </el-button>
+            </div>
+          </div>
+          <!-- 只读模式下不需要编辑相关的功能 -->
+          <template v-if="!projectContext?.readOnly">
+            <h5>物料库</h5>
+            <el-button
+              class="m-2"
+              @click="showMaterial = true;"
+            >
+              打开物料库面板
+            </el-button>
+            <el-button
+              class="m-2"
+              @click="showTemplate = true;"
+            >
+              打开本地模板
+            </el-button>
+            <h5>属性区</h5>
+            <template-meta />
+          </template>
+        </el-aside>
+        <el-main class="p-2">
+          <page-viewer />
+        </el-main>
+      </el-container>
     </el-container>
     <drawer-container
       v-model="showLoad"
@@ -334,3 +348,9 @@ debouncedWatch(() => [curBlock.value, blockOption.value], () => {
   updatePreview();
 }, { debounce: 400, deep: true });
 </script>
+
+<style lang="scss" scoped>
+.content {
+  height: calc(100vh - 44px);
+}
+</style>
