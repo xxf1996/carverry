@@ -94,6 +94,12 @@ export function initBlockOption() {
   };
 }
 
+/**
+ * 根据配置key从配置树中找到对应的节点
+ * @param tree 根节点
+ * @param key 节点key（相对根节点的路径）
+ * @returns 
+ */
 export function getOptionByKey(tree: ComponentOption, key: string): ComponentOption {
   let res = tree;
   const paths = key.split('-');

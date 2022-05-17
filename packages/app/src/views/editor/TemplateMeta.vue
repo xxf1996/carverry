@@ -1,87 +1,112 @@
 <template>
   <div v-if="curOption">
-    <p>Ref绑定</p>
-    <file-member
-      v-if="curOption.ref"
-      v-model:file="curOption.ref.path"
-      v-model:member="curOption.ref.member"
-    />
-    <p v-if="metaProps.length > 0">
+    <div class="editor-header">
+      Ref绑定
+    </div>
+    <div class="px-1 py-2">
+      <file-member
+        v-if="curOption.ref"
+        v-model:file="curOption.ref.path"
+        v-model:member="curOption.ref.member"
+      />
+    </div>
+    <div
+      v-if="metaProps.length > 0"
+      class="editor-header"
+    >
       Props
-    </p>
-    <!-- 注意prop和event不同组件会存在同名，不应该直接用名字做key -->
-    <template
-      v-for="prop in metaProps"
-      :key="`${curEditKey}-${prop.name}`"
+    </div>
+    <div class="px-1 py-2">
+      <!-- 注意prop和event不同组件会存在同名，不应该直接用名字做key -->
+      <template
+        v-for="prop in metaProps"
+        :key="`${curEditKey}-${prop.name}`"
+      >
+        <div class="flex items-center my-1 text-neutral-500">
+          <span>{{ prop.description || prop.name }}</span>
+          <span
+            v-if="prop.description"
+            class="text-red-600"
+          >({{ prop.name }})</span>
+          <el-tooltip
+            content="开启v-model"
+            placement="right"
+            :show-after="200"
+          >
+            <el-switch
+              v-model="curOption.props[prop.name].model"
+              class="ml-auto"
+              size="small"
+            />
+          </el-tooltip>
+        </div>
+        <file-member
+          v-model:file="curOption.props[prop.name].path"
+          v-model:member="curOption.props[prop.name].member"
+        />
+      </template>
+    </div>
+    <div
+      v-if="metaEvents.length > 0"
+      class="editor-header"
     >
-      <div class="flex items-center my-1 text-neutral-500">
-        <span>{{ prop.description || prop.name }}</span>
-        <span
-          v-if="prop.description"
-          class="text-red-600"
-        >({{ prop.name }})</span>
-        <el-tooltip
-          content="开启v-model"
-          placement="right"
-          :show-after="200"
-        >
-          <el-switch
-            v-model="curOption.props[prop.name].model"
-            class="ml-auto"
-          />
-        </el-tooltip>
-      </div>
-      <file-member
-        v-model:file="curOption.props[prop.name].path"
-        v-model:member="curOption.props[prop.name].member"
-      />
-    </template>
-    <p v-if="metaEvents.length > 0">
       Events
-    </p>
-    <template
-      v-for="event in metaEvents"
-      :key="`${curEditKey}-${event.name}`"
+    </div>
+    <div class="px-1 py-2">
+      <template
+        v-for="event in metaEvents"
+        :key="`${curEditKey}-${event.name}`"
+      >
+        <p class="my-1 text-neutral-500">
+          {{ event.description || event.name }}
+          <span v-if="event.description">({{ event.name }})</span>
+        </p>
+        <file-member
+          v-model:file="curOption.events[event.name].path"
+          v-model:member="curOption.events[event.name].member"
+        />
+      </template>
+    </div>
+    <div
+      v-if="metaSlots.length > 0"
+      class="editor-header"
     >
-      <p class="my-1 text-neutral-500">
-        {{ event.description || event.name }}
-        <span v-if="event.description">({{ event.name }})</span>
-      </p>
-      <file-member
-        v-model:file="curOption.events[event.name].path"
-        v-model:member="curOption.events[event.name].member"
-      />
-    </template>
-    <p v-if="metaSlots.length > 0">
       Slots
-    </p>
-    <template v-for="slot in metaSlots" :key="`${curEditKey}-${slot.name}`">
-      <div class="flex items-center my-1 text-neutral-500">
-        <span>{{ slot.description || slot.name }}</span>
-        <span
-          v-if="slot.description"
-          class="text-red-600"
-        >({{ slot.name }})</span>
-        <el-tooltip
-          content="是否使用空的slot内容（通常是为了使用组件的默认slot内容）"
-          placement="right"
-          :show-after="200"
-        >
-          <el-switch
-            v-if="curOption.slots[slot.name].length > 0"
-            v-model="curOption.slots[slot.name][0].skip"
-            class="ml-auto"
-            @change="val => changeSkip(val, slot.name)"
-          />
-          <el-switch
-            v-else
-            v-model="skipState"
-            class="ml-auto"
-            @change="val => changeSkip(val, slot.name)"
-          />
-        </el-tooltip>
-      </div>
-    </template>
+    </div>
+    <div class="px-1 py-2">
+      <template
+        v-for="slot in metaSlots"
+        :key="`${curEditKey}-${slot.name}`"
+      >
+        <div class="flex items-center my-1 text-neutral-500">
+          <span>{{ slot.description || slot.name }}</span>
+          <span
+            v-if="slot.description"
+            class="text-red-600"
+          >({{ slot.name }})</span>
+          <el-tooltip
+            content="是否使用空的slot内容（通常是为了使用组件的默认slot内容）"
+            placement="right"
+            :show-after="200"
+          >
+            <el-switch
+              v-if="curOption.slots[slot.name].length > 0"
+              v-model="curOption.slots[slot.name][0].skip"
+              class="ml-auto"
+              size="small"
+              @change="val => changeSkip(val, slot.name)"
+            />
+            <el-switch
+              v-else
+              v-model="skipState"
+              class="ml-auto"
+              size="small"
+              @change="val => changeSkip(val, slot.name)"
+            />
+          </el-tooltip>
+        </div>
+      </template>
+    </div>
   </div>
   <p
     v-else
@@ -116,8 +141,8 @@ function changeSkip(skip: boolean, slot: string) {
           path: '',
           props: {},
           events: {},
-          slots: {}
-        }
+          slots: {},
+        },
       ];
     } else {
       curOption.value.slots[slot][0].skip = true;
@@ -142,7 +167,7 @@ function checkMetaValid() {
     }
     curOption.value.props[prop.name] = {
       path: '',
-      member: ''
+      member: '',
     };
   });
   metaEvents.value.forEach((event) => {
@@ -151,7 +176,7 @@ function checkMetaValid() {
     }
     curOption.value.events[event.name] = {
       path: '',
-      member: ''
+      member: '',
     };
   });
   metaSlots.value.forEach((slot) => {
@@ -163,8 +188,8 @@ function checkMetaValid() {
   if (!curOption.value.ref) {
     curOption.value.ref = {
       path: '',
-      member: ''
-    }
+      member: '',
+    };
   }
 }
 

@@ -118,8 +118,8 @@
   $button-padding-horizontal: (
     'default': 16px,
     'medium': 16px,
-    'small': 10px,
-    'mini': 6px,
+    'small': 6px,
+    'mini': 4px,
   ),
   $button-border-radius: (
     'default': $--borderRadius-sm,
@@ -135,6 +135,13 @@
   $select-group: (
     'height': 32px,
     'font-size': 14px,
+  ),
+
+  // Switch
+  $switch-height: (
+    'large': 32px,
+    'default': 28px,
+    'small': 20px,
   ),
 
   // Dropdown

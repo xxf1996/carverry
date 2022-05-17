@@ -5,7 +5,86 @@
         <div>
           Logo
         </div>
+        <h3
+          v-if="projectContext?.readOnly"
+          class="text-red-500"
+        >
+          【只读模式】
+        </h3>
         <div class="ml-auto flex items-center gap-2">
+          <!-- 只读模式下不需要编辑相关的功能 -->
+          <template v-if="!projectContext?.readOnly">
+            <el-tooltip
+              content="物料库"
+              :show-after="200"
+            >
+              <el-button
+                size="small"
+                @click="showMaterial = true;"
+              >
+                <el-icon
+                  color="#f39"
+                  :size="16"
+                >
+                  <Box />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              content="本地模板"
+              :show-after="200"
+            >
+              <el-button
+                size="small"
+                @click="showTemplate = true;"
+              >
+                <el-icon
+                  color="#39f"
+                  :size="16"
+                >
+                  <Tickets />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              content="移除当前选中的组件"
+              :show-after="200"
+            >
+              <el-button
+                class="m-4"
+                type="danger"
+                size="small"
+                plain
+                :disabled="!curEditKey || projectContext?.readOnly"
+                @click="removeComponent"
+              >
+                <el-icon
+                  :size="16"
+                >
+                  <Delete />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+          </template>
+          <!-- block选择 -->
+          <el-tooltip
+            content="从项目中已有的Block进行选择，然后加载"
+            :show-after="200"
+          >
+            <el-select
+              v-model="loadedBlock"
+              placeholder="请选择一个Block"
+              size="small"
+              @change="selectBlock"
+            >
+              <el-option
+                v-for="block in blocks"
+                :key="block"
+                :value="block"
+                :label="block"
+              />
+            </el-select>
+          </el-tooltip>
           <!-- undo/redo操作 -->
           <el-tooltip
             content="Undo"
@@ -62,7 +141,7 @@
             </el-button>
           </el-tooltip>
           <el-tooltip
-            content="将当前选中组件配置保存为一个本地模板（暂未实现）"
+            content="将当前选中组件配置保存为一个本地模板"
             :show-after="100"
           >
             <el-button
@@ -108,70 +187,20 @@
           class="bg-white border-r border-r-gray-300 overflow-y-auto"
           width="360px"
         >
-          <h3
-            v-if="projectContext?.readOnly"
-            class="text-red-500"
-          >
-            【只读模式】
-          </h3>
-          <p>当前编辑Block为：<span class="font-bold">{{ curBlock || '暂无' }}</span></p>
-          <div class="flex items-center flex-wrap gap-2 px-1 py-2">
-            <el-tooltip
-              content="从项目中已有的Block进行选择，然后加载"
-              :show-after="100"
-            >
-              <el-button
-                size="small"
-                type="primary"
-                @click="showLoad = true;"
-              >
-                加载Block
-              </el-button>
-            </el-tooltip>
-            <!-- <el-button
-              size="small"
-              :disabled="projectContext?.readOnly"
-            >
-              重置
-            </el-button> -->
-          </div>
-          <h5>组件操作</h5>
-          <div class="p-2">
-            <p class="break-all">
-              <span class="font-medium">选中组件：</span>
-              {{ `${curMeta?.doc.displayName || curMeta?.name || '暂未获取到组件名称'}（${curMeta?.doc.description || '暂无描述'}）` }}
+          <component-bread />
+          <div class="py-2 px-1">
+            <p class="break-all text-xs leading-6">
+              <span class="font-medium">组件描述：</span>
+              {{ curMeta?.doc.description || '暂无描述' }}
             </p>
-            <p class="break-all">
+            <p class="break-all text-xs leading-6">
               <span class="font-medium">组件标识符：</span>
               {{ `${curMeta?.path || '暂无标识符'}` }}
+              <!-- TODO: 支持跳回到IDE（VSCode）中的具体文件（貌似有这个自定义协议的插件？） -->
             </p>
-            <div class="flex items-center gap-2">
-              <el-button
-                type="danger"
-                size="small"
-                :disabled="!curEditKey || projectContext?.readOnly"
-                @click="removeComponent"
-              >
-                移除组件
-              </el-button>
-            </div>
           </div>
           <!-- 只读模式下不需要编辑相关的功能 -->
           <template v-if="!projectContext?.readOnly">
-            <h5>物料库</h5>
-            <el-button
-              class="m-2"
-              @click="showMaterial = true;"
-            >
-              打开物料库面板
-            </el-button>
-            <el-button
-              class="m-2"
-              @click="showTemplate = true;"
-            >
-              打开本地模板
-            </el-button>
-            <h5>属性区</h5>
             <template-meta />
           </template>
         </el-aside>
@@ -180,21 +209,6 @@
         </el-main>
       </el-container>
     </el-container>
-    <drawer-container
-      v-model="showLoad"
-      title="加载Block"
-      @ok="selectBlock"
-      @cancel="showLoad = false;"
-    >
-      <el-select v-model="loadedBlock">
-        <el-option
-          v-for="block in blocks"
-          :key="block"
-          :value="block"
-          :label="block"
-        />
-      </el-select>
-    </drawer-container>
     <material-displayer v-model:visible="showMaterial" />
     <template-displayer v-model:visible="showTemplate" />
     <block-form v-model:visible="showAdd" />
@@ -212,19 +226,17 @@ import {
   curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates,
 } from './state';
 import PageViewer from './PageViewer.vue';
-import DrawerContainer from '@/components/DrawerContainer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
-import { RefreshLeft, RefreshRight } from '@element-plus/icons-vue';
+import { RefreshLeft, RefreshRight, Box, Tickets, Delete } from '@element-plus/icons-vue';
 import BlockForm from './BlockForm.vue';
 import TemplateForm from './TemplateForm.vue';
 import TemplateDisplayer from './TemplateDisplayer.vue';
+import ComponentBread from './ComponentBread.vue';
 
 /** 源码生成中 */
 const generating = ref(false);
-/** 是否显示加载block弹窗 */
-const showLoad = ref(false);
 /** 是否显示新增block弹窗 */
 const showAdd = ref(false);
 /** 显示本地模板列表 */
@@ -282,12 +294,11 @@ function toBlock(name: string) {
 }
 
 /** 选中某个block */
-async function selectBlock() {
-  if (!loadedBlock.value) {
+async function selectBlock(val: string) {
+  if (!val) {
     return;
   }
-  showLoad.value = false;
-  toBlock(loadedBlock.value);
+  toBlock(val);
 }
 
 /** 根据当前block初始化相关信息 */
@@ -338,8 +349,9 @@ watch(curEditKey, (val) => {
   curOption.value = getOptionByKey(blockOption.value, val);
 }, { immediate: true });
 
-watch(curBlock, () => {
+watch(curBlock, (val) => {
   updateBlockOption();
+  loadedBlock.value = val;
 }, {
   immediate: true,
 });

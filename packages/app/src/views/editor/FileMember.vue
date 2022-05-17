@@ -25,6 +25,7 @@
       filterable
       clearable
       placeholder="输入关键词或直接选择"
+      size="small"
       :props="casProps"
       :options="treeOptions"
       @change="changeFile"
@@ -32,6 +33,7 @@
     <!-- 文件变量选择 -->
     <el-select
       v-model="proxyMember"
+      size="small"
       filterable
       clearable
       placeholder="输入关键词或直接选择"
