@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "cz": "git add . && git cz",
-    "changelog": "npx lerna version --conventional-commits",
-    "pub": "lerna publish"
+    "changelog": "lerna version --conventional-commits",
+    "pub": "lerna publish --no-private"
   },
   "license": "MIT",
   "devDependencies": {
