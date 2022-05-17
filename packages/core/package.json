@@ -4,6 +4,7 @@
   "main": "index.ts",
   "type": "module",
   "license": "MIT",
+  "private": true,
   "keywords": [
     "carverry",
     "ts-node"
