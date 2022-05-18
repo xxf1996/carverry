@@ -1,5 +1,7 @@
 <template>
   <el-card
+    class="hover:cursor-move"
+    shadow="never"
     :body-style="{ padding: '0px' }"
     :data-source="JSON.stringify(info)"
   >

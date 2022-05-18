@@ -2,8 +2,12 @@
   <div class="flex gap-2 items-center">
     <!-- 最近使用路径快捷交互 -->
     <el-dropdown @command="selectRecent">
-      <el-icon :size="16">
-        <opportunity />
+      <el-icon
+        class="hover:cursor-pointer"
+        color="#FDA50F"
+        :size="16"
+      >
+        <clock />
       </el-icon>
       <template #dropdown>
         <el-dropdown-item disabled>
@@ -65,7 +69,7 @@ import { computed } from 'vue';
 import { proxyProp } from '@/composition/props';
 import { fileInfo, recentPaths, updateRecentPaths } from './state';
 import { FileExportMember, FileLeafNode, FileTree } from '@/typings/editor';
-import { Opportunity } from '@element-plus/icons-vue';
+import { Clock } from '@element-plus/icons-vue';
 
 function isLeaf(node: FileTree | FileLeafNode): node is FileLeafNode {
   return 'fullPath' in node;

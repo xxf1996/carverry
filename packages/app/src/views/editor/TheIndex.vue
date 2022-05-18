@@ -2,9 +2,7 @@
   <div>
     <el-container class="h-screen">
       <el-header class="flex items-center h-11 bg-white border-b border-b-gray-300">
-        <div>
-          Logo
-        </div>
+        <app-logo />
         <h3
           v-if="projectContext?.readOnly"
           class="text-red-500"
@@ -183,8 +181,11 @@
       </el-header>
       <!-- 不知道为啥flex-1不能自动填充高度，主要是子级元素高度超过不会控制 -->
       <el-container class="content">
+        <el-main class="p-2">
+          <page-viewer />
+        </el-main>
         <el-aside
-          class="bg-white border-r border-r-gray-300 overflow-y-auto"
+          class="bg-white border-l border-l-gray-300 overflow-y-auto"
           width="360px"
         >
           <component-bread />
@@ -196,7 +197,8 @@
             <p class="break-all text-xs leading-6">
               <span class="font-medium">组件标识符：</span>
               {{ `${curMeta?.path || '暂无标识符'}` }}
-              <!-- TODO: 支持跳回到IDE（VSCode）中的具体文件（貌似有这个自定义协议的插件？） -->
+              <!-- TODO: 支持跳回到IDE（VSCode）中的具体文件（貌似有这个自定义协议的插件？）; -->
+              <!-- 测试用：vscode://file/Users/xuefengxie/Desktop/self/carverry/packages/app/src/views/editor/Pageviewer.vue:22 -->
             </p>
           </div>
           <!-- 只读模式下不需要编辑相关的功能 -->
@@ -204,9 +206,6 @@
             <template-meta />
           </template>
         </el-aside>
-        <el-main class="p-2">
-          <page-viewer />
-        </el-main>
       </el-container>
     </el-container>
     <material-displayer v-model:visible="showMaterial" />
@@ -234,6 +233,7 @@ import BlockForm from './BlockForm.vue';
 import TemplateForm from './TemplateForm.vue';
 import TemplateDisplayer from './TemplateDisplayer.vue';
 import ComponentBread from './ComponentBread.vue';
+import AppLogo from './AppLogo.vue';
 
 /** 源码生成中 */
 const generating = ref(false);

@@ -162,6 +162,7 @@
 // Card 
 .el-card {
   color: $--color-neutral-600 !important;
+  --el-card-border-radius: 2px !important;
 
   &__header {
     @apply px-4 py-0 min-h-56 flex gap-2 items-center justify-between #{ !important };
@@ -416,5 +417,23 @@
       }
     }
   }
+}
+
+.el-switch {
+  /** 不知道为啥$switch-height的配置没有覆盖，只能手动配置一下 */
+  &--small {
+    --el-switch-height: 16px !important;
+    --el-switch-button-size: 12px !important;
+    height: 20px !important;
+  }
+}
+
+.el-popper {
+  --el-popper-border-radius: 2px !important;
+  @apply px-2 py-1;
+}
+
+.el-collapse {
+  --el-collapse-header-font-size: 18px !important;
 }
 

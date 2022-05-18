@@ -1,6 +1,7 @@
 <template>
   <div
     ref="container"
+    v-loading="iframeLoading"
     class="w-full h-full"
     @dragover="containerDragover"
     @drop="containerDrop"
@@ -14,6 +15,7 @@
       :class="dragging ? 'pointer-events-none' : ''"
       :src="previewUrl"
       title="预览"
+      @load="loadIframe"
     />
     <div
       v-if="showHover"
@@ -35,6 +37,7 @@ const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
 const container = ref<HTMLDivElement>();
 const iframeRef = ref<HTMLIFrameElement>();
+const iframeLoading = ref(true);
 const showHover = ref(false);
 const hoverStyle = ref({
   width: '0px',
@@ -243,6 +246,11 @@ function containerDragleave(e: DragEvent) {
   e.stopPropagation(); // 停止冒泡
 }
 
+function loadIframe() {
+  iframeLoading.value = false;
+  console.log('iframe loaded');
+}
+
 onMounted(() => {
   if (!container.value) {
     return;
@@ -253,6 +261,7 @@ onMounted(() => {
   pageBus.on((e) => {
     if (e === 'reload' && iframeRef.value) {
       console.log('reload iframe');
+      iframeLoading.value = true;
       iframeRef.value.src = previewUrl;
     }
   });

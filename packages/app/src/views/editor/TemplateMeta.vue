@@ -1,9 +1,9 @@
 <template>
   <div v-if="curOption">
     <div class="editor-header">
-      Ref绑定
+      Ref 绑定
     </div>
-    <div class="px-1 py-2">
+    <div class="template-meta__container">
       <file-member
         v-if="curOption.ref"
         v-model:file="curOption.ref.path"
@@ -16,21 +16,27 @@
     >
       Props
     </div>
-    <div class="px-1 py-2">
+    <div class="template-meta__container">
       <!-- 注意prop和event不同组件会存在同名，不应该直接用名字做key -->
       <template
         v-for="prop in metaProps"
         :key="`${curEditKey}-${prop.name}`"
       >
-        <div class="flex items-center my-1 text-neutral-500">
-          <span>{{ prop.description || prop.name }}</span>
-          <span
-            v-if="prop.description"
-            class="text-red-600"
-          >({{ prop.name }})</span>
+        <div class="template-meta__prop">
+          <span class="template-meta__title">{{ prop.name }}</span>
+          <el-tooltip
+            placement="right"
+            :content="prop.description || '暂无描述'"
+            :show-after="200"
+          >
+            <el-icon class="hover:cursor-pointer">
+              <warning />
+            </el-icon>
+          </el-tooltip>
+
           <el-tooltip
             content="开启v-model"
-            placement="right"
+            placement="left"
             :show-after="200"
           >
             <el-switch
@@ -43,6 +49,7 @@
         <file-member
           v-model:file="curOption.props[prop.name].path"
           v-model:member="curOption.props[prop.name].member"
+          class="template-meta__prop-item"
         />
       </template>
     </div>
@@ -52,18 +59,27 @@
     >
       Events
     </div>
-    <div class="px-1 py-2">
+    <div class="template-meta__container">
       <template
         v-for="event in metaEvents"
         :key="`${curEditKey}-${event.name}`"
       >
-        <p class="my-1 text-neutral-500">
-          {{ event.description || event.name }}
-          <span v-if="event.description">({{ event.name }})</span>
+        <p class="template-meta__prop">
+          <span class="template-meta__title">{{ event.name }}</span>
+          <el-tooltip
+            placement="right"
+            :content="event.description || '暂无描述'"
+            :show-after="200"
+          >
+            <el-icon class="hover:cursor-pointer">
+              <warning />
+            </el-icon>
+          </el-tooltip>
         </p>
         <file-member
           v-model:file="curOption.events[event.name].path"
           v-model:member="curOption.events[event.name].member"
+          class="template-meta__prop-item"
         />
       </template>
     </div>
@@ -73,20 +89,25 @@
     >
       Slots
     </div>
-    <div class="px-1 py-2">
+    <div class="template-meta__container">
       <template
         v-for="slot in metaSlots"
         :key="`${curEditKey}-${slot.name}`"
       >
-        <div class="flex items-center my-1 text-neutral-500">
-          <span>{{ slot.description || slot.name }}</span>
-          <span
-            v-if="slot.description"
-            class="text-red-600"
-          >({{ slot.name }})</span>
+        <div class="template-meta__prop">
+          <span class="template-meta__title">{{ slot.name }}</span>
+          <el-tooltip
+            placement="right"
+            :content="slot.description || '暂无描述'"
+            :show-after="200"
+          >
+            <el-icon class="hover:cursor-pointer">
+              <warning />
+            </el-icon>
+          </el-tooltip>
           <el-tooltip
             content="是否使用空的slot内容（通常是为了使用组件的默认slot内容）"
-            placement="right"
+            placement="left"
             :show-after="200"
           >
             <el-switch
@@ -120,6 +141,7 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
+import { Warning } from '@element-plus/icons-vue';
 
 const metaProps = computed(() => curMeta.value?.doc.props || []);
 const metaEvents = computed(() => curMeta.value?.doc.events || []);
@@ -201,3 +223,25 @@ watch(curMeta, (val) => {
   nextTick(checkMetaValid);
 });
 </script>
+
+<style lang="scss" scoped>
+.template-meta {
+  &__container {
+    @apply p-2;
+  }
+
+  &__prop {
+    @apply flex items-center px-1 py-1 my-1 text-neutral-600 bg-red-50 border-l-2 border-l-red-400;
+  }
+
+  &__prop-item {
+    &:not(:last-child) {
+      @apply mb-4;
+    }
+  }
+
+  &__title {
+    @apply text-sm font-medium mr-1;
+  }
+}
+</style>

@@ -32,6 +32,7 @@ declare module 'vue' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
 

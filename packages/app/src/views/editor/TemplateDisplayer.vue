@@ -12,7 +12,10 @@
         clearable
       />
     </div>
-    <el-collapse class="px-2">
+    <el-collapse
+      v-model="expanded"
+      class="px-2"
+    >
       <el-collapse-item
         v-for="(group, key) in groups"
         :key="key"
@@ -32,7 +35,7 @@
 <script lang="ts" setup>
 import { boolProps, proxyProp } from '@/composition/props';
 import { TemplateInfo } from '@/typings/editor';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { templates } from './state';
 import TemplateGroup from './TemplateGroup.vue';
 
@@ -43,6 +46,8 @@ const emit = defineEmits<{
   (event: 'update:visible', val: boolean): void;
 }>();
 const keyword = ref('');
+/** 已展开的分组 */
+const expanded = ref<string[]>([]);
 const filteredTemplates = computed(() => templates.value.filter((template) => {
   if (!keyword.value) {
     return true;
@@ -67,4 +72,8 @@ const groups = computed<Record<string, TemplateInfo[]>>(() => {
   return group;
 });
 const proxyVisible = proxyProp(props, 'visible');
+
+watch(groups, (val) => {
+  expanded.value = Object.keys(val); // 默认展开全部分组
+});
 </script>
