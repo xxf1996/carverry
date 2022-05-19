@@ -10,6 +10,7 @@
       class="px-2"
     >
       <el-tab-pane
+        class="pb-2"
         label="本地组件"
         name="local"
       >
@@ -18,6 +19,7 @@
       <el-tab-pane
         v-for="pkg in packages"
         :key="pkg.packageName"
+        class="pb-2"
         :label="pkg.name"
         :name="pkg.packageName"
       >

@@ -12,7 +12,7 @@
         @change="changeDir"
       />
     </div>
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-2 gap-2">
       <draggable
         :list="componentList"
         :group="{ name: 'source', pull: 'clone', put: false }"
@@ -23,23 +23,11 @@
         @end="dragEnd"
       >
         <template #item="{ element }">
-          <div
-            class="p-1 text-center h-20 break-all"
-            :data-source="JSON.stringify(element)"
-          >
-            <p>暂无预览</p>
-            <p class="font-medium">
-              {{ element.doc.displayName || element.name }}
-              <el-tooltip
-                v-if="element.doc.description"
-                :content="element.doc.description"
-              >
-                <el-icon class="mx-1">
-                  <warning />
-                </el-icon>
-              </el-tooltip>
-            </p>
-          </div>
+          <component-item
+            :title="element.doc.displayName || element.name"
+            :desc="element.doc.description"
+            :source="element"
+          />
         </template>
       </draggable>
     </div>
@@ -52,7 +40,7 @@ import Draggable from 'vuedraggable';
 import { localComponents, curDragComponent } from './state';
 import { ComponentLeafNode, ComponentMeta, ComponentTree } from '@/typings/editor';
 import { CascaderOption, CascaderProps } from 'element-plus';
-import { Warning } from '@element-plus/icons-vue';
+import ComponentItem from './ComponentItem.vue';
 
 const casProps: CascaderProps = { emitPath: false };
 const componentList = ref<Required<ComponentMeta>[]>([]);

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3">
+  <div class="grid grid-cols-2 gap-2">
     <draggable
       :list="items"
       :group="{ name: 'source', pull: 'clone', put: false }"
@@ -10,48 +10,12 @@
       @end="dragEnd"
     >
       <template #item="{ element }">
-        <div
-          class="flex flex-col p-1 text-center h-30 break-all hover:border hover:border-blue-200 cursor-move"
-          :data-source="JSON.stringify(element.meta)"
-        >
-          <!-- 点击显示预览大图 -->
-          <el-popover
-            v-if="element.cover"
-            placement="left"
-            trigger="click"
-            :width="600"
-          >
-            <template #reference>
-              <el-image
-                class="flex-1"
-                :src="element.cover"
-                fit="contain"
-              />
-            </template>
-            <el-image
-              class="w-150"
-              fit="contain"
-              :src="element.cover"
-            />
-          </el-popover>
-          <p
-            v-else
-            class="flex-1"
-          >
-            暂无预览
-          </p>
-          <p class="font-medium">
-            {{ element.config.title || element.meta.name }}
-            <el-tooltip
-              v-if="element.config.desc"
-              :content="element.config.desc"
-            >
-              <el-icon class="mx-1">
-                <warning />
-              </el-icon>
-            </el-tooltip>
-          </p>
-        </div>
+        <component-item
+          :cover="element.cover"
+          :title="element.config.title || element.meta.name"
+          :desc="element.config.desc"
+          :source="element.meta"
+        />
       </template>
     </draggable>
   </div>
@@ -63,6 +27,7 @@ import { MaterialItem } from '@/typings/editor';
 import Draggable from 'vuedraggable';
 import { curDragComponent } from './state';
 import { Warning } from '@element-plus/icons-vue';
+import ComponentItem from './ComponentItem.vue';
 
 const props = defineProps({
   items: listProps<MaterialItem>(),
