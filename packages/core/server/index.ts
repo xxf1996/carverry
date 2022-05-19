@@ -3,7 +3,7 @@ import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents, getRemoteComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
-import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
+import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, installPackage, updatePreview } from './project.js';
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
 
@@ -116,6 +116,19 @@ http
   .use(async (req) => {
     const config = await getBlockConfig(req.params.name);
     return Response.json(config);
+  });
+
+http
+  .match({
+    url: '/install',
+    method: 'post',
+    body: {
+      name: String,
+    },
+  })
+  .use(async (req) => {
+    await installPackage(req.body.name);
+    return Response.text('ok');
   });
 
 components

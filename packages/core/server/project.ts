@@ -7,6 +7,8 @@ import { writeFile, readFile } from 'fs/promises';
 import { emptyBlock, emptyPage, generateFile } from '../plugins/output.js';
 import { ComponentOption } from '@carverry/app/src/typings/editor';
 import { isDir } from '../utils/file.js';
+import { runCli, parseNi } from '@antfu/ni';
+import { promiseError } from '../utils/tip.js';
 
 const BLOCK_CONFIG = 'block.config.json';
 
@@ -115,4 +117,21 @@ export async function getBlockConfig(name: string) {
   } catch (e) {
     return Promise.reject(e);
   }
+}
+
+/**
+ * 在本地项目安装指定包
+ * @param packageName 包名
+ * @returns
+ */
+export async function installPackage(packageName: string) {
+  if (!packageName) {
+    return promiseError('没有发现包名！');
+  }
+  const context = await getContext();
+  const originArgv = process.argv.slice(0);
+  process.argv = [...process.argv.slice(0, 2), '-C', context.root, packageName]; // 指定本地项目为cwd，然后执行安装命令
+  await runCli(parseNi).finally(() => {
+    process.argv = originArgv; // 还原argv
+  });
 }

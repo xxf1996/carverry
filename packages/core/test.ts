@@ -1,5 +1,7 @@
-import { getComponentDoc } from './plugins/component-meta.js';
-import button from 'element-plus/es/components/button';
+import { runCli, parseNr } from '@antfu/ni';
 
-console.log(button);
+process.argv.push('-C', '/Users/xuefengxie/Desktop/project/yisight-fe', 'cr'); // -C可以指定cwd；https://github.com/antfu/ni#change-directory
 
+console.log(process.argv);
+
+runCli(parseNr);

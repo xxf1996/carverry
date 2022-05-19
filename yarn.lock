@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@antfu/ni@^0.16.2":
+  version "0.16.2"
+  resolved "https://registry.npmjs.org/@antfu/ni/-/ni-0.16.2.tgz#c740d965ccf7c1ea682811cf199fe0d5f20c6f4f"
+  integrity sha512-HZH4I07EYKU4KZLtUYm/zEmaDIhaq51H/qu45uH1AcUPWqMGbB7evE/TnSr0SGInEA+oQs4Is5Vn/PmQhfuU5w==
+
 "@antfu/utils@^0.4.0":
   version "0.4.0"
   resolved "https://registry.npmmirror.com/@antfu/utils/-/utils-0.4.0.tgz#df100ed9922d7359bf6c99083765b5207086b9a7"

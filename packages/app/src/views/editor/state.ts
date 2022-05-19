@@ -194,6 +194,15 @@ export async function generateCode() {
   });
 }
 
+export async function installMaterial(name: string) {
+  await fetch('/editor-api/install', {
+    method: 'post',
+    body: JSON.stringify({
+      name,
+    }),
+  });
+}
+
 export function updateOptionKey(option: ComponentOption, prefix = '') {
   // eslint-disable-next-line no-restricted-syntax,guard-for-in
   for (const slot in option.slots) {

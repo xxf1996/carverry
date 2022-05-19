@@ -31,6 +31,8 @@
             class="my-2"
             type="primary"
             size="small"
+            :loading="installing === pkg.packageName"
+            @click="toInstall(pkg.packageName)"
           >
             安装物料包
           </el-button>
@@ -61,11 +63,12 @@
 </template>
 
 <script lang="ts" setup>
-import { packages } from './state';
+import { installMaterial, packages, updatePackages } from './state';
 import ComponentDisplay from './ComponentDisplay.vue';
 import { ref } from 'vue';
 import MaterialGroup from './MaterialGroup.vue';
 import { boolProps, proxyProp } from '@/composition/props';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   visible: boolProps(),
@@ -75,4 +78,15 @@ const emit = defineEmits<{
 }>();
 const curSelected = ref('local');
 const proxyVisible = proxyProp(props, 'visible');
+/** 安装中的包名 */
+const installing = ref('');
+
+async function toInstall(packageName: string) {
+  installing.value = packageName;
+  await installMaterial(packageName).finally(() => {
+    installing.value = '';
+  });
+  ElMessage.success('安装完成！');
+  updatePackages();
+}
 </script>
