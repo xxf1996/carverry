@@ -18,6 +18,28 @@
       暂未选中组件
     </p>
   </div>
+  <div class="py-2 px-1">
+    <p class="break-all text-xs leading-6">
+      <span class="font-medium">组件描述：</span>
+      {{ curMeta?.doc.description || '暂无描述' }}
+    </p>
+    <p class="break-all text-xs leading-6">
+      <span class="font-medium">组件标识符：</span>
+      <el-tooltip
+        v-if="isLocalComponent(curMeta?.path || '')"
+        content="点击跳转回VSCode中对应的源码文件"
+        :show-after="200"
+      >
+        <span
+          class="component-bread__local"
+          @click="toVSCode"
+        >
+          {{ `${curMeta?.path || '暂无标识符'}` }}
+        </span>
+      </el-tooltip>
+      <span v-else>{{ `${curMeta?.path || '暂无标识符'}` }}</span>
+    </p>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -26,7 +48,7 @@
 import { ComponentOption } from '@/typings/editor';
 import { computed } from 'vue';
 import { ArrowRight } from '@element-plus/icons-vue';
-import { blockOption, componentMap, curEditKey, getOptionByKey } from './state';
+import { blockOption, componentMap, curEditKey, getOptionByKey, curMeta, projectContext } from './state';
 
 const breads = computed<ComponentOption[]>(() => {
   const res: ComponentOption[] = [];
@@ -64,6 +86,26 @@ function getComponentName(componentPath: string): string {
 
   return meta.name;
 }
+
+/**
+ * 判断当前组件是否为本地组件
+ * @param componentPath 组件path
+ */
+function isLocalComponent(componentPath: string) {
+  if (!curMeta.value?.path) {
+    return false;
+  }
+  return !/^package:\/\/.+/.test(componentPath);
+}
+
+/** 跳转到VSCode对应的源码文件 */
+function toVSCode() {
+  if (!curMeta.value) {
+    return;
+  }
+  // vscode的自定义协议；https://zhuanlan.zhihu.com/p/371062363
+  window.open(`vscode://file${projectContext.value.root}/${curMeta.value.path}`, '_blank');
+}
 </script>
 
 <style lang="scss" scoped>
@@ -86,6 +128,11 @@ function getComponentName(componentPath: string): string {
     :deep(.el-breadcrumb__inner) { // 深度选择器的使用：https://stackoverflow.com/questions/48032006/how-do-i-use-deep-or-or-v-deep-in-vue-js
       @apply text-red-400;
     }
+  }
+
+  &__local {
+    @apply cursor-help;
+    text-decoration: underline dashed darksalmon 2px;
   }
 }
 </style>

@@ -189,18 +189,6 @@
           width="360px"
         >
           <component-bread />
-          <div class="py-2 px-1">
-            <p class="break-all text-xs leading-6">
-              <span class="font-medium">组件描述：</span>
-              {{ curMeta?.doc.description || '暂无描述' }}
-            </p>
-            <p class="break-all text-xs leading-6">
-              <span class="font-medium">组件标识符：</span>
-              {{ `${curMeta?.path || '暂无标识符'}` }}
-              <!-- TODO: 支持跳回到IDE（VSCode）中的具体文件（貌似有这个自定义协议的插件？）; -->
-              <!-- 测试用：vscode://file/Users/xuefengxie/Desktop/self/carverry/packages/app/src/views/editor/Pageviewer.vue:22 -->
-            </p>
-          </div>
           <!-- 只读模式下不需要编辑相关的功能 -->
           <template v-if="!projectContext?.readOnly">
             <template-meta />
