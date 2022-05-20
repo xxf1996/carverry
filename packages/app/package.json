@@ -20,7 +20,7 @@
     "@types/lodash": "^4.14.179",
     "@vitejs/plugin-vue": "^2.2.0",
     "@vueuse/core": "^7.6.2",
-    "element-plus": "^2.0.2",
+    "element-plus": "^2.2.0",
     "lodash": "^4.17.21",
     "sass": "^1.49.9",
     "sortablejs": "^1.14.0",
