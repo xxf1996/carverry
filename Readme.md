@@ -1,20 +1,34 @@
-[TOC]
+## carverry ![carverry](https://img.shields.io/npm/v/@carverry/core.svg)
 
-## carverry
 
-这是一套比较<font color=#f00>激进</font>的`web`前端可视化搭建方案；
 
-- [Logo](https://app.brandmark.io/v3/#logo_data=%7B%22keywords%22%3A%5B%22wood%22%5D%2C%22id%22%3A%22logo-9538414a-a660-4e73-b895-271f1f979494%22%2C%22layout%22%3A0%2C%22title%22%3A%22carverry%22%2C%22titleFamily%22%3A%22Comfortaa%20Bold%20Alt1%22%2C%22titleVariant%22%3A%22700%22%2C%22titleColor%22%3A%5B%7B%22hex%22%3A%22%23d7d7d9%22%2C%22location%22%3A0%7D%2C%7B%22hex%22%3A%22%23d7d7d9%22%2C%22location%22%3A0.5%7D%2C%7B%22hex%22%3A%22%23d7d7d9%22%2C%22location%22%3A0.75%7D%2C%7B%22hex%22%3A%22%23869088%22%2C%22location%22%3A1%7D%5D%2C%22titleScale%22%3A1.55%2C%22titleLetterSpace%22%3A3%2C%22titleLineSpace%22%3A1.1%2C%22titleBoldness%22%3A0%2C%22titleX%22%3A0%2C%22titleY%22%3A0%2C%22titleAlign%22%3A%22center%22%2C%22slogan%22%3A%22%22%2C%22sloganFamily%22%3A%22Montserrat%22%2C%22sloganVariant%22%3A%22400%22%2C%22sloganColor%22%3A%5B%7B%22hex%22%3A%22%23d7d7d9%22%7D%5D%2C%22sloganScale%22%3A1%2C%22sloganLetterSpace%22%3A0%2C%22sloganLineSpace%22%3A1.1%2C%22sloganBoldness%22%3A0%2C%22sloganAlign%22%3A%22center%22%2C%22sloganX%22%3A0%2C%22sloganY%22%3A0%2C%22icon%22%3Anull%2C%22showIcon%22%3Afalse%2C%22iconScale%22%3A1%2C%22iconColor%22%3A%5B%7B%22hex%22%3A%22%23d7d7d9%22%7D%5D%2C%22iconContainer%22%3Anull%2C%22showIconContainer%22%3Afalse%2C%22iconContainerScale%22%3A1%2C%22iconContainerColor%22%3A%5B%7B%22hex%22%3A%22%23869088%22%7D%5D%2C%22iconSpace%22%3A1%2C%22iconX%22%3A0%2C%22iconY%22%3A0%2C%22nthChar%22%3A0%2C%22container%22%3Anull%2C%22showContainer%22%3Afalse%2C%22containerScale%22%3A1%2C%22containerColor%22%3A%5B%7B%22hex%22%3A%22%23869088%22%7D%5D%2C%22containerX%22%3A0%2C%22containerY%22%3A0%2C%22backgroundColor%22%3A%5B%7B%22hex%22%3A%22%2328272d%22%7D%5D%2C%22palette%22%3A%5B%22%2328272d%22%2C%22%23d7d7d9%22%2C%22%23d7d7d9%22%2C%22%23d7d7d9%22%2C%22%23869088%22%5D%7D)：也是项目名称生成来源
 
-### 关于workspaces
 
-采用目前比较流行的`workspaces`方式进行开发，对关联性很强的`package`进行统一开发；
 
-- [Workspaces | Yarn](https://classic.yarnpkg.com/lang/en/docs/workspaces/)
 
-## Roadmap
+## 快速开始
 
-- [ ] 组件获取prop的精准类型（可从组件实例化和language server两个角度出发），支持字面量编辑；
-- [x] 只读模式预览；
-- [x] 第三方UI库导入（适配）；
+首先全局安装 `ts-node`、`@carverry/app`、`@carverry/core`；
+
+```bash
+npm i -g ts-node @carverry/app @carverry/core #or
+yarn global add ts-node @carverry/app @carverry/core #or
+pnpm add -g ts-node @carverry/app @carverry/core
+```
+
+然后在项目命令行进行初始化：
+
+```bash
+carverry init
+```
+
+然后按照交互式命令进行对应选项的配置：
+
+![image](./docs/assets/carverry-1.jpg)
+
+如果想全部使用默认配置，可以使用`-y`选项来完成：
+
+```bash
+carverry init -y
+```
 
