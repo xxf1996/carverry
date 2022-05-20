@@ -3,10 +3,10 @@ import inquirer from 'inquirer';
 import { existsSync } from 'fs';
 import { writeFile, copyFile, mkdir } from 'fs/promises';
 import { resolve } from 'path';
-import { promiseError, warning } from '../utils/tip.js';
+import { info, promiseError, success, warning } from '../utils/tip.js';
 import { getContext } from '../server/project.js';
 import { getDirname } from '../utils/file.js';
-import { execShellOrigin } from '../utils/shell.js';
+import { execShellOrigin, installPackage } from '../utils/shell.js';
 import { setTimeout } from 'timers/promises';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -81,6 +81,7 @@ async function getUserConfig() {
   return answers;
 }
 
+/** 保存项目配置 */
 async function saveConfig(config: ProjectConfig) {
   const rootDir = process.cwd();
   await writeFile(resolve(rootDir, 'carverry.config.json'), JSON.stringify({
@@ -89,13 +90,16 @@ async function saveConfig(config: ProjectConfig) {
   }, null, 2), {
     encoding: 'utf-8',
   });
+  success('carverry.config.json 已生成！');
 }
 
+/** 启动服务 */
 export async function startApp() {
   const appDir = resolve(__dirname, '../../app');
   if (!existsSync(appDir)) {
     return promiseError('没有发现@carverry/app包！');
   }
+  // FIXME: 这里启动命令最好不要用yarn，也许调用时用户并没有安装yarn，应该使用node执行
   const curDir = resolve(__dirname, '..');
   execShellOrigin(`cd ${curDir} && yarn server`); // 先启动服务器
   await setTimeout(3000); // 服务器和应用分属两个不同的线程
@@ -122,6 +126,26 @@ export async function initProjectFiles() {
 }
 
 /**
+ * 检测某个包是否已经安装
+ * @param packageName 包名
+ * @param autoInstall 没有安装时是否自动安装，默认为`true`
+ * @returns 
+ */
+export async function checkPackage(packageName: string, autoInstall = true) {
+  const context = await getContext();
+  const packageDir = resolve(context.root, 'node_modules', packageName);
+  if (existsSync(packageDir)) {
+    info(` 📦[${packageName}]已存在！`);
+    return;
+  }
+  if (!autoInstall) {
+    return;
+  }
+  await installPackage(packageName);
+  success(` 📦[${packageName}]安装完成！`);
+}
+
+/**
  * 初始化项目配置
  * @param useDefault 是否使用默认配置
  */
@@ -135,5 +159,6 @@ export async function initConfig(useDefault = false) {
     config = await getUserConfig();
   }
   await saveConfig(config);
+  await checkPackage('@carverry/helper');
   // TODO: 初始化成功后提示；要不要给项目script字段注入脚本？
 }

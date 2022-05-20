@@ -3,9 +3,10 @@ import farrowHttp from 'farrow-http';
 import farrowCors from 'farrow-cors';
 import { getLoaclComponents, getRemoteComponents } from '../plugins/component-meta.js';
 import { getFileInfo } from '../plugins/file-meta.js';
-import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, installPackage, updatePreview } from './project.js';
+import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updatePreview } from './project.js';
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
+import { installPackage } from '../utils/shell.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
