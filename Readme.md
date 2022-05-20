@@ -1,8 +1,6 @@
 ## carverry ![carverry](https://img.shields.io/npm/v/@carverry/core.svg)
 
-
-
-
+这是一个比较激进的可视化搭建方案，适用于`vue3.2+/TS/vite`技术栈的项目；目的在于快速搭建页面
 
 
 
@@ -30,5 +28,12 @@ carverry init
 
 ```bash
 carverry init -y
+```
+
+完成初始化后，就可以启动可视化搭建应用了：
+
+```bash
+carverry start #or
+carverry #可以直接省掉start命令，因为默认命令就是start
 ```
 
