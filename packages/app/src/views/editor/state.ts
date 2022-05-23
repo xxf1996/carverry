@@ -70,6 +70,8 @@ export const {
   undo: blockUndo,
   canRedo: blockCanRedo,
   canUndo: blockCanUndo,
+  clear: blockClear,
+  resume: blockResume,
 } = useRefHistory(blockOption, {
   deep: true,
 });

@@ -210,7 +210,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, curMeta, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates, blockClear,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import { debouncedWatch } from '@vueuse/core';
@@ -297,6 +297,9 @@ async function updateBlockOption() {
   } else {
     initBlockOption();
   }
+  nextTick(() => {
+    blockClear(); // 切换block要重新开始记录历史，否则会回退到不是同一个block的配置的情况
+  });
 }
 
 /** 重新加载右侧预览页 */
