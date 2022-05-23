@@ -12,16 +12,26 @@
 }
 
 
-// Form 
+// Form
 .el-input {
   &__inner {
     @apply text-sm #{ !important};
+    &:focus { // 默认会有很丑的选中样式
+      outline: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
   }
 
   &__prefix {
     .el-input__icon {
       @apply text-base;
     }
+  }
+
+  &--small {
+    // --el-input-height: 28px !important;
+    --el-input-height-small: 28px !important; // 同理，不知道为啥$input-height没有生效
   }
 }
 
