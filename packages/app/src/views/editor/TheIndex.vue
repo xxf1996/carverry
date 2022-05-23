@@ -332,6 +332,7 @@ updatePreview();
 
 watch(curEditKey, (val) => {
   if (val === undefined) {
+    curOption.value = undefined; // 同步清空
     return;
   }
   curOption.value = getOptionByKey(blockOption.value, val);
@@ -340,6 +341,7 @@ watch(curEditKey, (val) => {
 watch(curBlock, (val) => {
   updateBlockOption();
   loadedBlock.value = val;
+  curEditKey.value = undefined; // 切换block要清空选中状态
 }, {
   immediate: true,
 });
