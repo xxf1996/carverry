@@ -1,7 +1,7 @@
 <template>
   <div
     ref="containerRef"
-    style="padding: 8px;"
+    class="empty-block"
     @slot-append.stop="slotAppend"
   >
     空白的配置，请先拖拽添加一个初始的容器组件
@@ -26,3 +26,14 @@ onMounted(() => {
   initSlotContainer(containerRef.value, true);
 });
 </script>
+
+<style scoped>
+.empty-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 28px;
+  font-weight: 500;
+}
+</style>
