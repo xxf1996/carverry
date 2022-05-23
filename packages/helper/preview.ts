@@ -86,7 +86,7 @@ function initSort(target: HTMLElement, slot: string) {
  * @param target 目标容器
  */
 function addDropStyle(target: HTMLElement) {
-  target.style.backgroundColor = 'rgba(60, 120, 240, 0.15)';
+  target.style.backgroundColor = 'rgb(209, 234, 252)';
 }
 
 function removeDropStyle(target: HTMLElement) {
@@ -294,7 +294,9 @@ function initSocket() {
 function initSlotEvent(target: HTMLElement, name: string, empty: boolean) {
   target.dataset.slot = name;
   // 给slot容器加上样式
-  target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
+  target.style.minHeight = '25px';
+  target.style.border = '1px dashed rgb(97 100 103)';
+  // target.classList.add('min-h-25px', 'border', 'border-neutral-50', 'border-dashed');
   if (empty) { // 空的容器才需要直接的拖拽插入处理（因为不需要精准插入）
     // 容器拖拽交互和样式
     target.addEventListener('dragover', containerDragover);
@@ -312,6 +314,8 @@ function initBlockInsert() {
   let prevTarget: Nullable<HTMLElement> = null;
   /** 命中组件对应的DOMRect */
   let prevRect: Nullable<DOMRect> = null;
+  const barWidth = 5;
+  const barHalfWidth = barWidth / 2;
   document.body.addEventListener('dragover', () => {
     const hitTarget = document.elementFromPoint(curX, curY) as Nullable<HTMLElement>;
     if (!hitTarget || hitTarget.dataset.carverryEmpty) {
@@ -343,33 +347,33 @@ function initBlockInsert() {
       bar = document.createElement('div');
       bar.id = 'carverry-bar';
       bar.style.position = 'fixed';
-      bar.style.backgroundColor = 'rgb(50, 240, 200)';
+      bar.style.backgroundColor = 'rgb(37, 99, 235)';
       bar.style.zIndex = '9999';
       document.body.appendChild(bar);
     }
     // 根据鼠标距离命中目标DOMRect的最近边框是哪个，决定插入的位置和方向
     if (minDist === left) {
-      width = 8;
-      height = targetRect.height + 8;
-      originX = targetRect.left - 8;
-      originY = targetRect.top - 4;
+      width = barWidth;
+      height = targetRect.height + barWidth;
+      originX = targetRect.left - barWidth;
+      originY = targetRect.top - barHalfWidth;
       insertBefore = curIdx;
     } else if (minDist === right) {
-      width = 8;
-      height = targetRect.height + 8;
+      width = barWidth;
+      height = targetRect.height + barWidth;
       originX = targetRect.right;
-      originY = targetRect.top - 4;
+      originY = targetRect.top - barHalfWidth;
       insertBefore = curIdx + 1;
     } else if (minDist === top) {
-      height = 8;
-      width = targetRect.width + 8;
-      originX = targetRect.left - 4;
-      originY = targetRect.top - 8;
+      height = barWidth;
+      width = targetRect.width + barWidth;
+      originX = targetRect.left - barHalfWidth;
+      originY = targetRect.top - barWidth;
       insertBefore = curIdx;
     } else if (minDist === bottom) {
-      height = 8;
-      width = targetRect.width + 8;
-      originX = targetRect.left - 4;
+      height = barWidth;
+      width = targetRect.width + barWidth;
+      originX = targetRect.left - barHalfWidth;
       originY = targetRect.bottom;
       insertBefore = curIdx + 1;
     }
