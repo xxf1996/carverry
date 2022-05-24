@@ -19,6 +19,10 @@
     "port": {
       "type": "integer",
       "description": "可视化应用启动端口"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "description": "是否以只读模式运行"
     }
   },
   "required": [
