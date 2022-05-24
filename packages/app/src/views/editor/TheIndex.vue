@@ -15,6 +15,22 @@
           </h3>
         </el-tooltip>
         <div class="ml-auto flex items-center gap-2">
+          <el-tooltip
+            content="查看操作文档"
+            :show-after="200"
+          >
+            <el-button
+              size="small"
+              @click="toDoc"
+            >
+              <el-icon
+                color="#3c6"
+                :size="16"
+              >
+                <document />
+              </el-icon>
+            </el-button>
+          </el-tooltip>
           <!-- 只读模式下不需要编辑相关的功能 -->
           <template v-if="!readOnly">
             <el-tooltip
@@ -225,7 +241,7 @@ import PageViewer from './PageViewer.vue';
 import { debouncedWatch } from '@vueuse/core';
 import MaterialDisplayer from './MaterialDisplayer.vue';
 import { useRouter } from 'vue-router';
-import { RefreshLeft, RefreshRight, Box, Tickets, Delete } from '@element-plus/icons-vue';
+import { RefreshLeft, RefreshRight, Box, Tickets, Delete, Document } from '@element-plus/icons-vue';
 import BlockForm from './BlockForm.vue';
 import TemplateForm from './TemplateForm.vue';
 import TemplateDisplayer from './TemplateDisplayer.vue';
@@ -337,6 +353,10 @@ function toSaveTemplate() {
     return;
   }
   showAddTemplate.value = true;
+}
+
+function toDoc() {
+  window.open('https://github.com/xxf1996/carverry/blob/master/docs/basic.md', '_blank');
 }
 
 updateProjectInfo();
