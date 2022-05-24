@@ -19,4 +19,7 @@ export interface ProjectContext extends ProjectConfig {
   /** 项目根目录 */
   root: string;
   alias: AliasPath;
+  // TODO
+  /** 本地项目开发端口，默认为3000；从vite配置直接读取 */
+  devPort?: number;
 }
