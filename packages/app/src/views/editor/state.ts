@@ -85,6 +85,8 @@ export const projectContext = ref<ProjectContext>();
 export const blocks = ref<string[]>([]);
 /** 本地模板列表 */
 export const templates = ref<TemplateInfo[]>([]);
+/** 是否为只读模式 */
+export const readOnly = computed(() => projectContext.value?.readOnly);
 
 export function initBlockOption() {
   blockOption.value = {

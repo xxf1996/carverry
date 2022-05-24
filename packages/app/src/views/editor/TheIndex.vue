@@ -3,15 +3,20 @@
     <el-container class="h-screen">
       <el-header class="flex items-center h-11 bg-white border-b border-b-gray-300">
         <app-logo />
-        <h3
-          v-if="projectContext?.readOnly"
-          class="text-red-500"
+        <el-tooltip
+          v-if="readOnly"
+          content="只读模式下不能进行任何编辑操作，只能查看Block及其结构"
+          :show-after="200"
         >
-          【只读模式】
-        </h3>
+          <h3
+            class="text-blue-500 text-sm pl-2 cursor-pointer"
+          >
+            【只读模式】
+          </h3>
+        </el-tooltip>
         <div class="ml-auto flex items-center gap-2">
           <!-- 只读模式下不需要编辑相关的功能 -->
-          <template v-if="!projectContext?.readOnly">
+          <template v-if="!readOnly">
             <el-tooltip
               content="物料库"
               :show-after="200"
@@ -53,7 +58,7 @@
                 type="danger"
                 size="small"
                 plain
-                :disabled="!curEditKey || projectContext?.readOnly"
+                :disabled="!curEditKey || readOnly"
                 @click="removeComponent"
               >
                 <el-icon
@@ -85,6 +90,7 @@
           </el-tooltip>
           <!-- undo/redo操作 -->
           <el-tooltip
+            v-if="!readOnly"
             content="Undo"
             :show-after="100"
           >
@@ -99,6 +105,7 @@
             </el-button>
           </el-tooltip>
           <el-tooltip
+            v-if="!readOnly"
             content="Redo"
             :show-after="100"
           >
@@ -139,11 +146,12 @@
             </el-button>
           </el-tooltip>
           <el-tooltip
+            v-if="!readOnly"
             content="将当前选中组件配置保存为一个本地模板"
             :show-after="100"
           >
             <el-button
-              :disabled="projectContext?.readOnly || !curOption"
+              :disabled="!curOption"
               type="primary"
               size="small"
               @click="toSaveTemplate"
@@ -152,25 +160,26 @@
             </el-button>
           </el-tooltip>
           <el-tooltip
+            v-if="!readOnly"
             content="创建一个新的Block"
             :show-after="100"
           >
             <el-button
               size="small"
-              :disabled="projectContext?.readOnly"
               @click="showAdd = true;"
             >
               新建Block
             </el-button>
           </el-tooltip>
           <el-tooltip
+            v-if="!readOnly"
             content="将当前Block的配置转换为对应的Vue源码"
             :show-after="100"
           >
             <el-button
               type="primary"
               size="small"
-              :disabled="generating || !curBlock || projectContext?.readOnly"
+              :disabled="generating || !curBlock"
               :loading="generating"
               @click="generateBlock"
             >
@@ -190,7 +199,7 @@
         >
           <component-bread />
           <!-- 只读模式下不需要编辑相关的功能 -->
-          <template v-if="!projectContext?.readOnly">
+          <template v-if="!readOnly">
             <template-meta />
           </template>
         </el-aside>
@@ -210,7 +219,7 @@ import {
 import { ElMessageBox, ElMessage } from 'element-plus';
 import TemplateMeta from './TemplateMeta.vue';
 import {
-  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, updatePackages, updateContext, projectContext, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates, blockClear,
+  curEditKey, curOption, getOptionByKey, blockOption, updateLocalComponents, updateFileInfo, updateOptionKey, updatePreview, curBlock, initBlockOption, blocks, getBlockConfig, generateCode, updatePackages, updateContext, readOnly, pageBus, blockCanRedo, blockCanUndo, blockRedo, blockUndo, updateBlocks, updateTemplates, blockClear,
 } from './state';
 import PageViewer from './PageViewer.vue';
 import { debouncedWatch } from '@vueuse/core';
