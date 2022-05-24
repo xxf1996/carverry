@@ -148,7 +148,7 @@ function getTemplate(option: ComponentOption): string {
 
 function getPreviewTemplate(option: ComponentOption): string {
   // 映射props，注意v-model绑定
-  let props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
+  const props = Object.entries(getValidProps(option.props)).map(([name, dep]) => `${dep.model ? 'v-model' : ''}:${name}="${dep.member}"`).join(' ');
   const events = Object.entries(getValidEvents(option.events)).map(([name, dep]) => `@${name}="${dep.member}"`).join(' ');
   // 同级slot转为对应的slot-{name}-{idx}组件形式
   const slots = Object.keys(option.slots)
@@ -302,4 +302,7 @@ export async function generateFile(dir: string, option: ComponentOption, preview
   await writeFile(resolve(dir, 'index.vue'), source, {
     encoding: 'utf-8',
   });
+  await writeFile(resolve(dir, 'index.ts'), 'import Component from \'./index.vue\';\n\nexport default Component;', {
+    encoding: 'utf-8',
+  }); // 用index.ts来暴露入口，使引入路径少一层
 }
