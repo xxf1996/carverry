@@ -99,11 +99,11 @@ export async function startApp() {
   if (!existsSync(appDir)) {
     return promiseError('没有发现@carverry/app包！');
   }
-  // FIXME: 这里启动命令最好不要用yarn，也许调用时用户并没有安装yarn，应该使用node执行
+  // 这里启动命令最好不要用yarn，也许调用时用户并没有安装yarn，应该使用node执行
   const curDir = resolve(__dirname, '..');
-  execShellOrigin(`cd ${curDir} && yarn server`); // 先启动服务器
+  execShellOrigin(`cd ${curDir} && node --no-warnings --loader ts-node/esm ./server/index.ts`); // 先启动服务器
   await setTimeout(3000); // 服务器和应用分属两个不同的线程
-  await execShellOrigin(`cd ${appDir} && yarn preview`); // 再启动可视化应用
+  await execShellOrigin(`cd ${appDir} && npm run preview`); // 再启动可视化应用（无论是npm/yarn/pnpm至少都会有npm？）
 }
 
 /**
