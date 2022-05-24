@@ -1,3 +1,4 @@
+/** @deprecated 已废弃文件，适时删除 */
 import { Nullable } from '@/typings/common';
 import type { Router } from 'vue-router';
 import Sortable from 'sortablejs/modular/sortable.core.esm';
