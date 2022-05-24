@@ -1,6 +1,4 @@
-[TOC]
-
-## @carverry/app
+## @carverry/app ![img](https://img.shields.io/npm/v/@carverry/app)
 
 这是承载`carverry`可视化搭建（即`UI`界面）的前端`APP`项目；
 
@@ -8,8 +6,9 @@
 
 ## 技术栈
 
-- vite
-- Vue3
-- TS
-- element-plus
-- windiCSS：tailwind的替代品
+- `vite`
+- `Vue3`
+- `TS`
+- `element-plus`
+- `windiCSS`：`tailwind`的替代品
+
