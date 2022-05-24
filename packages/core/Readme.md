@@ -1,6 +1,4 @@
-[TOC]
-
-## @carverry/core
+## @carverry/core ![img](https://img.shields.io/npm/v/@carverry/core)
 
 这个包承接了`carverry`的命令行、`UI`和本地应用直接的通信服务、核心插件等相关业务；
 
