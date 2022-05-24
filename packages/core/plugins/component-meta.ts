@@ -12,8 +12,7 @@ const require = createRequire(import.meta.url);
 /** 物料包信息，key为包名，value为包的中文名称 */
 const MATERIAL_PACKAGE: Record<string, string> = {
   '@carverry/demo-material': '示例物料包',
-  'carverry-404': '不存在的包',
-  'carverry-element-plus': 'Element Plus组件',
+  // 'carverry-element-plus': 'Element Plus组件', // 先隐藏，还没正常发布
 };
 
 // TODO: 支持从项目配置文件中增加自定义物料包（包括私库）
