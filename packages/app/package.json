@@ -37,5 +37,10 @@
     "vuedraggable": "^4.1.0",
     "windicss": "^3.5.0",
     "ws": "^8.5.0"
-  }
+  },
+  "homepage": "https://github.com/xxf1996/carverry/tree/master/packages/app",
+  "repository": {
+    "url": "https://github.com/xxf1996/carverry"
+  },
+  "description": "这是承载carverry可视化搭建（即UI界面）的前端APP项目；"
 }

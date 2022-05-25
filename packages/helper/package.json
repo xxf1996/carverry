@@ -12,5 +12,10 @@
   "devDependencies": {
     "sortablejs": "^1.15.0",
     "vue-router": "^4.0.15"
-  }
+  },
+  "homepage": "https://github.com/xxf1996/carverry/tree/master/packages/helper",
+  "repository": {
+    "url": "https://github.com/xxf1996/carverry"
+  },
+  "description": "这个包主要承接用于给本地项目使用的辅助函数；"
 }

@@ -46,5 +46,10 @@
     "typescript": "^4.6.2",
     "vue-docgen-api": "^4.44.22",
     "ws": "^8.5.0"
-  }
+  },
+  "homepage": "https://github.com/xxf1996/carverry/tree/master/packages/core",
+  "repository": {
+    "url": "https://github.com/xxf1996/carverry"
+  },
+  "description": "这个包承接了carverry的命令行、UI和本地应用直接的通信服务、核心插件等相关业务；"
 }
