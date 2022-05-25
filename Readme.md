@@ -22,7 +22,7 @@ pnpm add -g ts-node @carverry/app @carverry/core
 
 ​	如果安装完了这些包，想要快点进行玩耍的话，可以直接`clone`[示例项目](https://github.com/xxf1996/carverry-demo-project)进行使用；
 
-2. 然后在项目命令行进行初始化：
+2. 然后在**项目命令行**进行初始化：
 
 ```bash
 carverry init
@@ -57,9 +57,10 @@ if (import.meta.env.MODE === 'development') { // 仅需要在开发环境引入
 }
 ```
 
-4. 完成配置后，就可以启动可视化搭建应用了：
+4. 完成配置后，**先启动本地项目开发环境**，然后再启动可视化搭建应用了：
 
 ```bash
+yarn dev # 启动本地项目开发环境，具体命令取决于各自的配置
 carverry start #or
 carverry #可以直接省掉start命令，因为默认命令就是start
 ```
