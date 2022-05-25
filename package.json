@@ -10,7 +10,7 @@
   "scripts": {
     "cz": "git add . && git cz",
     "changelog": "lerna version --conventional-commits",
-    "pub": "lerna publish --no-private"
+    "pub": "lerna publish --no-private --registry https://registry.npmjs.org/"
   },
   "license": "MIT",
   "devDependencies": {
