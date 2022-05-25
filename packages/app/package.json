@@ -13,7 +13,8 @@
     "lint:ts": "vue-tsc --noEmit",
     "preview": "vite preview",
     "autofix": "eslint ./src --ext .ts --ext .vue --fix",
-    "lint": "eslint ./src --ext .ts --ext .vue"
+    "lint": "eslint ./src --ext .ts --ext .vue",
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.3",
