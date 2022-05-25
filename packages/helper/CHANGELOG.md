@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/xxf1996/carverry/compare/@carverry/helper@0.1.0...@carverry/helper@0.2.0) (2022-05-25)
+
+
+### Features
+
+* **helper:** 优化引导条和拖拽命中样式效果 ([fa5d969](https://github.com/xxf1996/carverry/commit/fa5d9691aa19bca761a761a271f21f9e336bcff3))
+
+
+
+
+
 # 0.1.0 (2022-05-17)
 
 

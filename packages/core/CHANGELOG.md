@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/xxf1996/carverry/compare/@carverry/core@0.2.0...@carverry/core@0.3.0) (2022-05-25)
+
+
+### Bug Fixes
+
+* **core:** 去掉测试物料包 ([52b8dc3](https://github.com/xxf1996/carverry/commit/52b8dc30f3390eabf2fa7bc8e18ebb94951f627e))
+* **core:** 拖拽插入组件位置不对 ([0f1f9c9](https://github.com/xxf1996/carverry/commit/0f1f9c920c27a67ca677db9e001c357e98b9f15b)), closes [#2](https://github.com/xxf1996/carverry/issues/2)
+
+
+### Features
+
+* **app:** 插入模板并添加到配置中 ([489bc60](https://github.com/xxf1996/carverry/commit/489bc60ef185550abe1c8d0a133144dc483bcdb0)), closes [#10](https://github.com/xxf1996/carverry/issues/10)
+* **app:** 调整组件信息展示和编辑相关UI ([0578802](https://github.com/xxf1996/carverry/commit/0578802699b55368e51785aa493c4d654a1d83ff))
+* **core:** 优化启动服务的调用命令 ([70ca23c](https://github.com/xxf1996/carverry/commit/70ca23ceabc29fc26009e385213d8dbbf2cf5908)), closes [#18](https://github.com/xxf1996/carverry/issues/18)
+* **core:** 优化源码入口路径(缩短) ([cc2aa18](https://github.com/xxf1996/carverry/commit/cc2aa1827631da7ac5338b8b5f29871bf12267c8))
+* **core:** 初始化命令增加自动安装@carverry/helper包相关逻辑 ([a54d241](https://github.com/xxf1996/carverry/commit/a54d24126ea12d17224763c6ccfedd5bb2b77ba5)), closes [#15](https://github.com/xxf1996/carverry/issues/15)
+* **core:** 调整空白页面的样式 ([0d39b1c](https://github.com/xxf1996/carverry/commit/0d39b1ce1694f0a697ab8d8531de195323555a38))
+* **core:** 预览源码替换@carverry/helper相关引入 ([6ca1f06](https://github.com/xxf1996/carverry/commit/6ca1f06567234a9e777e7b1426a7b45fbcfbadc4))
+* 支持安装物料包 ([9fcc7c9](https://github.com/xxf1996/carverry/commit/9fcc7c9f345e1a0953e0babd67fa64461924802c)), closes [#13](https://github.com/xxf1996/carverry/issues/13)
+* 新增模板相关接口&调试接口 ([ed682ec](https://github.com/xxf1996/carverry/commit/ed682ec2bd5b86a037fa7a3149ff079bdbea245e))
+
+
+
+
+
 # 0.2.0 (2022-04-28)
 
 
