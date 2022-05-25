@@ -55,7 +55,7 @@ export const curMeta = computed<Nullable<Required<ComponentMeta>>>(() => {
   return componentMap.value[curOption.value.path];
 });
 /** 操作的block配置 */
-export const blockOption = useLocalStorage<ComponentOption>('carverry_blockOption', {
+export const blockOption = ref<ComponentOption>({
   path: '', // 空的path代表是一个空的block，初始状态
   key: '',
   props: {},
