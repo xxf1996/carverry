@@ -77,3 +77,9 @@ carverry #可以直接省掉start命令，因为默认命令就是start
 ## 物料包
 
 - [`@carverry/demo-material`](https://github.com/xxf1996/carverry-material) ![img](https://img.shields.io/npm/v/@carverry/demo-material)：做示范的物料包
+
+
+
+## 注意事项
+
+- `node`版本需要`16+`
