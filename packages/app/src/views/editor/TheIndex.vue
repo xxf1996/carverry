@@ -214,6 +214,7 @@
           width="360px"
         >
           <component-bread />
+          <option-tree />
           <!-- 只读模式下不需要编辑相关的功能 -->
           <template v-if="!readOnly">
             <template-meta />
@@ -246,6 +247,7 @@ import BlockForm from './BlockForm.vue';
 import TemplateForm from './TemplateForm.vue';
 import TemplateDisplayer from './TemplateDisplayer.vue';
 import ComponentBread from './ComponentBread.vue';
+import OptionTree from './option-tree/OptionTree.vue';
 import AppLogo from './AppLogo.vue';
 
 /** 源码生成中 */

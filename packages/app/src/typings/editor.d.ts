@@ -13,12 +13,15 @@ export interface SlotAppendEvent {
   before?: number;
 }
 
+/** 目录叶节点，即组件本身 */
 export interface ComponentLeafNode {
   /** 组件路径，也是唯一标识符 */
   path: string;
 }
 
+/** 实际上是组件库的路径树 */
 export interface ComponentTree {
+  /** key为路径，value为子级 */
   children: Record<string, ComponentTree | ComponentLeafNode>;
 }
 
@@ -55,6 +58,18 @@ export interface ComponentOption {
   })[]>;
   /** TODO：绑定ref */
   ref?: ComponentDependence;
+}
+
+/** 配置树 */
+export interface OptionTree {
+  /** 节点名称 */
+  label: string;
+  /** 配置树结构中的标识 */
+  key: string;
+  /** 是否为slot */
+  isSlot: boolean;
+  /** 子级节点 */
+  children: OptionTree[];
 }
 
 export interface FileExportMember {
