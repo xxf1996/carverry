@@ -28,6 +28,8 @@ export const packages = ref<MaterialPackage[]>([]);
 export const curDragComponent = ref<Required<ComponentMeta>>();
 /** 当前编辑的配置节点key */
 export const curEditKey = ref<string>();
+/** 当前hover的配置节点key */
+export const curHoverKey = ref<string>();
 /** 当前进行操作的block名称 */
 export const curBlock = computed<string>(() => (router.currentRoute.value.query.block as string) || '');
 /** 当前进行拖拽的本地模板信息 */

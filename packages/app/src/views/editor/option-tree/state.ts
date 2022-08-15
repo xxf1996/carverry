@@ -5,6 +5,9 @@ import { blockOption, componentMap } from '../state';
 function componentToOptions(root: ComponentOption): OptionTree[] {
   const tree: OptionTree[] = [];
   const meta = componentMap.value[root.path];
+  if (!meta) {
+    return tree;
+  }
   const children: OptionTree[] = [];
   Object.entries(root.slots).forEach(([slotName, slotChildren]) => {
     children.push({

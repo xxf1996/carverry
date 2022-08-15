@@ -26,18 +26,20 @@
 </template>
 
 <script lang="ts" setup>
-import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey, pageBus, curDragTemplate } from './state';
-import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange, SocketHover } from '@carverry/core/typings/server';
+import { blockOption, curBlock, curDragComponent, curEditKey, dragging, getOptionByKey, updateOptionKey, pageBus, curDragTemplate, curHoverKey } from './state';
+import { SocketInit, SocketEvent, SocketDragover, SocketDrop, SocketConfigChange, SocketSlotChange, SocketHover, SocketHoverByKey } from '@carverry/core/typings/server';
 import { ComponentOption  } from '@/typings/editor';
 import type { ComponentDoc } from 'vue-docgen-api';
 import { onMounted, ref, watch } from 'vue';
 import { useThrottleFn } from '@vueuse/core';
+import { hoverBus } from './event-bus';
 
 const previewUrl = 'http://localhost:3000/carverry-preview';
 const ws = new WebSocket('ws://localhost:3366');
 const container = ref<HTMLDivElement>();
 const iframeRef = ref<HTMLIFrameElement>();
 const iframeLoading = ref(true);
+/** 是否显示当前hover的组件区域 */
 const showHover = ref(false);
 const hoverStyle = ref({
   width: '0px',
@@ -119,7 +121,9 @@ function slotChange(message: SocketSlotChange) {
   pageBus.emit('reload');
 }
 
+/** hover配置节点操作 */
 function hoverContainer(message: SocketHover) {
+  curHoverKey.value = message.carverryKey;
   if (message.width < 0 || !curBlock.value || !container.value) {
     showHover.value = false;
     return;
@@ -183,6 +187,17 @@ ws.onopen = () => {
     type: 'init',
     id: 'app',
   };
+  hoverBus.on(e => {
+    if (e !== 'hover' && !curHoverKey.value) {
+      return;
+    }
+    const hoverData: SocketHoverByKey = {
+      type: 'hoverByKey',
+      id: 'app',
+      carverryKey: curHoverKey.value,
+    }; // 通过key来触发节点hover（同步）
+    sendMessage(hoverData);
+  });
   sendMessage(data);
 };
 ws.onerror = (e) => {

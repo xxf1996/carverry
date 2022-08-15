@@ -76,6 +76,8 @@ export interface SocketSelected {
 export interface SocketHover {
   type: 'hover';
   id: SocketType;
+  /** 对应配置树中的key */
+  carverryKey?: string;
   x: number;
   y: number;
   /** 为负值则代表没有hover命中 */
@@ -83,8 +85,16 @@ export interface SocketHover {
   height: number;
 }
 
+/** 通过配置树的key来同步hover对应的配置节点 */
+export interface SocketHoverByKey {
+  type: 'hoverByKey';
+  id: SocketType;
+  /** 配置树中的key */
+  carverryKey: string;
+}
+
 /** websocket通信事件 */
-export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange | SocketSelected | SocketHover;
+export type SocketEvent = SocketInit | SocketDragover | SocketDrop | SocketConfigChange | SocketSlotChange | SocketSelected | SocketHover | SocketHoverByKey;
 
 export interface PreviewParams {
   block: string;

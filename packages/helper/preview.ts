@@ -181,6 +181,7 @@ function initMouseEvent() {
       ws.send(JSON.stringify(data));
       return;
     }
+    data.carverryKey = hitContainer.dataset.carverryKey;
     if (hitContainer === prevHovered) {
       return;
     }
@@ -241,7 +242,7 @@ function initSocket() {
   };
   ws.onmessage = (e) => {
     const message: SocketEvent = JSON.parse(e.data);
-    // console.log(message);
+    console.log(message);
     // 自行触发drag相关事件（从父级窗口进行参数传递）
     switch (message.type) {
       case 'dragover':
@@ -278,6 +279,23 @@ function initSocket() {
         }
         target = null;
         hideBar();
+        break;
+      case 'hoverByKey':
+        const targetNode = document.body.querySelector(`[data-carverry-key="${message.carverryKey}"]`) as HTMLElement;
+        if (!targetNode) {
+          break;
+        }
+        const rect = targetNode.getBoundingClientRect();
+        const data: SocketHover = {
+          type: 'hover',
+          id: 'target',
+          carverryKey: message.carverryKey,
+          x: rect.x,
+          y: rect.y,
+          width: rect.width,
+          height: rect.height,
+        }; // 伪造对应配置节点的hover
+        ws.send(JSON.stringify(data));
         break;
       default:
         break;
