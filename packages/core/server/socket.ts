@@ -21,13 +21,16 @@ function handleEvent(message: string, ws: WebSocket) {
         target = ws;
       }
       break;
+    // 从app发向target的事件
     case 'dragover':
     case 'drop':
+    case 'hoverByKey':
       if (data.id === 'target' || !target) {
         return;
       }
       target.send(message);
       break;
+    // 从target发向app的事件
     case 'config-change':
     case 'slot-change':
     case 'selected':

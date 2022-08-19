@@ -242,7 +242,6 @@ function initSocket() {
   };
   ws.onmessage = (e) => {
     const message: SocketEvent = JSON.parse(e.data);
-    console.log(message);
     // 自行触发drag相关事件（从父级窗口进行参数传递）
     switch (message.type) {
       case 'dragover':
@@ -280,11 +279,12 @@ function initSocket() {
         target = null;
         hideBar();
         break;
-      case 'hoverByKey':
+      case 'hoverByKey': // 从配置树节点获取真实预览节点的信息，伪造hover事件，进行hover同步
         const targetNode = document.body.querySelector(`[data-carverry-key="${message.carverryKey}"]`) as HTMLElement;
         if (!targetNode) {
           break;
         }
+        targetNode.scrollIntoView(); // 将目标节点滚动至可视区域
         const rect = targetNode.getBoundingClientRect();
         const data: SocketHover = {
           type: 'hover',

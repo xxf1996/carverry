@@ -37,7 +37,6 @@ import { optionTree } from './state';
 import { curHoverKey } from '../state';
 import { hoverBus } from '../event-bus';
 
-// TODO: 同步节点hover状态
 // TODO: 更好的分辨节点类型（渲染，UI）
 // TODO: 在配置树内进行插入操作，且同步插入交互占位显示
 
