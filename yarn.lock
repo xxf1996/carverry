@@ -1205,6 +1205,16 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
+"@ts-morph/common@^0.16.0", "@ts-morph/common@~0.16.0":
+  version "0.16.0"
+  resolved "https://registry.npmmirror.com/@ts-morph/common/-/common-0.16.0.tgz#57e27d4b3fd65a4cd72cb36679ed08acb40fa3ba"
+  integrity sha512-SgJpzkTgZKLKqQniCjLaE3c2L2sdL7UShvmTmPBejAKd2OKV/yfMpQ2IWpAuA+VY5wy7PkSUaEObIqEK6afFuw==
+  dependencies:
+    fast-glob "^3.2.11"
+    minimatch "^5.1.0"
+    mkdirp "^1.0.4"
+    path-browserify "^1.0.1"
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.8"
   resolved "https://registry.npmmirror.com/@tsconfig/node10/-/node10-1.0.8.tgz#c1e4e80d6f964fbecb3359c43bd48b40f7cadad9"
@@ -1486,6 +1496,16 @@
     estree-walker "^2.0.2"
     source-map "^0.6.1"
 
+"@vue/compiler-core@3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/compiler-core/-/compiler-core-3.2.37.tgz#b3c42e04c0e0f2c496ff1784e543fbefe91e215a"
+  integrity sha512-81KhEjo7YAOh0vQJoSmAD68wLfYqJvoiD4ulyedzF+OEk/bk6/hx3fTNVfuzugIIaTrOx4PGx6pAiBRe5e9Zmg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/shared" "3.2.37"
+    estree-walker "^2.0.2"
+    source-map "^0.6.1"
+
 "@vue/compiler-dom@3.2.31", "@vue/compiler-dom@^3.2.0", "@vue/compiler-dom@^3.2.21":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/compiler-dom/-/compiler-dom-3.2.31.tgz#b1b7dfad55c96c8cc2b919cd7eb5fd7e4ddbf00e"
@@ -1493,6 +1513,14 @@
   dependencies:
     "@vue/compiler-core" "3.2.31"
     "@vue/shared" "3.2.31"
+
+"@vue/compiler-dom@3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/compiler-dom/-/compiler-dom-3.2.37.tgz#10d2427a789e7c707c872da9d678c82a0c6582b5"
+  integrity sha512-yxJLH167fucHKxaqXpYk7x8z7mMEnXOw3G2q62FTkmsvNxu4FQSu5+3UMb+L7fjKa26DEzhrmCxAgFLLIzVfqQ==
+  dependencies:
+    "@vue/compiler-core" "3.2.37"
+    "@vue/shared" "3.2.37"
 
 "@vue/compiler-sfc@3.2.31", "@vue/compiler-sfc@^3.2.0":
   version "3.2.31"
@@ -1510,6 +1538,22 @@
     postcss "^8.1.10"
     source-map "^0.6.1"
 
+"@vue/compiler-sfc@^3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-3.2.37.tgz#3103af3da2f40286edcd85ea495dcb35bc7f5ff4"
+  integrity sha512-+7i/2+9LYlpqDv+KTtWhOZH+pa8/HnX/905MdVmAcI/mPQOBwkHHIzrsEsucyOIZQYMkXUiTkmZq5am/NyXKkg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/compiler-core" "3.2.37"
+    "@vue/compiler-dom" "3.2.37"
+    "@vue/compiler-ssr" "3.2.37"
+    "@vue/reactivity-transform" "3.2.37"
+    "@vue/shared" "3.2.37"
+    estree-walker "^2.0.2"
+    magic-string "^0.25.7"
+    postcss "^8.1.10"
+    source-map "^0.6.1"
+
 "@vue/compiler-ssr@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/compiler-ssr/-/compiler-ssr-3.2.31.tgz#4fa00f486c9c4580b40a4177871ebbd650ecb99c"
@@ -1517,6 +1561,14 @@
   dependencies:
     "@vue/compiler-dom" "3.2.31"
     "@vue/shared" "3.2.31"
+
+"@vue/compiler-ssr@3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/compiler-ssr/-/compiler-ssr-3.2.37.tgz#4899d19f3a5fafd61524a9d1aee8eb0505313cff"
+  integrity sha512-7mQJD7HdXxQjktmsWp/J67lThEIcxLemz1Vb5I6rYJHR5vI+lON3nPGOH3ubmbvYGt8xEUaAr1j7/tIFWiEOqw==
+  dependencies:
+    "@vue/compiler-dom" "3.2.37"
+    "@vue/shared" "3.2.37"
 
 "@vue/devtools-api@^6.0.0":
   version "6.0.12"
@@ -1541,6 +1593,17 @@
     "@babel/parser" "^7.16.4"
     "@vue/compiler-core" "3.2.31"
     "@vue/shared" "3.2.31"
+    estree-walker "^2.0.2"
+    magic-string "^0.25.7"
+
+"@vue/reactivity-transform@3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/reactivity-transform/-/reactivity-transform-3.2.37.tgz#0caa47c4344df4ae59f5a05dde2a8758829f8eca"
+  integrity sha512-IWopkKEb+8qpu/1eMKVeXrK0NLw9HicGviJzhJDEyfxTR9e1WtpnnbYkJWurX6WwoFP0sz10xQg8yL8lgskAZg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/compiler-core" "3.2.37"
+    "@vue/shared" "3.2.37"
     estree-walker "^2.0.2"
     magic-string "^0.25.7"
 
@@ -1580,6 +1643,11 @@
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/shared/-/shared-3.2.31.tgz#c90de7126d833dcd3a4c7534d534be2fb41faa4e"
   integrity sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==
+
+"@vue/shared@3.2.37":
+  version "3.2.37"
+  resolved "https://registry.npmmirror.com/@vue/shared/-/shared-3.2.37.tgz#8e6adc3f2759af52f0e85863dfb0b711ecc5c702"
+  integrity sha512-4rSJemR2NQIo9Klm1vabqWjD8rs/ZaJSzMxkMNeJS6lHiUjjUeYFbooN19NgFjztubEKh3WlZUeOLVdbbUWHsw==
 
 "@vueuse/core@^7.6.2":
   version "7.7.1"
@@ -1971,6 +2039,13 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
+brace-expansion@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmmirror.com/brace-expansion/-/brace-expansion-2.0.1.tgz#1edc459e0f0c548486ecf9fc99f2221364b9a0ae"
+  integrity sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==
+  dependencies:
+    balanced-match "^1.0.0"
+
 braces@^3.0.1, braces@~3.0.2:
   version "3.0.2"
   resolved "https://registry.npmmirror.com/braces/-/braces-3.0.2.tgz#3454e1a462ee8d599e236df336cd9ea4f8afe107"
@@ -2225,6 +2300,11 @@ co-body@^6.0.0:
     qs "^6.5.2"
     raw-body "^2.3.3"
     type-is "^1.6.16"
+
+code-block-writer@^11.0.0:
+  version "11.0.3"
+  resolved "https://registry.npmmirror.com/code-block-writer/-/code-block-writer-11.0.3.tgz#9eec2993edfb79bfae845fbc093758c0a0b73b76"
+  integrity sha512-NiujjUFB4SwScJq2bwbYUtXbZhBSlY6vYzm++3Q6oC+U+injTqfPYFK8wS9COOmb2lueqp0ZRB4nK1VYeHgNyw==
 
 code-point-at@^1.0.0:
   version "1.1.0"
@@ -5043,6 +5123,13 @@ minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
+minimatch@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmmirror.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
+  integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
+  dependencies:
+    brace-expansion "^2.0.1"
+
 minimist-options@4.1.0:
   version "4.1.0"
   resolved "https://registry.npmmirror.com/minimist-options/-/minimist-options-4.1.0.tgz#c0655713c53a8a2ebd77ffa247d342c40f010619"
@@ -5726,6 +5813,11 @@ parse-url@^6.0.0:
     normalize-url "^6.1.0"
     parse-path "^4.0.0"
     protocols "^1.4.0"
+
+path-browserify@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/path-browserify/-/path-browserify-1.0.1.tgz#d98454a9c3753d5790860f16f68867b9e46be1fd"
+  integrity sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==
 
 path-exists@^3.0.0:
   version "3.0.0"
@@ -6945,6 +7037,14 @@ ts-map@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmmirror.com/ts-map/-/ts-map-1.0.3.tgz#1c4d218dec813d2103b7e04e4bcf348e1471c1ff"
   integrity sha512-vDWbsl26LIcPGmDpoVzjEP6+hvHZkBkLW7JpvwbCv/5IYPJlsbzCVXY3wsCeAxAUeTclNOUZxnLdGh3VBD/J6w==
+
+ts-morph@^15.1.0:
+  version "15.1.0"
+  resolved "https://registry.npmmirror.com/ts-morph/-/ts-morph-15.1.0.tgz#53deea5296d967ff6eba8f15f99d378aa7074a4e"
+  integrity sha512-RBsGE2sDzUXFTnv8Ba22QfeuKbgvAGJFuTN7HfmIRUkgT/NaVLfDM/8OFm2NlFkGlWEXdpW5OaFIp1jvqdDuOg==
+  dependencies:
+    "@ts-morph/common" "~0.16.0"
+    code-block-writer "^11.0.0"
 
 ts-node@^10.5.0, ts-node@^10.6.0:
   version "10.7.0"

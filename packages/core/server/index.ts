@@ -7,12 +7,14 @@ import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updateP
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
 import { installPackage } from '../utils/shell.js';
+import { langTest } from './language.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
 const http = Http();
 const components = Router();
 const templates = Router();
+const language = Router();
 
 http.use(cors()); // 跨域支持
 
@@ -22,6 +24,9 @@ http
 http
   .route('/templates')
   .use(templates);
+http
+  .route('/language')
+  .use(language);
 
 http
   .get('/context')
@@ -164,6 +169,13 @@ templates
     const info: TemplateInfo = JSON.parse(req.body.config);
     await addTemplate(info);
     return Response.text('ok');
+  });
+
+language
+  .get('/test')
+  .use(async () => {
+    const data = await langTest();
+    return Response.json(data);
   });
 
 http.listen(3344);
