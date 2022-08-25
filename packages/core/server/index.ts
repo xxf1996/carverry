@@ -7,7 +7,7 @@ import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updateP
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
 import { installPackage } from '../utils/shell.js';
-import { langTest } from './language.js';
+import { getTsExports, getVueProps, langTest } from './language.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
@@ -176,6 +176,18 @@ language
   .use(async () => {
     const data = await langTest();
     return Response.json(data);
+  });
+language
+  .get('/ts?<filePath:string>')
+  .use(async (req) => {
+    const res = await getTsExports(req.query.filePath);
+    return Response.json(res || {});
+  });
+language
+  .get('/vue-props?<filePath:string>')
+  .use(async (req) => {
+    const res = await getVueProps(req.query.filePath);
+    return Response.json(res);
   });
 
 http.listen(3344);

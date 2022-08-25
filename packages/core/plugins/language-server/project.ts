@@ -7,6 +7,9 @@ import { existsSync, readFileSync } from 'fs';
 
 // const projectRoot = '/Users/xuefengxie/Desktop/project/yimonitor-frontend';
 
+/** 可以获取到嵌套泛型对象类型的最直接表达：https://stackoverflow.com/questions/57683303/how-can-i-see-the-full-expanded-contract-of-a-typescript-type/57683652#57683652 */
+const expandType = 'type CarverryExpand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;';
+
 /** 通过自定义fileSystem来实现对非ts源码生成对应的ts结构的目的 */
 class CustomFS extends RealFileSystemHost {
   constructor(private projectRoot: string) {
@@ -42,7 +45,21 @@ class CustomFS extends RealFileSystemHost {
         id: realPath,
       });
 
-      return script.content;
+      let content = script.content;
+      const componentOption = content.match(/defineComponent\((.+)\)/s);
+
+      /**
+       * 通过截取defineComponent的option对象字面量，方便后续进一步推断出精准的props type；
+       */
+      if (componentOption && componentOption.length > 1) {
+        const option = componentOption[1];
+        const extraInfo = `${expandType}\nconst __carverryComponentOption = ${option};\ntype CarverryComponentProps = CarverryExpand<ExtractPropTypes<(typeof __carverryComponentOption)['props']>>;`;
+        content = content.replace(/(export default.+defineComponent\(.+\))/s, `${extraInfo}\n$1`);
+        content = `import { ExtractPropTypes } from 'vue';\n${content}`;
+        // content = content.replace(/defineComponent\(.+\)/s, 'defineComponent(__carverryComponentOption)');
+      }
+
+      return content;
     }
     return originContent;
   }
