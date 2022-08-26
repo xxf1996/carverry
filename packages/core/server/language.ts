@@ -2,7 +2,7 @@ import { Nullable } from '@carverry/app/src/typings/common';
 import type { Project } from 'ts-morph';
 import { getAliasType, getExportedMap } from '../plugins/language-server/common.js';
 import { createVueTSProject } from '../plugins/language-server/project.js';
-import { getVueFilePropsType } from '../plugins/language-server/vue.js';
+import { getPropMemberNode, getVueFilePropsNode } from '../plugins/language-server/vue.js';
 import { getContext } from './project.js';
 
 let project: Nullable<Project> = null;
@@ -20,7 +20,7 @@ async function getLangProject() {
 
 export async function langTest() {
   const langProject = await getLangProject();
-  const prop = getVueFilePropsType(langProject, 'MultiChart.vue.ts');
+  const prop = getPropMemberNode(langProject, 'MultiChart.vue.ts', 'data');
   if (prop) {
     return getAliasType(langProject, prop);
   }
@@ -52,7 +52,7 @@ export async function getTsExports(filePath: string) {
  */
 export async function getVueProps(filePath: string) {
   const langProject = await getLangProject();
-  const props = getVueFilePropsType(langProject, filePath);
+  const props = getVueFilePropsNode(langProject, filePath);
 
   return props ? getAliasType(langProject, props) : '{}';
 }

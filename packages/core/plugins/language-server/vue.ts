@@ -85,12 +85,12 @@ function getPropsType(assignment: ExportAssignment, ast: SourceFile) {
 }
 
 /**
- * 从指定vue文件中获取对应的props类型
+ * 从指定vue文件中获取对应的props节点
  * @param project 编译上下文
  * @param filePath 文件路径
  * @returns
  */
-export function getVueFilePropsType(project: Project, filePath: string) {
+export function getVueFilePropsNode(project: Project, filePath: string) {
   const ast = project.getSourceFile(getHostPath(filePath));
   if (!ast) {
     return null;
@@ -102,4 +102,34 @@ export function getVueFilePropsType(project: Project, filePath: string) {
     return null;
   }
   return getPropsType(defineComponent, ast);
+}
+
+/**
+ * 获取vue props指定prop属性节点
+ * @param project 项目上下文
+ * @param filePath vue文件路径
+ * @param prop 指定prop名称
+ * @returns 
+ */
+export function getPropMemberNode(project: Project, filePath: string, prop: string) {
+  const propsType = getVueFilePropsNode(project, filePath);
+
+  if (!propsType) {
+    return null;
+  }
+
+  const propType = propsType.getType().getProperties().find((symbol) => symbol.getName() === prop); // 判断props对象类型中是不是存在指定prop
+
+  if (!propType) {
+    return null;
+  }
+
+  // 构造type声明，相当于在源码里写入'type CarverryTargetProp = CarverryComponentProps[prop]'
+  // 这样可以直接利用CarverryTargetProp来获取到最终的属性类型（不然就是原始的声明symbol对应的类型）
+  const p = propsType.getSourceFile().addTypeAlias({
+    name: 'CarverryTargetProp',
+    type: `CarverryComponentProps['${prop}']`,
+  });
+
+  return p;
 }

@@ -1,14 +1,31 @@
-import { Node, Project, ts } from 'ts-morph';
+/* eslint-disable @typescript-eslint/ban-types */
+import { Node, Project, ts, Symbol } from 'ts-morph';
+
+/**
+ * 直接从symbol节点找到其对应的类型节点
+ * @param node symbol节点
+ * @returns 
+ */
+function getSymbolType(node: Symbol) {
+  const declarations = node.getDeclarations();
+
+  if (declarations.length === 0) { // 确保有类型声明
+    return node.getDeclaredType();
+  }
+
+  return declarations[0].getType();
+}
 
 /**
  * 获取某个AST节点的完整类型描述
  * @param project 项目上下文
  * @param node AST节点
  */
-export function getAliasType(project: Project, node: Node<ts.Node>) {
+export function getAliasType(project: Project, node: Node<ts.Node> | Symbol) {
   const typeChecker = project.getTypeChecker();
+  const type = Node.isNode(node) ? node.getType() : getSymbolType(node);
   // ts.TypeFormatFlags.NoTruncation flag可以避免对类型描述进行省略（因为描述内容过多时，默认会用...省略部分内容）
-  return typeChecker.getTypeText(node.getType(), undefined, ts.TypeFormatFlags.InTypeAlias | ts.TypeFormatFlags.NoTruncation);
+  return typeChecker.getTypeText(type, undefined, ts.TypeFormatFlags.InTypeAlias | ts.TypeFormatFlags.NoTruncation);
 }
 
 /**
