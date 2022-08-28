@@ -1,6 +1,6 @@
 import { Nullable } from '@carverry/app/src/typings/common';
 import type { Project } from 'ts-morph';
-import { getAliasType, getExportedMap } from '../plugins/language-server/common.js';
+import { getAliasType, getExportedMap, getExportTypes } from '../plugins/language-server/common.js';
 import { createVueTSProject } from '../plugins/language-server/project.js';
 import { getPropMemberNode, getVueFilePropsNode } from '../plugins/language-server/vue.js';
 import { getContext } from './project.js';
@@ -63,6 +63,29 @@ export async function getVueProps(filePath: string) {
  * @param vuePath vue（组件）文件路径
  * @param prop prop key
  */
-export async function filterExportsByProp(tsPath: string, vuePath: string, prop: string) {
-  // TODO
+export async function filterExportsByProp(tsPath: string, vuePath: string, prop: string): Promise<string[]> {
+  const langProject = await getLangProject();
+  const exportTypes = getExportTypes(langProject, tsPath);
+  const propNode = getPropMemberNode(langProject, vuePath, prop);
+
+  if (!exportTypes) {
+    return [];
+  }
+
+  const keys = Array.from(exportTypes.keys());
+
+  if (!propNode) {
+    return keys;
+  }
+
+  const propType = propNode.getType();
+  const typeChecker = langProject.getTypeChecker();
+
+  return keys.filter((key) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const exportType = exportTypes.get(key)!;
+
+    // TODO: 解套ref类型
+    return typeChecker.compilerObject.isTypeAssignableTo(propType.compilerType, exportType.compilerType);
+  });
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Node, Project, ts, Symbol } from 'ts-morph';
+import { Node, Project, ts, Symbol, Type } from 'ts-morph';
 
 /**
  * 直接从symbol节点找到其对应的类型节点
@@ -40,6 +40,26 @@ export function getHostPath(filePath: string) {
   }
 
   return hostFilePath;
+}
+
+/**
+ * 获取ts的导出成员类型映射
+ * @param project 项目上下文
+ * @param filePath 文件路径
+ */
+export function getExportTypes(project: Project, filePath: string) {
+  const ast = project.getSourceFile(getHostPath(filePath));
+  if (!ast) {
+    return null;
+  }
+  const exportedMap = ast.getExportedDeclarations();
+  const res: Map<string, Type<ts.Type>> = new Map();
+
+  exportedMap.forEach((declarations, key) => {
+    res.set(key, declarations[0].getType());
+  });
+
+  return res;
 }
 
 /**
