@@ -1,6 +1,6 @@
 import { Nullable } from '@carverry/app/src/typings/common';
 import type { Project } from 'ts-morph';
-import { getAliasType, getExportedMap, getExportTypes } from '../plugins/language-server/common.js';
+import { getAliasType, getExportedMap, getHostPath } from '../plugins/language-server/common.js';
 import { createVueTSProject } from '../plugins/language-server/project.js';
 import { getPropMemberNode, getVueFilePropsNode } from '../plugins/language-server/vue.js';
 import { getContext } from './project.js';
@@ -65,14 +65,16 @@ export async function getVueProps(filePath: string) {
  */
 export async function filterExportsByProp(tsPath: string, vuePath: string, prop: string): Promise<string[]> {
   const langProject = await getLangProject();
-  const exportTypes = getExportTypes(langProject, tsPath);
+  const exportedMap = getExportedMap(langProject, tsPath);
   const propNode = getPropMemberNode(langProject, vuePath, prop);
+  const tsAst = langProject.getSourceFile(getHostPath(tsPath));
 
-  if (!exportTypes) {
+  if (!exportedMap || !tsAst) {
     return [];
   }
 
-  const keys = Array.from(exportTypes.keys());
+  /** 导出成员标识符列表 */
+  const keys = Array.from(exportedMap.keys());
 
   if (!propNode) {
     return keys;
@@ -82,10 +84,18 @@ export async function filterExportsByProp(tsPath: string, vuePath: string, prop:
   const typeChecker = langProject.getTypeChecker();
 
   return keys.filter((key) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const exportType = exportTypes.get(key)!;
+    // 使用vue自带的UnwrapRef泛型可以直接解套ref/computedRef类型，获取里面的数据类型
+    // import('vue')可直接在type alias声明中导入模块，避免需要对AST节点或源码直接插入import节点
+    const aliasType = tsAst.addTypeAlias({
+      name: `CarverryAliasType${key}`,
+      type: `import('vue').UnwrapRef<typeof ${key}>`,
+    });
+    const aliasTypeNode = aliasType.getType();
+    /** 类型兼容性，即检测当前导出成员类型是否兼容prop类型 */
+    const typeAssignable: boolean = typeChecker.compilerObject.isTypeAssignableTo(propType.compilerType, aliasTypeNode.compilerType); // isTypeAssignableTo是ts complier API暴露的一个内部方法
 
-    // TODO: 解套ref类型
-    return typeChecker.compilerObject.isTypeAssignableTo(propType.compilerType, exportType.compilerType);
+    aliasType.remove(); // 用完后清除alias声明
+
+    return typeAssignable;
   });
 }
