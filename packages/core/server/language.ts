@@ -1,9 +1,13 @@
 import { Nullable } from '@carverry/app/src/typings/common';
 import type { Project } from 'ts-morph';
-import { getAliasType, getExportedMap, getHostPath } from '../plugins/language-server/common.js';
+import { getAliasType, getExportedMap, getExportTypes, getHostPath } from '../plugins/language-server/common.js';
 import { createVueTSProject } from '../plugins/language-server/project.js';
 import { getPropMemberNode, getVueFilePropsNode } from '../plugins/language-server/vue.js';
+import { getRelativePath, globAsync } from '../utils/file.js';
 import { getContext } from './project.js';
+import { resolve } from 'path';
+import { getFileTree } from '../plugins/file-meta.js';
+import { FileExportMemberV2, FileInfoV2 } from '@carverry/app/src/typings/editor';
 
 let project: Nullable<Project> = null;
 let needUpdate = true;
@@ -58,6 +62,22 @@ export async function getVueProps(filePath: string) {
 }
 
 /**
+ * 获取vue文件单个prop类型
+ * @param filePath vue文件路径
+ * @param prop prop name
+ */
+export async function getVuePropType(filePath: string, prop: string) {
+  const langProject = await getLangProject();
+  const propNode = getPropMemberNode(langProject, filePath, prop);
+
+  if (!propNode) {
+    return 'unknown';
+  }
+
+  return getAliasType(langProject, propNode, true);
+}
+
+/**
  * 根据prop过滤出指定ts文件兼容该prop类型的导出成员
  * @param tsPath ts文件路径
  * @param vuePath vue（组件）文件路径
@@ -98,4 +118,39 @@ export async function filterExportsByProp(tsPath: string, vuePath: string, prop:
 
     return typeAssignable;
   });
+}
+
+/**
+ * 获取项目中ts/js（即逻辑）文件的信息
+ * @returns
+ */
+export async function getTsFileInfo(): Promise<FileInfoV2> {
+  const context = await getContext();
+  // 忽略源码输出目录里面的文件
+  const res = await globAsync(resolve(context.root, context.sourceDir, '**/*.@(ts|js)'), resolve(context.root, context.pageOutDir, '**'));
+  const files = res.filter((item) => !/\.d\.ts$/.test(item));
+  const fileMap: FileInfoV2['fileMap'] = {};
+  const fileTree = getFileTree(files, context.root);
+  const langProject = await getLangProject();
+
+  files.forEach((filePath) => {
+    const exportMap = getExportedMap(langProject, filePath);
+    if (!exportMap) {
+      return;
+    }
+    const map: Record<string, FileExportMemberV2> = {};
+    exportMap.forEach((type, key) => {
+      map[key] = {
+        name: key,
+        desc: '', // TODO: 从jsdoc中提取（https://ts-morph.com/details/documentation）
+        type,
+      };
+    });
+    fileMap[getRelativePath(context.root, filePath)] = map;
+  });
+
+  return {
+    fileMap,
+    fileTree,
+  };
 }

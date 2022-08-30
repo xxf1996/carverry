@@ -2,16 +2,17 @@ import { computed, ref } from 'vue';
 import { useLocalStorage, useEventBus, useRefHistory } from '@vueuse/core';
 import {
   ComponentInfo,
-  ComponentMeta, ComponentOption, FileInfo, MaterialPackage, TemplateInfo,
+  ComponentMeta, ComponentOption, FileInfoV2, MaterialPackage, TemplateInfo,
 } from '@/typings/editor';
 import { Nullable } from '@/typings/common';
 import { ProjectContext } from '@carverry/core/typings/context';
 import router from '@/router';
+import { getLogicFileInfo } from '@/api';
 
 export const pageBus = useEventBus<string>(Symbol('page'));
 /** 当前选中的组件配置 */
 export const curOption = ref<ComponentOption>();
-export const fileInfo = ref<FileInfo>({
+export const fileInfo = ref<FileInfoV2>({
   fileMap: {},
   fileTree: { children: {} },
 });
@@ -121,13 +122,7 @@ export function getOptionByKey(tree: ComponentOption, key: string): ComponentOpt
 }
 
 export async function updateFileInfo() {
-  // 获取当前项目逻辑文件信息
-  const data = await fetch('/editor-api/files', {
-    method: 'get',
-  }).then((res) => {
-    return res.json() as Promise<FileInfo>;
-  });
-  fileInfo.value = data;
+  fileInfo.value = await getLogicFileInfo();
 }
 
 export async function updateLocalComponents() {

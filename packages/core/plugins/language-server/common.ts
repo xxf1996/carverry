@@ -20,12 +20,17 @@ function getSymbolType(node: Symbol) {
  * 获取某个AST节点的完整类型描述
  * @param project 项目上下文
  * @param node AST节点
+ * @param truncation 是否截取过长的类型描述
  */
-export function getAliasType(project: Project, node: Node<ts.Node> | Symbol) {
+export function getAliasType(project: Project, node: Node<ts.Node> | Symbol, truncation = false) {
   const typeChecker = project.getTypeChecker();
   const type = Node.isNode(node) ? node.getType() : getSymbolType(node);
+  let formatFlag = ts.TypeFormatFlags.InTypeAlias;
+  if (!truncation) {
+    formatFlag |=  ts.TypeFormatFlags.NoTruncation;
+  }
   // ts.TypeFormatFlags.NoTruncation flag可以避免对类型描述进行省略（因为描述内容过多时，默认会用...省略部分内容）
-  return typeChecker.getTypeText(type, undefined, ts.TypeFormatFlags.InTypeAlias | ts.TypeFormatFlags.NoTruncation);
+  return typeChecker.getTypeText(type, undefined, formatFlag);
 }
 
 /**
@@ -77,7 +82,7 @@ export function getExportedMap(project: Project, filePath: string) {
   exportedMap.forEach((declarations, key) => {
     const types: string[] = [];
     declarations.forEach((declaration) => {
-      types.push(getAliasType(project, declaration));
+      types.push(getAliasType(project, declaration, true)); // 完整的类型描述过于的长，而且事实上也没必要
     });
     res.set(key, types.join(' | '));
   });

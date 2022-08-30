@@ -23,7 +23,12 @@
         :key="`${curEditKey}-${prop.name}`"
       >
         <div class="template-meta__prop">
-          <span class="template-meta__title">{{ prop.name }}</span>
+          <el-popover @show="updatePropType(prop.name)">
+            <template #reference>
+              <span class="template-meta__title">{{ prop.name }}</span>
+            </template>
+            <span>{{ propType }}</span>
+          </el-popover>
           <el-tooltip
             placement="right"
             :content="prop.description || '暂无描述'"
@@ -142,11 +147,13 @@ import { computed, nextTick, ref, watch } from 'vue';
 import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
 import { Warning } from '@element-plus/icons-vue';
+import { getPropType } from '@/api';
 
 const metaProps = computed(() => curMeta.value?.doc.props || []);
 const metaEvents = computed(() => curMeta.value?.doc.events || []);
 const metaSlots = computed(() => curMeta.value?.doc.slots || []);
 const skipState = ref(false);
+const propType = ref('');
 
 /**
  * 处理skip筛选状态
@@ -213,6 +220,13 @@ function checkMetaValid() {
       member: '',
     };
   }
+}
+
+async function updatePropType(prop: string) {
+  if (!curMeta.value) {
+    return;
+  }
+  propType.value = await getPropType(curMeta.value.path, prop);
 }
 
 watch(curOption, (val) => {

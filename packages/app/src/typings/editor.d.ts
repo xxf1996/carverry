@@ -78,6 +78,13 @@ export interface FileExportMember {
   type: 'function' | 'var';
 }
 
+export interface FileExportMemberV2 {
+  name: string;
+  desc: string;
+  /** 类型描述 */
+  type: string;
+}
+
 export interface FileLeafNode {
   fullPath: string;
 }
@@ -89,6 +96,11 @@ export interface FileTree {
 export interface FileInfo {
   fileTree: FileTree;
   fileMap: Record<string, Record<string, FileExportMember>>
+}
+
+export interface FileInfoV2 {
+  fileTree: FileTree;
+  fileMap: Record<string, Record<string, FileExportMemberV2>>;
 }
 
 /** 一个物料（组件）的配置信息 */

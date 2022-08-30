@@ -7,7 +7,7 @@ import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updateP
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
 import { installPackage } from '../utils/shell.js';
-import { filterExportsByProp, getTsExports, getVueProps, langTest } from './language.js';
+import { filterExportsByProp, getTsExports, getTsFileInfo, getVueProps, getVuePropType, langTest } from './language.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
@@ -195,6 +195,20 @@ language
     const { tsPath, vuePath, prop } = req.query;
     const res = await filterExportsByProp(tsPath, vuePath, prop);
     return Response.json(res);
+  });
+language
+  .get('/files')
+  .use(async () => {
+    const data = await getTsFileInfo();
+    return Response.json(data);
+  });
+language
+  .get('/vue-prop?<filePath:string>&<prop:string>')
+  .use(async (req) => {
+    const { filePath, prop } = req.query;
+    const type = await getVuePropType(filePath, prop);
+
+    return Response.text(type);
   });
 
 http.listen(3344);

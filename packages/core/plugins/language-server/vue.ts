@@ -112,7 +112,7 @@ export function getVueFilePropsNode(project: Project, filePath: string) {
  * @returns 
  */
 export function getPropMemberNode(project: Project, filePath: string, prop: string) {
-  const propsType = getVueFilePropsNode(project, filePath);
+  const propsType = getVueFilePropsNode(project, getHostPath(filePath));
 
   if (!propsType) {
     return null;

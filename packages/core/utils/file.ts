@@ -15,9 +15,12 @@ export function getDirname(relativePath: string): string {
   return dirname(fileURLToPath(relativePath));
 }
 
-export function globAsync(pattern: string): Promise<string[]> {
+export function globAsync(pattern: string, ignore?: string): Promise<string[]> {
+  const options = {
+    ignore,
+  };
   return new Promise((resolve, reject) => {
-    glob(pattern, (err, files) => {
+    glob(pattern, options, (err, files) => {
       if (err) {
         reject(err);
         return;

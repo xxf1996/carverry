@@ -118,7 +118,7 @@ async function tsFileInfo(path: string) {
  * 获取文件树
  * @param files 所有有效文件路径（相对路径，根目录就是项目目录）
  */
-function getFileTree(files: string[], rootDir: string) {
+export function getFileTree(files: string[], rootDir: string) {
   const root: FileTree = {
     children: {},
   };

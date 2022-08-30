@@ -68,7 +68,7 @@ import { CascaderOption, CascaderProps } from 'element-plus';
 import { computed } from 'vue';
 import { proxyProp } from '@/composition/props';
 import { fileInfo, recentPaths, updateRecentPaths } from './state';
-import { FileExportMember, FileLeafNode, FileTree } from '@/typings/editor';
+import { FileExportMemberV2, FileLeafNode, FileTree } from '@/typings/editor';
 import { Clock } from '@element-plus/icons-vue';
 
 function isLeaf(node: FileTree | FileLeafNode): node is FileLeafNode {
@@ -104,8 +104,8 @@ const props = defineProps<{
 }>();
 const casProps: CascaderProps = { emitPath: false };
 const treeOptions = computed(() => getTree(fileInfo.value.fileTree));
-const memberOptions = computed<FileExportMember[]>(() => {
-  let options: FileExportMember[] = [];
+const memberOptions = computed<FileExportMemberV2[]>(() => {
+  let options: FileExportMemberV2[] = [];
 
   if (props.file) {
     const members = fileInfo.value.fileMap[props.file];
