@@ -49,7 +49,10 @@
       >
         <p class="grid grid-cols-2 gap-2 m-1 leading-5">
           <span>{{ option.name }}</span>
-          <span class="text-neutral-50 text-right">{{ option.type }}</span>
+          <ts-type
+            class="text-right"
+            :code="option.type"
+          />
         </p>
         <p
           v-if="option.desc"

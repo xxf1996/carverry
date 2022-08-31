@@ -1,6 +1,6 @@
 import { Nullable } from '@carverry/app/src/typings/common';
 import type { Project } from 'ts-morph';
-import { getAliasType, getExportedMap, getExportTypes, getHostPath } from '../plugins/language-server/common.js';
+import { getAliasType, getExportedMap, getHostPath } from '../plugins/language-server/common.js';
 import { createVueTSProject } from '../plugins/language-server/project.js';
 import { getPropMemberNode, getVueFilePropsNode } from '../plugins/language-server/vue.js';
 import { getRelativePath, globAsync } from '../utils/file.js';
@@ -68,7 +68,9 @@ export async function getVueProps(filePath: string) {
  */
 export async function getVuePropType(filePath: string, prop: string) {
   const langProject = await getLangProject();
-  const propNode = getPropMemberNode(langProject, filePath, prop);
+  const context = await getContext();
+  // 拼接完整路径进行匹配，默认从客户端传来的是相对路径（相对于项目根目录）
+  const propNode = getPropMemberNode(langProject, resolve(context.root, filePath), prop);
 
   if (!propNode) {
     return 'unknown';

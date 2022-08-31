@@ -33,6 +33,8 @@ declare module 'vue' {
     ElTree: typeof import('element-plus/es')['ElTree']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    TsType: typeof import('./src/components/TsType.vue')['default']
+    TSType: typeof import('./src/components/TSType.vue')['default']
   }
 }
 

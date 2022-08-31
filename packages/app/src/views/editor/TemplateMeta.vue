@@ -23,11 +23,15 @@
         :key="`${curEditKey}-${prop.name}`"
       >
         <div class="template-meta__prop">
-          <el-popover @show="updatePropType(prop.name)">
+          <el-popover
+            placement="left"
+            :width="300"
+            @show="updatePropType(prop.name)"
+          >
             <template #reference>
-              <span class="template-meta__title">{{ prop.name }}</span>
+              <span class="template-meta__title underline underline-offset-2 underline-dark-50">{{ prop.name }}</span>
             </template>
-            <span>{{ propType }}</span>
+            <ts-type :code="propType" />
           </el-popover>
           <el-tooltip
             placement="right"
