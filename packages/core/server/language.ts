@@ -8,15 +8,17 @@ import { getContext } from './project.js';
 import { resolve } from 'path';
 import { getFileTree } from '../plugins/file-meta.js';
 import { FileExportMemberV2, FileInfoV2 } from '@carverry/app/src/typings/editor';
+import { success } from '../utils/tip.js';
 
 let project: Nullable<Project> = null;
 let needUpdate = true;
 
-async function getLangProject() {
+export async function getLangProject() {
   if (needUpdate || !project) {
     const context = await getContext();
     project = await createVueTSProject(context.root);
     needUpdate = false;
+    success('language server启动');
   }
 
   return project;

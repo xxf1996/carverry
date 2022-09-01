@@ -1,18 +1,19 @@
 import { WebSocketServer } from 'ws';
 import type { WebSocket } from 'ws';
 import { SocketEvent } from '../typings/server';
+import { success, info } from '../utils/tip.js';
 
 const wss = new WebSocketServer({
   port: 3366,
 }, () => {
-  console.log('wss启动成功');
+  success('wss启动成功');
 });
 let app: WebSocket | null = null;
 let target: WebSocket | null = null;
 
 function handleEvent(message: string, ws: WebSocket) {
   const data: SocketEvent = JSON.parse(message);
-  console.log(`收到来自【${data.id}】的信息：\n${JSON.stringify(data, null, 2)}`);
+  info(`收到来自【${data.id}】的信息：\n${JSON.stringify(data, null, 2)}`);
   switch (data.type) {
     case 'init':
       if (data.id === 'app') {

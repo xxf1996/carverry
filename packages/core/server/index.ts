@@ -7,7 +7,8 @@ import { addBlock, generateBlock, getBlockConfig, getBlocks, getContext, updateP
 import './socket.js';
 import { addTemplate, getTemplates } from '../plugins/template.js';
 import { installPackage } from '../utils/shell.js';
-import { filterExportsByProp, getTsExports, getTsFileInfo, getVueProps, getVuePropType, langTest } from './language.js';
+import { filterExportsByProp, getTsExports, getTsFileInfo, getVueProps, getVuePropType, langTest, getLangProject } from './language.js';
+import { success } from '../utils/tip.js';
 
 const { Http, Router, Response } = farrowHttp;
 const { cors } = farrowCors;
@@ -211,4 +212,7 @@ language
     return Response.text(type);
   });
 
-http.listen(3344);
+http.listen(3344, async () => {
+  success('dev server启动');
+  await getLangProject();
+});
