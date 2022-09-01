@@ -34,24 +34,28 @@
       :options="treeOptions"
       @change="changeFile"
     />
-    <!-- 文件变量选择 -->
+    <!-- 导出变量选择 -->
     <el-select
       v-model="proxyMember"
       size="small"
       filterable
       clearable
       placeholder="输入关键词或直接选择"
+      :loading="filterLoading"
+      @visible-change="filterExportMember"
     >
+      <!-- FIXME: loading完成后宽度闪动 -->
       <el-option
         v-for="option in memberOptions"
         :key="option.name"
         :value="option.name"
       >
-        <p class="grid grid-cols-2 gap-2 m-1 leading-5">
+        <p class="grid grid-cols-2 gap-2 m-1 items-center leading-5">
           <span>{{ option.name }}</span>
           <ts-type
             class="text-right"
             :code="option.type"
+            :max-width="200"
           />
         </p>
         <p
@@ -68,7 +72,7 @@
 <script lang="ts" setup>
 /* eslint-disable no-restricted-syntax */
 import { CascaderOption, CascaderProps } from 'element-plus';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { proxyProp } from '@/composition/props';
 import { fileInfo, recentPaths, updateRecentPaths } from './state';
 import { FileExportMemberV2, FileLeafNode, FileTree } from '@/typings/editor';
@@ -101,11 +105,22 @@ function getTree(node: FileTree): CascaderOption[] {
   return options;
 }
 
-const props = defineProps<{
+interface Props {
+  /** 文件路径 */
   file?: string;
+  /** 导出成员（标识符） */
   member?: string;
-}>();
+  /** 绑定类型 */
+  type: 'prop' | 'event'
+  /** 类型过滤函数 */
+  filter?: (tsPath: string) => Promise<string[]>
+}
+
+const props = defineProps<Props>();
 const casProps: CascaderProps = { emitPath: false };
+/** 满足当前类型的导出成员标识符 */
+const filteredKeys = ref<string[]>([]);
+const filterLoading = ref(false);
 const treeOptions = computed(() => getTree(fileInfo.value.fileTree));
 const memberOptions = computed<FileExportMemberV2[]>(() => {
   let options: FileExportMemberV2[] = [];
@@ -113,6 +128,11 @@ const memberOptions = computed<FileExportMemberV2[]>(() => {
   if (props.file) {
     const members = fileInfo.value.fileMap[props.file];
     options = Object.values(members);
+  }
+
+  // 过滤满足类型的导出成员
+  if (props.filter && filteredKeys.value.length > 0) {
+    options = options.filter((option) => filteredKeys.value.includes(option.name));
   }
 
   return options;
@@ -131,5 +151,18 @@ function changeFile(val: string) {
 function selectRecent(path: string) {
   proxyFile.value = path;
   changeFile(path);
+}
+
+/** 过滤兼容当前类型的成员 */
+async function filterExportMember(visible: boolean) {
+  if (!proxyFile.value || !props.filter || !visible) {
+    return;
+  }
+  filterLoading.value = true;
+  filteredKeys.value = [];
+  const keys = await props.filter(proxyFile.value).finally(() => {
+    filterLoading.value = false;
+  });
+  filteredKeys.value = keys;
 }
 </script>

@@ -191,7 +191,7 @@ language
     return Response.json(res);
   });
 language
-  .get('/filter?<tsPath:string>&<vuePath:string>&<prop:string>')
+  .get('/filter-prop?<tsPath:string>&<vuePath:string>&<prop:string>')
   .use(async (req) => {
     const { tsPath, vuePath, prop } = req.query;
     const res = await filterExportsByProp(tsPath, vuePath, prop);

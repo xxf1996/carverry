@@ -26,7 +26,6 @@ import { listProps } from '@/composition/props';
 import { MaterialItem } from '@/typings/editor';
 import Draggable from 'vuedraggable';
 import { curDragComponent } from './state';
-import { Warning } from '@element-plus/icons-vue';
 import ComponentItem from './ComponentItem.vue';
 
 const props = defineProps({

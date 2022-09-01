@@ -88,10 +88,13 @@ export async function getVuePropType(filePath: string, prop: string) {
  * @param prop prop key
  */
 export async function filterExportsByProp(tsPath: string, vuePath: string, prop: string): Promise<string[]> {
+  const context = await getContext();
   const langProject = await getLangProject();
-  const exportedMap = getExportedMap(langProject, tsPath);
-  const propNode = getPropMemberNode(langProject, vuePath, prop);
-  const tsAst = langProject.getSourceFile(getHostPath(tsPath));
+  const tsFullPath = resolve(context.root, tsPath);
+  const vueFullPath = resolve(context.root, vuePath);
+  const exportedMap = getExportedMap(langProject, tsFullPath);
+  const propNode = getPropMemberNode(langProject, vueFullPath, prop);
+  const tsAst = langProject.getSourceFile(getHostPath(tsFullPath));
 
   if (!exportedMap || !tsAst) {
     return [];

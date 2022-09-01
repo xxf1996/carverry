@@ -29,3 +29,20 @@ export async function getPropType(filePath: string, prop: string) {
 
   return data;
 }
+
+/**
+ * 根据组件prop类型对指定逻辑文件进行类型过滤
+ * @param tsPath 逻辑文件path
+ * @param vuePath （本地）组件文件path
+ * @param prop 组件prop
+ * @returns 
+ */
+export async function filterByProp(tsPath: string, vuePath: string, prop: string) {
+  const data = await fetch(`${BASE_URL}/language/filter-prop?tsPath=${tsPath}&vuePath=${vuePath}&prop=${prop}`, {
+    method: 'get',
+  }).then((res) => {
+    return res.json() as Promise<string[]>;
+  });
+
+  return data;
+}

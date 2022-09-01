@@ -1,5 +1,19 @@
 <template>
   <div v-if="curOption">
+    <div class="editor-header flex items-center mb-2">
+      <el-tooltip
+        content="使用精准类型匹配后，可使用的文件导出成员的类型必须兼容指定prop/event等标识符的类型"
+        placement="left"
+        :show-after="200"
+      >
+        <span>精准类型匹配</span>
+      </el-tooltip>
+      <el-switch
+        v-model="typeFiltered"
+        class="ml-auto"
+        size="small"
+      />
+    </div>
     <div class="editor-header">
       Ref 绑定
     </div>
@@ -8,6 +22,7 @@
         v-if="curOption.ref"
         v-model:file="curOption.ref.path"
         v-model:member="curOption.ref.member"
+        type="prop"
       />
     </div>
     <div
@@ -31,7 +46,10 @@
             <template #reference>
               <span class="template-meta__title underline underline-offset-2 underline-dark-50">{{ prop.name }}</span>
             </template>
-            <ts-type :code="propType" />
+            <ts-type
+              :code="propType"
+              auto-line
+            />
           </el-popover>
           <el-tooltip
             placement="right"
@@ -59,6 +77,8 @@
           v-model:file="curOption.props[prop.name].path"
           v-model:member="curOption.props[prop.name].member"
           class="template-meta__prop-item"
+          type="prop"
+          :filter="getPropFilter(prop.name)"
         />
       </template>
     </div>
@@ -89,6 +109,7 @@
           v-model:file="curOption.events[event.name].path"
           v-model:member="curOption.events[event.name].member"
           class="template-meta__prop-item"
+          type="event"
         />
       </template>
     </div>
@@ -151,13 +172,15 @@ import { computed, nextTick, ref, watch } from 'vue';
 import { curMeta, curOption } from './state';
 import FileMember from './FileMember.vue';
 import { Warning } from '@element-plus/icons-vue';
-import { getPropType } from '@/api';
+import { filterByProp, getPropType } from '@/api';
 
 const metaProps = computed(() => curMeta.value?.doc.props || []);
 const metaEvents = computed(() => curMeta.value?.doc.events || []);
 const metaSlots = computed(() => curMeta.value?.doc.slots || []);
 const skipState = ref(false);
 const propType = ref('');
+/** 按类型过滤导出成员 */
+const typeFiltered = ref(false);
 
 /**
  * 处理skip筛选状态
@@ -231,6 +254,17 @@ async function updatePropType(prop: string) {
     return;
   }
   propType.value = await getPropType(curMeta.value.path, prop);
+}
+
+/**
+ * 获取当前组件指定prop类型过滤函数
+ * @param prop 组件prop
+ */
+function getPropFilter(prop: string) {
+  if (!curMeta.value || !typeFiltered.value) {
+    return;
+  }
+  return (tsPath: string) => filterByProp(tsPath, curMeta.value.path, prop);
 }
 
 watch(curOption, (val) => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-header option-tree flex items-center justify-between">
+  <div class="editor-header option-tree flex items-center justify-between mb-2">
     <span>配置树</span>
     <el-switch
       v-model="showTree"
